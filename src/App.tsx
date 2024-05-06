@@ -1,8 +1,8 @@
+import Wordle from "@/components/Wordle"
+
 function App() {
   return (
-    <>
-      MAKE SOMETHING
-    </>
+    <Wordle />
   )
 }
 
