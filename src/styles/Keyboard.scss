@@ -1,0 +1,36 @@
+.Keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 200px;
+
+  &__row {
+    display: flex;
+    width: 100%;
+  }
+
+  &__key {
+    font-weight: $font-weight-medium;
+    font-size: 20px;
+    height: 60px;
+    flex: 1;
+    margin: 2px;
+    border: 0;
+    border-radius: 4px;
+
+    &--enter {
+      flex: 1.5;
+      font-size: 12px;
+    }
+
+    &--backspace {
+      flex: 1.5;
+    }
+
+    &--spacer {
+      flex: 0.5;
+    }
+  }
+}
