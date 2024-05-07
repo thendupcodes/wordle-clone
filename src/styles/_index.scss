@@ -12,8 +12,8 @@
   font-weight: $font-weight-regular;
 
   color-scheme: light dark;
-  color: $body-color;
-  background-color: $dark-gray;
+  color: $white;
+  background-color: $black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -27,7 +27,7 @@
 
 a {
   font-weight: $font-weight-regular;
-  color: $teal-3;
+  color: $white;
   text-decoration: none;
   position: relative;
 
@@ -38,13 +38,13 @@ a {
     height: 1px;
     left: 50%;
     position: absolute;
-    background: $teal-4;
+    background: $blue;
     transition: width 0.3s ease 0s, left 0.3s ease 0s;
     width: 0;
   }
 
   &:hover {
-    color: $teal-4;
+    color: $blue;
   
     &:after {
       width: 100%; 
@@ -62,7 +62,7 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
-  background-color: $dark-gray;
+  background-color: $black;
 }
 
 h1 {

@@ -12,12 +12,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100% - 50px);
 
     &-grid {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 6px;
+      height: 600px;
 
       &-row {
         display: flex;
@@ -30,7 +31,7 @@
         width: 60px;
         height: 60px;
         border-radius: 0;
-        border: 2px solid darkgray;
+        border: 2px solid $dark-gray;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -41,24 +42,27 @@
         &--filled {
           position: relative;
           color: white;
-          border: 2px solid white;
+          border: 2px solid $gray;
+          background: $black;
           animation: pop 0.1s ease;
         }
 
         &--full-correct {
-          background: green;
-          color: white;
+          background: $green;
+          border-color: $green;
+          color: $white;
         }
 
         &--half-correct {
-          background: orange;
-          color: white;
+          background: $yellow;
+          border-color: $yellow;
+          color: $white;
         }
 
         &--not-correct {
-          background: gray;
-          border-color: gray;
-          color: black;
+          background: $dark-gray;
+          border-color: $dark-gray;
+          color: $white;
         }
       }
     }
