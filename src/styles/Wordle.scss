@@ -41,46 +41,31 @@
 
         &--filled {
           position: relative;
-          color: white;
+          color: $white;
           border: 2px solid $gray;
-          background: $black;
-          animation: pop 0.1s ease;
+          animation: pop 0.1s ease-in;
+        }
+
+        &--submitted {
+          animation: flip 0.7s ease-in forwards;
+          border: 2px solid $gray;
         }
 
         &--full-correct {
-          background: $green;
-          border-color: $green;
-          color: $white;
+          --bg-color: #{$green};
+          --bd-color: #{$green};
         }
 
         &--half-correct {
-          background: $yellow;
-          border-color: $yellow;
-          color: $white;
+          --bg-color: #{$yellow};
+          --bd-color: #{$yellow};
         }
 
         &--not-correct {
-          background: $dark-gray;
-          border-color: $dark-gray;
-          color: $white;
+          --bg-color: #{$dark-gray};
+          --bd-color: #{$dark-gray};
         }
       }
     }
-  }
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-
-  40% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(1);
   }
 }

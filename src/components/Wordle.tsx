@@ -5,7 +5,7 @@ import Row from '@/components/Row';
 import useWordle from '@/hooks/useWordle';
 
 export default function Wordle () {  
-  const { grid, handleUserInput } = useWordle();
+  const { grid, guessIndex, handleUserInput } = useWordle();
 
   useEffect(() => {
     window.addEventListener('keyup', handleUserInput)
@@ -43,6 +43,7 @@ export default function Wordle () {
             <Row
               key={rowIdx}
               guess={guess}
+              isSubmitted={guessIndex > rowIdx}
               rowIdx={rowIdx}
             />
           )}
