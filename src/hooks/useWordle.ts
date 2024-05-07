@@ -1,17 +1,36 @@
-import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
-import isLetter from "@/helpers/isLetter";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const FULL_CORRECT_CLASS = 'Wordle__body-grid-cell--full-correct';
-const HALF_CORRECT_CLASS = 'Wordle__body-grid-cell--half-correct';
-const NOT_CORRECT_CLASS = 'Wordle__body-grid-cell--not-correct';
-const FILLED_CLASS = 'Wordle__body-grid-cell--filled';
+import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
+import isLetter from "@/helpers/isLetter";
+
+import alphabetLetters from '@/dictionary/alphabets.json';
+
+const FULL_CORRECT_CLASS = 'full-correct';
+const HALF_CORRECT_CLASS = 'half-correct';
+const NOT_CORRECT_CLASS = 'not-correct';
+const FILLED_CLASS = 'filled';
+
+export type KeyboardLetter = {
+  key: string;
+  color: 'default' | 'correct' | 'partial' | 'wrong';
+}
+
+export type GridCell = {
+  key: string;
+  state: 'empty' | 'filled' | 'correct' | 'partial' | 'wrong';
+}
 
 export default function useWordle () {
   const [answer, setAnswer] = useState('')
   const [currentGuess, setCurrentGuess] = useState('');
   const [guessHistory, setGuessHistory] = useState<string[]>(Array(6).fill(''))
   const [guessIndex, setGuessIndex] = useState(0);
+  const [usedKeys, setUsedKeys] = useState(alphabetLetters.map((letter) => {
+    return {
+      key: letter,
+      color: 'default',
+    }
+  }));
 
   const deleteChar = () => {
     setCurrentGuess((prev) => prev.slice(0,-1));
@@ -63,8 +82,6 @@ export default function useWordle () {
       return gridChars;
     });
   }, [guessHistory, guessIndex, currentGuess, answer])
-
-  console.log({ grid });
 
   const submitGuess = useCallback(() => {
     if (guessIndex > 5) {
@@ -125,5 +142,5 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { answer, grid, currentGuess, guessIndex, handleUserInput };
+  return { answer, grid, currentGuess, guessIndex, usedKeys, handleUserInput };
 }
