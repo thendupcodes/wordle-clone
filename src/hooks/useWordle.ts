@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
 
 import alphabetLetters from '@/dictionary/alphabets.json';
 
-const FULL_CORRECT_CLASS = 'full-correct';
-const PARTIAL_CORRECT_CLASS = 'half-correct';
-const NOT_CORRECT_CLASS = 'not-correct';
-const FILLED_CLASS = 'filled';
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
 
@@ -31,13 +27,10 @@ export type GridCell = {
 }
 
 export default function useWordle () {
-  const [answer, setAnswer] = useState('')
-  const [currentGuess, setCurrentGuess] = useState('');
-  const [guessHistory, setGuessHistory] = useState<string[]>(Array(6).fill(''))
+  const [answer, setAnswer] = useState('')  
   const [guessIndex, setGuessIndex] = useState(0);
-
-  const [newCurrentGuess, setNewCurrentGuess] = useState('');
-  const [newPreviousGuesses, setNewPreviousGuesses] = useState<string[]>([]);
+  const [currentGuess, setCurrentGuess] = useState('');
+  const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
   const [guessesLeft, setGuessesLeft] = useState(TOTAL_GUESSES - 1);
   const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
@@ -52,7 +45,7 @@ export default function useWordle () {
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
-    for (let i = 0; i < newPreviousGuesses.length; i++) {
+    for (let i = 0; i < previousGuesses.length; i++) {
       const gridRow: GridCell[] = [];
       const answerCompare = answer.split('');
 
@@ -60,7 +53,7 @@ export default function useWordle () {
       for (let j = 0; j < WORD_LENGTH; j++) {
         gridRow.push({
           id: `guess_history_${i}_letter_${j}`,
-          key: newPreviousGuesses[i][j],
+          key: previousGuesses[i][j],
           state: STATE_NOT_CORRECT,
         });
       }      
@@ -87,7 +80,7 @@ export default function useWordle () {
     }
 
     setGridGuessHistory(gridRows);
-  }, [answer, newPreviousGuesses])
+  }, [answer, previousGuesses])
 
   useEffect(() => {
     const gridRow: GridCell[] = []
@@ -98,8 +91,8 @@ export default function useWordle () {
         state: 'empty',
       }
 
-      if (newCurrentGuess[i] != null) {
-        gridCell.key = newCurrentGuess[i];
+      if (currentGuess[i] != null) {
+        gridCell.key = currentGuess[i];
         gridCell.state = 'filled';
       }
 
@@ -107,7 +100,7 @@ export default function useWordle () {
     }
 
     setGridCurrentGuess(gridRow);
-  }, [newCurrentGuess])
+  }, [currentGuess])
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
@@ -136,7 +129,7 @@ export default function useWordle () {
       return;
     }
 
-    if (guessHistory.includes(currentGuess)) {
+    if (previousGuesses.includes(currentGuess)) {
       // Already guessed case
       console.log('ALREADY GUESSED');
       return;
@@ -153,33 +146,20 @@ export default function useWordle () {
       console.log('INVALID');
       return;
     }
-  
-    setGuessHistory(prev => {
+
+    setGuessIndex(prev => prev + 1); // Increment current row
+    setPreviousGuesses(prev => {
       const temp = [...prev]; // Create a copy of the guesses array
       temp[guessIndex] = currentGuess; // Update the current row with the current guess
       return temp; // Return the updated guesses array
     });
-    setCurrentGuess(''); // Reset current guess
-    setGuessIndex(prev => prev + 1); // Increment current row
-
-
-
-    setNewPreviousGuesses(prev => {
-      const temp = [...prev]; // Create a copy of the guesses array
-      temp[guessIndex] = newCurrentGuess; // Update the current row with the current guess
-      return temp; // Return the updated guesses array
-    });
     setGuessesLeft(prev => prev - 1);
-    setNewCurrentGuess('');
-  }, [currentGuess, newCurrentGuess, guessHistory, guessIndex]);
+    setCurrentGuess('');
+  }, [guessIndex, previousGuesses, currentGuess]);
 
   const addChar = (char: string) => {
     if (currentGuess.length < WORD_LENGTH) {
       setCurrentGuess(prev => {
-        return (prev + char.toUpperCase());
-      });
-
-      setNewCurrentGuess(prev => {
         return (prev + char.toUpperCase());
       });
     }
@@ -187,7 +167,6 @@ export default function useWordle () {
 
   const deleteChar = () => {
     setCurrentGuess((prev) => prev.slice(0,-1));
-    setNewCurrentGuess((prev) => prev.slice(0,-1));
   }
 
   const handleUserInput = (e: KeyboardEvent) => {
@@ -206,5 +185,5 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, currentGuess, guessIndex, usedKeys, handleUserInput };
+  return { gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, usedKeys, handleUserInput };
 }
