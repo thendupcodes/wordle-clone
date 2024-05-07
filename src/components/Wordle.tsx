@@ -5,11 +5,22 @@ import Row from '@/components/Row';
 import useWordle from '@/hooks/useWordle';
 
 export default function Wordle () {  
-  const { grid, guessIndex, handleUserInput, keyboardKeys, gameOver } = useWordle();
+  const {
+    grid,
+    guessIndex,
+    shakeRow,
+    handleUserInput,
+    keyboardKeys,
+    gameOver,
+    gameWon,
+    winningRow
+  } = useWordle();
 
   useEffect(() => {
-    if (!gameOver) {
-      window.addEventListener('keyup', handleUserInput);
+    window.addEventListener('keyup', handleUserInput);
+
+    if (gameOver) {
+      window.removeEventListener('keyup', handleUserInput);
     }
 
     return () => {
@@ -44,6 +55,9 @@ export default function Wordle () {
               key={`row-${rowIdx}`}
               cells={cells}
               rowIdx={rowIdx}
+              shakeRow={guessIndex === rowIdx && shakeRow}
+              gameWon={gameWon}
+              winningRow={winningRow}
               isSubmitted={rowIdx < guessIndex}
             />
           )}

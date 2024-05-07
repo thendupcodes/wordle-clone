@@ -39,6 +39,7 @@ export default function useWordle () {
   const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
+  const [shakeRow, setShakeRow] = useState(false); 
 
   const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
     const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
@@ -50,17 +51,13 @@ export default function useWordle () {
     return alphabetKeys;
   });
 
-  const gameOver = useMemo(() => {
-    if (guessIndex >= TOTAL_GUESSES) return true;
+  const [gameOver, gameWon, winningRow] = useMemo(() => {
+    const outOfTurns = guessIndex >= TOTAL_GUESSES;
+    const correctAnswer = previousGuesses.includes(answer);
+    const correctRow = correctAnswer ? guessIndex - 1 : null;
 
-    if (previousGuesses.includes(answer)) return true;
-
-    return false;
+    return [outOfTurns || correctAnswer, correctAnswer, correctRow];
   }, [answer, guessIndex, previousGuesses])
-
-  useEffect(() => {
-    console.log({ gameOver, guessIndex });
-  }, [gameOver, guessIndex]);
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
@@ -175,6 +172,14 @@ export default function useWordle () {
     setGridGuessesLeft(gridRows);
   }, [previousGuesses])
 
+  const animateRow = () => {
+    setShakeRow(true);
+
+    setTimeout(() => {
+      setShakeRow(false);
+    }, 700);
+  }
+
   const submitGuess = useCallback(() => {
     if (gameOver) {
       // User has used up all guesses
@@ -185,22 +190,24 @@ export default function useWordle () {
     if (previousGuesses.includes(currentGuess)) {
       // Already guessed case
       console.log('ALREADY GUESSED');
+      animateRow();
       return;
     }
 
     if (currentGuess.length !== WORD_LENGTH) {
       // not enough chars in guess
       console.log('NOT ENOUGH');
+      animateRow();
       return;
     }
 
     if (!wordIsInDictionary(currentGuess)) {
       // Word is invalid
       console.log('INVALID');
+      animateRow();
       return;
     }
 
-    setGuessIndex(prev => prev + 1); // Increment current row
     setPreviousGuesses(prev => {
       const temp = [...prev]; // Create a copy of the guesses array
       temp[guessIndex] = currentGuess; // Update the current row with the current guess
@@ -209,6 +216,7 @@ export default function useWordle () {
 
     if (guessIndex < TOTAL_GUESSES) {
       setCurrentGuess('');
+      setGuessIndex(prev => prev + 1); // Increment current row
     } else {
       setCurrentGuess(null);
     }
@@ -264,5 +272,18 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { grid, gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, keyboardKeys, handleUserInput, gameOver };
+  return {
+    grid,
+    gridGuessHistory,
+    gridCurrentGuess,
+    gridGuessesLeft,
+    shakeRow,
+    answer,
+    guessIndex,
+    keyboardKeys,
+    handleUserInput,
+    gameOver,
+    gameWon,
+    winningRow,
+  };
 }
