@@ -1,49 +1,64 @@
 .Wordle {
-  width: 365px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  height: 100vh;
 
   &__header {
-    font-size: 30px;
-    text-align: center;
+    height: 50px;
   }
 
   &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 50px);
+
     &-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
       &-row {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 90px;
-        gap: 8px;
+        gap: 6px;
       }
 
       &-cell {
-        width: 70px;
-        height: 70px;
-        background: lightgrey;
-        border-radius: 4px;
-        border: 1px solid black;
+        width: 60px;
+        height: 60px;
+        border-radius: 0;
+        border: 2px solid darkgray;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 50px;
+        font-size: 32px;
+        font-weight: $font-weight-medium;
         text-transform: uppercase;
 
         &--filled {
           position: relative;
-          animation: pop 0.1s ease-in-out;
+          color: white;
+          border: 2px solid white;
+          animation: pop 0.1s ease;
         }
 
-        &--green {
+        &--full-correct {
           background: green;
           color: white;
         }
 
-        &--orange {
+        &--half-correct {
           background: orange;
           color: white;
+        }
+
+        &--not-correct {
+          background: gray;
+          border-color: gray;
+          color: black;
         }
       }
     }
@@ -52,34 +67,16 @@
 
 @keyframes pop {
   0% {
-    width: 70px;
-    height: 70px
+    transform: scale(0.8);
+    opacity: 0;
   }
 
-  50% {
-    width: 80px;
-    height: 80px
-  }
-
-  100% {
-    width: 70px;
-    height: 70px
-  }
-}
-
-@keyframes pop {
-  0% {
-    width: 70px;
-    height: 70px
-  }
-
-  50% {
-    width: 80px;
-    height: 80px
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
   }
 
   100% {
-    width: 70px;
-    height: 70px
+    transform: scale(1);
   }
 }
