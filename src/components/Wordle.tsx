@@ -5,15 +5,17 @@ import Row from '@/components/Row';
 import useWordle from '@/hooks/useWordle';
 
 export default function Wordle () {  
-  const { grid, guessIndex, handleUserInput, keyboardKeys } = useWordle();
+  const { grid, guessIndex, handleUserInput, keyboardKeys, gameOver } = useWordle();
 
   useEffect(() => {
-    window.addEventListener('keyup', handleUserInput)
+    if (!gameOver) {
+      window.addEventListener('keyup', handleUserInput);
+    }
 
     return () => {
       window.removeEventListener('keyup', handleUserInput);
     }
-  }, [handleUserInput])
+  }, [handleUserInput, gameOver])
 
   return (
     // Wrapper 

@@ -36,7 +36,6 @@ export default function useWordle () {
   const [guessIndex, setGuessIndex] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
   const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
-  const [guessesLeft, setGuessesLeft] = useState(TOTAL_GUESSES - 1);
   const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
@@ -50,6 +49,18 @@ export default function useWordle () {
 
     return alphabetKeys;
   });
+
+  const gameOver = useMemo(() => {
+    if (guessIndex >= TOTAL_GUESSES) return true;
+
+    if (previousGuesses.includes(answer)) return true;
+
+    return false;
+  }, [answer, guessIndex, previousGuesses])
+
+  useEffect(() => {
+    console.log({ gameOver, guessIndex });
+  }, [gameOver, guessIndex]);
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
@@ -85,7 +96,7 @@ export default function useWordle () {
           answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
         }
       });
-
+      
       setKeyboardKeys((prev) => {
         const newKeys = {...prev};
       
@@ -120,28 +131,33 @@ export default function useWordle () {
   }, [answer, previousGuesses])
 
   useEffect(() => {
-    const gridRow: GridCell[] = []
-    for (let i = 0; i < WORD_LENGTH; i++) {
-      const gridCell: GridCell = {
-        id: `guess_cur_letter_${i}`,
-        key: '',
-        state: 'empty',
+    if (currentGuess != null && guessIndex < TOTAL_GUESSES) {
+      const gridRow: GridCell[] = []
+      for (let i = 0; i < WORD_LENGTH; i++) {
+        const gridCell: GridCell = {
+          id: `guess_cur_letter_${i}`,
+          key: '',
+          state: 'empty',
+        }
+
+        if (currentGuess[i] != null) {
+          gridCell.key = currentGuess[i];
+          gridCell.state = 'filled';
+        }
+
+        gridRow.push(gridCell);
       }
 
-      if (currentGuess[i] != null) {
-        gridCell.key = currentGuess[i];
-        gridCell.state = 'filled';
-      }
-
-      gridRow.push(gridCell);
+      setGridCurrentGuess(gridRow);
+    } else {
+      setGridCurrentGuess(null);
     }
-
-    setGridCurrentGuess(gridRow);
-  }, [currentGuess])
+  }, [currentGuess, guessIndex])
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
-    for (let i = 0; i < guessesLeft; i++) {
+
+    for (let i = 0; i < TOTAL_GUESSES - previousGuesses.length - 1; i++) {
       const gridRow: GridCell[] = [];
 
       for (let j = 0; j < WORD_LENGTH; j++) {
@@ -157,10 +173,10 @@ export default function useWordle () {
     }
 
     setGridGuessesLeft(gridRows);
-  }, [guessesLeft])
+  }, [previousGuesses])
 
   const submitGuess = useCallback(() => {
-    if (guessIndex >= TOTAL_GUESSES) {
+    if (gameOver) {
       // User has used up all guesses
       console.log('GAME OVER');
       return;
@@ -190,11 +206,17 @@ export default function useWordle () {
       temp[guessIndex] = currentGuess; // Update the current row with the current guess
       return temp; // Return the updated guesses array
     });
-    setGuessesLeft(prev => prev - 1);
-    setCurrentGuess('');
-  }, [guessIndex, previousGuesses, currentGuess]);
+
+    if (guessIndex < TOTAL_GUESSES) {
+      setCurrentGuess('');
+    } else {
+      setCurrentGuess(null);
+    }
+  }, [gameOver, previousGuesses, currentGuess, guessIndex]);
 
   const addChar = (char: string) => {
+    if (gameOver) return;
+
     if (currentGuess.length < WORD_LENGTH) {
       setCurrentGuess(prev => {
         return (prev + char.toUpperCase());
@@ -203,6 +225,8 @@ export default function useWordle () {
   }
 
   const deleteChar = () => {
+    if (gameOver) return;
+
     setCurrentGuess((prev) => prev.slice(0,-1));
   }
 
@@ -217,11 +241,21 @@ export default function useWordle () {
   }
 
   const grid = useMemo(() => {
-    return [
-      ...gridGuessHistory,
-      gridCurrentGuess,
-      ...gridGuessesLeft
-    ]
+    const result = [];
+
+    if (gridGuessHistory.length > 0) {
+      result.push(...gridGuessHistory);
+    }
+
+    if (gridCurrentGuess != null) {
+      result.push(gridCurrentGuess);
+    }
+
+    if (gridGuessesLeft.length > 0) {
+      result.push(...gridGuessesLeft);
+    }
+
+    return result
   }, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft])
 
   useEffect(() => {
@@ -230,5 +264,5 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { grid, gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, keyboardKeys, handleUserInput };
+  return { grid, gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, keyboardKeys, handleUserInput, gameOver };
 }
