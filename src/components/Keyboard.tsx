@@ -25,7 +25,7 @@ export default function Keyboard () {
       <div className="Keyboard__row Keyboard__row--second">
         {secondRowKeys.map((k) => (
           k === 'SPACER-LEFT' || k === 'SPACER-RIGHT' ? (
-            <div className="Keyboard__key--spacer"></div>
+            <div key={k} className="Keyboard__key--spacer"></div>
           ) : (
             <button
               key={k}
