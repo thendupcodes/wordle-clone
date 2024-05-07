@@ -51,17 +51,17 @@
           border: 2px solid $gray;
         }
 
-        &--full-correct {
+        &--correct {
           --bg-color: #{$green};
           --bd-color: #{$green};
         }
 
-        &--half-correct {
+        &--partial {
           --bg-color: #{$yellow};
           --bd-color: #{$yellow};
         }
 
-        &--not-correct {
+        &--wrong {
           --bg-color: #{$dark-gray};
           --bd-color: #{$dark-gray};
         }

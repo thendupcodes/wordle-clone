@@ -6,18 +6,28 @@ import isLetter from "@/helpers/isLetter";
 import alphabetLetters from '@/dictionary/alphabets.json';
 
 const FULL_CORRECT_CLASS = 'full-correct';
-const HALF_CORRECT_CLASS = 'half-correct';
+const PARTIAL_CORRECT_CLASS = 'half-correct';
 const NOT_CORRECT_CLASS = 'not-correct';
 const FILLED_CLASS = 'filled';
+const TOTAL_GUESSES = 6;
+const WORD_LENGTH = 5;
 
 export type KeyboardLetter = {
+  id: string;
   key: string;
   color: 'default' | 'correct' | 'partial' | 'wrong';
 }
 
+const STATE_CORRECT = 'correct';
+const STATE_PARTIAL_CORRECT = 'partial';
+const STATE_NOT_CORRECT = 'wrong';
+const STATE_EMPTY = 'empty';
+const STATE_FILLED = 'filled';
+
 export type GridCell = {
+  id: string;
   key: string;
-  state: 'empty' | 'filled' | 'correct' | 'partial' | 'wrong';
+  state: typeof STATE_CORRECT | typeof STATE_PARTIAL_CORRECT | typeof STATE_NOT_CORRECT | typeof STATE_EMPTY | typeof STATE_FILLED;
 }
 
 export default function useWordle () {
@@ -25,6 +35,14 @@ export default function useWordle () {
   const [currentGuess, setCurrentGuess] = useState('');
   const [guessHistory, setGuessHistory] = useState<string[]>(Array(6).fill(''))
   const [guessIndex, setGuessIndex] = useState(0);
+
+  const [newCurrentGuess, setNewCurrentGuess] = useState('');
+  const [newPreviousGuesses, setNewPreviousGuesses] = useState<string[]>([]);
+  const [guessesLeft, setGuessesLeft] = useState(TOTAL_GUESSES - 1);
+  const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
+  const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
+  const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
+
   const [usedKeys, setUsedKeys] = useState(alphabetLetters.map((letter) => {
     return {
       key: letter,
@@ -32,59 +50,87 @@ export default function useWordle () {
     }
   }));
 
-  const deleteChar = () => {
-    setCurrentGuess((prev) => prev.slice(0,-1));
-  }
-
-  const grid = useMemo(() => {
-    return guessHistory.map((guessHistoryWord, rowIdx) => {
-      const isSubmitted = rowIdx < guessIndex;
-      const guess = rowIdx === guessIndex ? currentGuess :  guessHistoryWord;
+  useEffect(() => {
+    const gridRows: GridCell[][] = [];
+    for (let i = 0; i < newPreviousGuesses.length; i++) {
+      const gridRow: GridCell[] = [];
       const answerCompare = answer.split('');
 
-      const gridChars = Array(5).fill(null).map((_, idx) => {
-        const guessChar = guess?.[idx] || '';
-
-        return {
-          charKey: guessChar,
-          charClass: guessChar != '' ? FILLED_CLASS : '',
-        };
+      // Instantiate all chars as being wrong, we will add correct classes later
+      for (let j = 0; j < WORD_LENGTH; j++) {
+        gridRow.push({
+          id: `guess_history_${i}_letter_${j}`,
+          key: newPreviousGuesses[i][j],
+          state: STATE_NOT_CORRECT,
+        });
+      }      
+      // Style the charactes that are in the word AND in the correct spot
+      gridRow.forEach((ltr, idx) => {
+        if (answer[idx] === ltr.key) {
+          ltr.state = STATE_CORRECT;
+          
+          // Modify the answer being compared for cases like duplicate letters in the guess
+          //   e.g. if answer=BREAK and guess=KAYAK, only 1 K and 1 A should be styled correctly
+          answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
+        }
       });
 
-      if (isSubmitted) {
-        // Instantiate all chars as being wrong, we will add correct classes later
-        gridChars.forEach((_, idx) => {
-          gridChars[idx].charClass = NOT_CORRECT_CLASS;
-        });
+      // Style the charactes that are in the word BUT NOT in the correct spot
+      gridRow.forEach((ltr, idx) => {
+        if (answerCompare.includes(ltr.key) && gridRow[idx].state != STATE_CORRECT) {
+          gridRow[idx].state = STATE_PARTIAL_CORRECT;
+          answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
+        }
+      });
 
-        
-        // Style the charactes that are in the word AND in the correct spot
-        gridChars.forEach((guessChar, idx) => {
-          if (answer[idx] === guessChar.charKey) {
-            gridChars[idx].charClass = FULL_CORRECT_CLASS;
-            
-            // Modify the answer being compared for cases like duplicate letters in the guess
-            //   e.g. if answer=BREAK and guess=KAYAK, only 1 K and 1 A should be styled correctly
-            answerCompare.splice(answerCompare.indexOf(guessChar.charKey), 1);
-          }
-        });
+      gridRows.push(gridRow);
+    }
 
+    setGridGuessHistory(gridRows);
+  }, [answer, newPreviousGuesses])
 
-        // Style the charactes that are in the word BUT NOT in the correct spot
-        gridChars.forEach((guessChar, idx) => {
-          if (answerCompare.includes(guessChar.charKey) && gridChars[idx].charClass != FULL_CORRECT_CLASS) {
-            gridChars[idx].charClass = HALF_CORRECT_CLASS;
-            answerCompare.splice(answerCompare.indexOf(guessChar.charKey), 1);
-          }
-        });
+  useEffect(() => {
+    const gridRow: GridCell[] = []
+    for (let i = 0; i < WORD_LENGTH; i++) {
+      const gridCell: GridCell = {
+        id: `guess_cur_letter_${i}`,
+        key: '',
+        state: 'empty',
       }
 
-      return gridChars;
-    });
-  }, [guessHistory, guessIndex, currentGuess, answer])
+      if (newCurrentGuess[i] != null) {
+        gridCell.key = newCurrentGuess[i];
+        gridCell.state = 'filled';
+      }
+
+      gridRow.push(gridCell);
+    }
+
+    setGridCurrentGuess(gridRow);
+  }, [newCurrentGuess])
+
+  useEffect(() => {
+    const gridRows: GridCell[][] = [];
+    for (let i = 0; i < guessesLeft; i++) {
+      const gridRow: GridCell[] = [];
+
+      for (let j = 0; j < WORD_LENGTH; j++) {
+        const gridCell: GridCell = {
+          id: `guess_rem_${i}_letter_${j}`,
+          key: '',
+          state: 'empty',
+        }
+        gridRow.push(gridCell);
+      }
+
+      gridRows.push(gridRow);
+    }
+
+    setGridGuessesLeft(gridRows);
+  }, [guessesLeft])
 
   const submitGuess = useCallback(() => {
-    if (guessIndex > 5) {
+    if (guessIndex >= TOTAL_GUESSES) {
       // User has used up all guesses
       console.log('GAME OVER');
       return;
@@ -96,7 +142,7 @@ export default function useWordle () {
       return;
     }
 
-    if (currentGuess.length !== 5) {
+    if (currentGuess.length !== WORD_LENGTH) {
       // not enough chars in guess
       console.log('NOT ENOUGH');
       return;
@@ -113,17 +159,35 @@ export default function useWordle () {
       temp[guessIndex] = currentGuess; // Update the current row with the current guess
       return temp; // Return the updated guesses array
     });
-  
-    setGuessIndex(prevRow => prevRow + 1); // Increment current row
     setCurrentGuess(''); // Reset current guess
-  }, [currentGuess, guessHistory, guessIndex]);
+    setGuessIndex(prev => prev + 1); // Increment current row
+
+
+
+    setNewPreviousGuesses(prev => {
+      const temp = [...prev]; // Create a copy of the guesses array
+      temp[guessIndex] = newCurrentGuess; // Update the current row with the current guess
+      return temp; // Return the updated guesses array
+    });
+    setGuessesLeft(prev => prev - 1);
+    setNewCurrentGuess('');
+  }, [currentGuess, newCurrentGuess, guessHistory, guessIndex]);
 
   const addChar = (char: string) => {
-    if (currentGuess.length < 5) {
+    if (currentGuess.length < WORD_LENGTH) {
       setCurrentGuess(prev => {
         return (prev + char.toUpperCase());
       });
+
+      setNewCurrentGuess(prev => {
+        return (prev + char.toUpperCase());
+      });
     }
+  }
+
+  const deleteChar = () => {
+    setCurrentGuess((prev) => prev.slice(0,-1));
+    setNewCurrentGuess((prev) => prev.slice(0,-1));
   }
 
   const handleUserInput = (e: KeyboardEvent) => {
@@ -142,5 +206,5 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { answer, grid, currentGuess, guessIndex, usedKeys, handleUserInput };
+  return { gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, currentGuess, guessIndex, usedKeys, handleUserInput };
 }
