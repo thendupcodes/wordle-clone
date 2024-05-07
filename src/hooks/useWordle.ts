@@ -1,16 +1,70 @@
 import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+const FULL_CORRECT_CLASS = 'Wordle__body-grid-cell--full-correct';
+const HALF_CORRECT_CLASS = 'Wordle__body-grid-cell--half-correct';
+const NOT_CORRECT_CLASS = 'Wordle__body-grid-cell--not-correct';
+const FILLED_CLASS = 'Wordle__body-grid-cell--filled';
 
 export default function useWordle () {
   const [answer, setAnswer] = useState('')
   const [currentGuess, setCurrentGuess] = useState('');
-  const [guessHistory, setGuessHistory] = useState<string[]>(Array(6).fill(null))
+  const [guessHistory, setGuessHistory] = useState<string[]>(Array(6).fill(''))
   const [guessIndex, setGuessIndex] = useState(0);
 
   const deleteChar = () => {
     setCurrentGuess((prev) => prev.slice(0,-1));
   }
+
+  const grid = useMemo(() => {
+    return guessHistory.map((guessHistoryWord, rowIdx) => {
+      const isSubmitted = rowIdx < guessIndex;
+      const guess = rowIdx === guessIndex ? currentGuess :  guessHistoryWord;
+      const answerCompare = answer.split('');
+
+      const gridChars = Array(5).fill(null).map((_, idx) => {
+        const guessChar = guess?.[idx] || '';
+
+        return {
+          charKey: guessChar,
+          charClass: guessChar != '' ? FILLED_CLASS : '',
+        };
+      });
+
+      if (isSubmitted) {
+        // Instantiate all chars as being wrong, we will add correct classes later
+        gridChars.forEach((_, idx) => {
+          gridChars[idx].charClass = NOT_CORRECT_CLASS;
+        });
+
+        
+        // Style the charactes that are in the word AND in the correct spot
+        gridChars.forEach((guessChar, idx) => {
+          if (answer[idx] === guessChar.charKey) {
+            gridChars[idx].charClass = FULL_CORRECT_CLASS;
+            
+            // Modify the answer being compared for cases like duplicate letters in the guess
+            //   e.g. if answer=BREAK and guess=KAYAK, only 1 K and 1 A should be styled correctly
+            answerCompare.splice(answerCompare.indexOf(guessChar.charKey), 1);
+          }
+        });
+
+
+        // Style the charactes that are in the word BUT NOT in the correct spot
+        gridChars.forEach((guessChar, idx) => {
+          if (answerCompare.includes(guessChar.charKey) && gridChars[idx].charClass != FULL_CORRECT_CLASS) {
+            gridChars[idx].charClass = HALF_CORRECT_CLASS;
+            answerCompare.splice(answerCompare.indexOf(guessChar.charKey), 1);
+          }
+        });
+      }
+
+      return gridChars;
+    });
+  }, [guessHistory, guessIndex, currentGuess, answer])
+
+  console.log({ grid });
 
   const submitGuess = useCallback(() => {
     if (guessIndex > 5) {
@@ -56,8 +110,6 @@ export default function useWordle () {
   }
 
   const handleUserInput = (e: KeyboardEvent) => {
-    console.log('isLetter: ', isLetter(e.key));
-
     if (isLetter(e.key)) {
       return addChar(e.key);
     } else if (e.key === 'Backspace') {
@@ -73,5 +125,5 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { answer, currentGuess, guessHistory, guessIndex, handleUserInput };
+  return { answer, grid, currentGuess, guessIndex, handleUserInput };
 }

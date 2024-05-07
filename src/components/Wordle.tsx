@@ -5,7 +5,7 @@ import Row from '@/components/Row';
 import useWordle from '@/hooks/useWordle';
 
 export default function Wordle () {  
-  const { answer, currentGuess, guessHistory, guessIndex, handleUserInput } = useWordle();
+  const { grid, handleUserInput } = useWordle();
 
   useEffect(() => {
     window.addEventListener('keyup', handleUserInput)
@@ -39,13 +39,11 @@ export default function Wordle () {
         <div className="Wordle__body-grid">
           {/* loop over each guess (row), then loop over row (letter) */}
 
-          {guessHistory.map((guess, rowIdx) =>
+          {grid.map((guess, rowIdx) =>
             <Row
               key={rowIdx}
-              guess={guessIndex === rowIdx ? currentGuess : guess}
+              guess={guess}
               rowIdx={rowIdx}
-              answer={answer}
-              isSubmitted={guessIndex > rowIdx}
             />
           )}
         </div>
