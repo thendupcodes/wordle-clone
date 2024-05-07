@@ -38,6 +38,7 @@
         font-size: 32px;
         font-weight: $font-weight-medium;
         text-transform: uppercase;
+        transform: rotateX(0deg);
 
         &--filled {
           position: relative;

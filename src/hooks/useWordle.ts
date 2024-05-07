@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
@@ -45,19 +45,21 @@ export default function useWordle () {
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
+
     for (let i = 0; i < previousGuesses.length; i++) {
       const gridRow: GridCell[] = [];
       const answerCompare = answer.split('');
 
-      // Instantiate all chars as being wrong, we will add correct classes later
+      // Instantiate all characters as being wrong, we will add correct classes next
       for (let j = 0; j < WORD_LENGTH; j++) {
         gridRow.push({
           id: `guess_history_${i}_letter_${j}`,
           key: previousGuesses[i][j],
           state: STATE_NOT_CORRECT,
         });
-      }      
-      // Style the charactes that are in the word AND in the correct spot
+      }
+
+      // Style the characters that are in the word AND in the correct spot
       gridRow.forEach((ltr, idx) => {
         if (answer[idx] === ltr.key) {
           ltr.state = STATE_CORRECT;
@@ -179,11 +181,19 @@ export default function useWordle () {
     } 
   }
 
+  const grid = useMemo(() => {
+    return [
+      ...gridGuessHistory,
+      gridCurrentGuess,
+      ...gridGuessesLeft
+    ]
+  }, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft])
+
   useEffect(() => {
     const word = getWord();
 
     setAnswer(word);
   }, []);
 
-  return { gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, usedKeys, handleUserInput };
+  return { grid, gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, usedKeys, handleUserInput };
 }

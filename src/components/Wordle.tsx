@@ -5,7 +5,7 @@ import Row from '@/components/Row';
 import useWordle from '@/hooks/useWordle';
 
 export default function Wordle () {  
-  const { gridGuessHistory, gridCurrentGuess, gridGuessesLeft, guessIndex, handleUserInput } = useWordle();
+  const { grid, guessIndex, handleUserInput } = useWordle();
 
   useEffect(() => {
     window.addEventListener('keyup', handleUserInput)
@@ -14,18 +14,6 @@ export default function Wordle () {
       window.removeEventListener('keyup', handleUserInput);
     }
   }, [handleUserInput])
-
-  useEffect(() => {
-    console.log({ gridGuessHistory });
-  }, [gridGuessHistory]);
-
-  useEffect(() => {
-    console.log({ gridCurrentGuess });
-  }, [gridCurrentGuess]);
-
-  useEffect(() => {
-    console.log({ gridGuessesLeft });
-  }, [gridGuessesLeft]);
 
   return (
     // Wrapper 
@@ -49,26 +37,12 @@ export default function Wordle () {
 
       <div className="Wordle__body">
         <div className="Wordle__body-grid">
-          {gridGuessHistory.map((cells, idx) =>
+          {grid.map((cells, rowIdx) =>
             <Row
-              key={`previous-guess-${idx}`}
+              key={`row-${rowIdx}`}
               cells={cells}
-              rowIdx={idx}
-              isSubmitted={true}
-            />
-          )}
-
-          <Row
-            key={`current-guess-$}`}
-            cells={gridCurrentGuess}
-            rowIdx={guessIndex}
-          />
-
-          {gridGuessesLeft.map((cells, idx) =>
-            <Row
-              key={`next-guess-${idx}`}
-              cells={cells}
-              rowIdx={guessIndex + idx + 1}
+              rowIdx={rowIdx}
+              isSubmitted={rowIdx < guessIndex}
             />
           )}
         </div>
