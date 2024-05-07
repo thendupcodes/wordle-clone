@@ -94,33 +94,35 @@ export default function useWordle () {
         }
       });
       
-      setKeyboardKeys((prev) => {
-        const newKeys = {...prev};
-      
-        gridRow.forEach((letter) => {
-          switch (letter.state) {
-            case CELL_STATE_CORRECT:
-              newKeys[letter.key] = KEY_STATE_CORRECT;
-              return;
-
-            case CELL_STATE_PARTIAL_CORRECT:
-              if (newKeys[letter.key] != KEY_STATE_CORRECT) {
-                newKeys[letter.key] = KEY_STATE_PARTIAL;
-              }
-              return;
-
-            case CELL_STATE_NOT_CORRECT:
-              if (newKeys[letter.key] != KEY_STATE_CORRECT && newKeys[letter.key] != KEY_STATE_PARTIAL) {
-                newKeys[letter.key] = KEY_STATE_WRONG;
-              }
-              return;
-
-            // no default
-          }  
-        })
-
-        return newKeys;
-      });
+      setTimeout(() => {
+        setKeyboardKeys((prev) => {
+          const newKeys = {...prev};
+        
+          gridRow.forEach((letter) => {
+            switch (letter.state) {
+              case CELL_STATE_CORRECT:
+                newKeys[letter.key] = KEY_STATE_CORRECT;
+                return;
+  
+              case CELL_STATE_PARTIAL_CORRECT:
+                if (newKeys[letter.key] != KEY_STATE_CORRECT) {
+                  newKeys[letter.key] = KEY_STATE_PARTIAL;
+                }
+                return;
+  
+              case CELL_STATE_NOT_CORRECT:
+                if (newKeys[letter.key] != KEY_STATE_CORRECT && newKeys[letter.key] != KEY_STATE_PARTIAL) {
+                  newKeys[letter.key] = KEY_STATE_WRONG;
+                }
+                return;
+  
+              // no default
+            }  
+          })
+  
+          return newKeys;
+        });
+      }, 1900); // flip animation=700ms + delay=1200ms
       gridRows.push(gridRow);
     }
 
