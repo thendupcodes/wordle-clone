@@ -10,6 +10,9 @@ export default function Wordle () {
     guessIndex,
     shakeRow,
     handleUserInput,
+    submitGuess,
+    addChar,
+    deleteChar,
     keyboardKeys,
     gameOver,
     gameWon,
@@ -64,7 +67,12 @@ export default function Wordle () {
         </div>
 
         <div className="Wordle__body-keyboard">
-          <Keyboard keyboardKeys={keyboardKeys} />
+          <Keyboard
+            keyboardKeys={keyboardKeys}
+            submitGuess={submitGuess}
+            addChar={addChar}
+            deleteChar={deleteChar}
+          />
         </div>
       </div>
     </div>

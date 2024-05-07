@@ -4,11 +4,17 @@ const firstRowKeys = ['Q','W','E','R','T','Y','U','I','O','P'];
 const secondRowKeys = ['A','S','D','F','G','H','J','K','L'];
 const thirdRowKeys = ['Z','X','C','V','B','N','M',];
 
-export default function Keyboard ({ keyboardKeys }: { keyboardKeys: Record<string, KeyboardLetter['state']> }) {
-  const keyClick = (key: string) => () => {
-    console.log(`Clicked key: ${key}`);
-  };
-
+export default function Keyboard ({
+  keyboardKeys,
+  addChar,
+  deleteChar,
+  submitGuess,
+}: {
+  keyboardKeys: Record<string, KeyboardLetter['state']>,
+  submitGuess: () => void,
+  addChar: (char: string) => void,
+  deleteChar: () => void
+}) {
   return (
     <div className="Keyboard">
       <div className="Keyboard__row Keyboard__row--first">
@@ -17,7 +23,7 @@ export default function Keyboard ({ keyboardKeys }: { keyboardKeys: Record<strin
             key={k}
             className={`Keyboard__key Keyboard__key--${k} Keyboard__key--${keyboardKeys[k]}`}
             data-key={k}
-            onClick={keyClick(k)}
+            onClick={() => addChar(k)}
           >
             {k}
           </button>
@@ -32,7 +38,7 @@ export default function Keyboard ({ keyboardKeys }: { keyboardKeys: Record<strin
             key={k}
             className={`Keyboard__key Keyboard__key--${k} Keyboard__key--${keyboardKeys[k]}`}
             data-key={k}
-            onClick={keyClick(k)}
+            onClick={() => addChar(k)}
           >
             {k}
           </button>
@@ -46,7 +52,7 @@ export default function Keyboard ({ keyboardKeys }: { keyboardKeys: Record<strin
           key='enter'
           className="Keyboard__key Keyboard__key--enter Keyboard__key--default"
           data-key="enter"
-          onClick={() => keyClick('enter')}
+          onClick={() => submitGuess()}
         >
           ENTER
         </button>
@@ -56,7 +62,7 @@ export default function Keyboard ({ keyboardKeys }: { keyboardKeys: Record<strin
             key={k}
             className={`Keyboard__key Keyboard__key--${k} Keyboard__key--${keyboardKeys[k]}`}
             data-key={k}
-            onClick={() => keyClick(k)}
+            onClick={() => addChar(k)}
           >
             {k}
           </button>
@@ -66,7 +72,7 @@ export default function Keyboard ({ keyboardKeys }: { keyboardKeys: Record<strin
           key='backspace'
           className="Keyboard__key Keyboard__key--backspace Keyboard__key--default"
           data-key="backspace"
-          onClick={() => keyClick('backspace')}
+          onClick={() => deleteChar()}
         >
           <i className="fa-solid fa-delete-left" />
         </button>
