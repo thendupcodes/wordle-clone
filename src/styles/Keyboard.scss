@@ -22,6 +22,21 @@
     background: $gray;
     color: $white;
 
+    &--correct {
+      background: $green;
+      transition: all 0.3s ease;
+    }
+
+    &--partial {
+      background: $yellow;
+      transition: all 0.3s ease;
+    }
+
+    &--wrong {
+      background: $dark-gray;
+      transition: all 0.3s ease;
+    }
+
     &--enter {
       flex: 1.5;
       font-size: 12px;

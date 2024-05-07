@@ -5,7 +5,7 @@ import Row from '@/components/Row';
 import useWordle from '@/hooks/useWordle';
 
 export default function Wordle () {  
-  const { grid, guessIndex, handleUserInput } = useWordle();
+  const { grid, guessIndex, handleUserInput, keyboardKeys } = useWordle();
 
   useEffect(() => {
     window.addEventListener('keyup', handleUserInput)
@@ -48,7 +48,7 @@ export default function Wordle () {
         </div>
 
         <div className="Wordle__body-keyboard">
-          <Keyboard />
+          <Keyboard keyboardKeys={keyboardKeys} />
         </div>
       </div>
     </div>

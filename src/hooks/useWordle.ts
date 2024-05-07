@@ -8,22 +8,27 @@ import alphabetLetters from '@/dictionary/alphabets.json';
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
 
+const KEY_STATE_DEFAULT = 'default';
+const KEY_STATE_CORRECT = 'correct';
+const KEY_STATE_PARTIAL = 'partial';
+const KEY_STATE_WRONG = 'wrong';
+
 export type KeyboardLetter = {
   id: string;
   key: string;
-  color: 'default' | 'correct' | 'partial' | 'wrong';
+  state: typeof KEY_STATE_DEFAULT | typeof KEY_STATE_CORRECT | typeof KEY_STATE_PARTIAL | typeof KEY_STATE_WRONG;
 }
 
-const STATE_CORRECT = 'correct';
-const STATE_PARTIAL_CORRECT = 'partial';
-const STATE_NOT_CORRECT = 'wrong';
-const STATE_EMPTY = 'empty';
-const STATE_FILLED = 'filled';
+const CELL_STATE_CORRECT = 'correct';
+const CELL_STATE_PARTIAL_CORRECT = 'partial';
+const CELL_STATE_NOT_CORRECT = 'wrong';
+const CELL_STATE_EMPTY = 'empty';
+const CELL_STATE_FILLED = 'filled';
 
 export type GridCell = {
   id: string;
   key: string;
-  state: typeof STATE_CORRECT | typeof STATE_PARTIAL_CORRECT | typeof STATE_NOT_CORRECT | typeof STATE_EMPTY | typeof STATE_FILLED;
+  state: typeof CELL_STATE_CORRECT | typeof CELL_STATE_PARTIAL_CORRECT | typeof CELL_STATE_NOT_CORRECT | typeof CELL_STATE_EMPTY | typeof CELL_STATE_FILLED;
 }
 
 export default function useWordle () {
@@ -36,12 +41,15 @@ export default function useWordle () {
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
 
-  const [usedKeys, setUsedKeys] = useState(alphabetLetters.map((letter) => {
-    return {
-      key: letter,
-      color: 'default',
-    }
-  }));
+  const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
+    const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
+
+    alphabetLetters.forEach((letter) => {
+      alphabetKeys[letter] = KEY_STATE_DEFAULT;
+    })
+
+    return alphabetKeys;
+  });
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
@@ -55,14 +63,14 @@ export default function useWordle () {
         gridRow.push({
           id: `guess_history_${i}_letter_${j}`,
           key: previousGuesses[i][j],
-          state: STATE_NOT_CORRECT,
+          state: CELL_STATE_NOT_CORRECT,
         });
       }
 
       // Style the characters that are in the word AND in the correct spot
       gridRow.forEach((ltr, idx) => {
         if (answer[idx] === ltr.key) {
-          ltr.state = STATE_CORRECT;
+          ltr.state = CELL_STATE_CORRECT;
           
           // Modify the answer being compared for cases like duplicate letters in the guess
           //   e.g. if answer=BREAK and guess=KAYAK, only 1 K and 1 A should be styled correctly
@@ -72,12 +80,39 @@ export default function useWordle () {
 
       // Style the charactes that are in the word BUT NOT in the correct spot
       gridRow.forEach((ltr, idx) => {
-        if (answerCompare.includes(ltr.key) && gridRow[idx].state != STATE_CORRECT) {
-          gridRow[idx].state = STATE_PARTIAL_CORRECT;
+        if (answerCompare.includes(ltr.key) && gridRow[idx].state != CELL_STATE_CORRECT) {
+          gridRow[idx].state = CELL_STATE_PARTIAL_CORRECT;
           answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
         }
       });
 
+      setKeyboardKeys((prev) => {
+        const newKeys = {...prev};
+      
+        gridRow.forEach((letter) => {
+          switch (letter.state) {
+            case CELL_STATE_CORRECT:
+              newKeys[letter.key] = KEY_STATE_CORRECT;
+              return;
+
+            case CELL_STATE_PARTIAL_CORRECT:
+              if (newKeys[letter.key] != KEY_STATE_CORRECT) {
+                newKeys[letter.key] = KEY_STATE_PARTIAL;
+              }
+              return;
+
+            case CELL_STATE_NOT_CORRECT:
+              if (newKeys[letter.key] != KEY_STATE_CORRECT && newKeys[letter.key] != KEY_STATE_PARTIAL) {
+                newKeys[letter.key] = KEY_STATE_WRONG;
+              }
+              return;
+
+            // no default
+          }  
+        })
+
+        return newKeys;
+      });
       gridRows.push(gridRow);
     }
 
@@ -195,5 +230,5 @@ export default function useWordle () {
     setAnswer(word);
   }, []);
 
-  return { grid, gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, usedKeys, handleUserInput };
+  return { grid, gridGuessHistory, gridCurrentGuess, gridGuessesLeft, answer, guessIndex, keyboardKeys, handleUserInput };
 }
