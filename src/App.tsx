@@ -1,8 +1,11 @@
-import Wordle from "@/components/Wordle"
+import ToastProvider from "@/components/ToastNotification/ToastContext";
+import Wordle from "@/components/Wordle";
 
 function App() {
   return (
-    <Wordle />
+    <ToastProvider>
+      <Wordle />
+    </ToastProvider>
   )
 }
 

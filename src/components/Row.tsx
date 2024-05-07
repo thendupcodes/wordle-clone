@@ -1,4 +1,4 @@
-import { GridCell } from "@/hooks/useWordle";
+import { FLIP_ANIMATION_DUR, GridCell } from "@/hooks/useWordle";
 import { useEffect, useState } from "react";
 
 export default function Row ({ rowIdx, cells, isSubmitted, shakeRow, gameWon, winningRow }: {
@@ -17,7 +17,7 @@ export default function Row ({ rowIdx, cells, isSubmitted, shakeRow, gameWon, wi
       setTimeout(() => {
         setDelay(100);
         setBounceRow(true)
-      }, 1900); // flip animation=700ms + delay=1200ms
+      }, FLIP_ANIMATION_DUR);
     }
   }, [gameWon, rowIdx, winningRow])
 

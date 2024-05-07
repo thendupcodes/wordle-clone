@@ -3,15 +3,20 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
 
+import { useToaster } from "@/components/ToastNotification/ToastContext";
 import alphabetLetters from '@/dictionary/alphabets.json';
 
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
 
+export const FLIP_ANIMATION_DUR = 1900; // flip animation=700ms + delay=1200ms
+
 const KEY_STATE_DEFAULT = 'default';
 const KEY_STATE_CORRECT = 'correct';
 const KEY_STATE_PARTIAL = 'partial';
 const KEY_STATE_WRONG = 'wrong';
+
+const winPhrases = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'];
 
 export type KeyboardLetter = {
   id: string;
@@ -32,6 +37,8 @@ export type GridCell = {
 }
 
 export default function useWordle () {
+  const { openToast } = useToaster();
+
   const [answer, setAnswer] = useState('')  
   const [guessIndex, setGuessIndex] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
@@ -58,6 +65,14 @@ export default function useWordle () {
 
     return [outOfTurns || correctAnswer, correctAnswer, correctRow];
   }, [answer, guessIndex, previousGuesses])
+
+  useEffect(() => {
+    if (gameWon) {
+      setTimeout(() => {
+        openToast(winPhrases[guessIndex], 3000);
+      }, FLIP_ANIMATION_DUR);
+    }
+  }, [gameWon, guessIndex]);
 
   useEffect(() => {
     const gridRows: GridCell[][] = [];
@@ -122,7 +137,7 @@ export default function useWordle () {
   
           return newKeys;
         });
-      }, 1900); // flip animation=700ms + delay=1200ms
+      }, FLIP_ANIMATION_DUR);
       gridRows.push(gridRow);
     }
 
@@ -185,27 +200,27 @@ export default function useWordle () {
   const submitGuess = useCallback(() => {
     if (gameOver) {
       // User has used up all guesses
-      console.log('GAME OVER');
+      openToast('Impressive!');
       return;
     }
 
     if (previousGuesses.includes(currentGuess)) {
       // Already guessed case
-      console.log('ALREADY GUESSED');
+      openToast('Already guessed word');
       animateRow();
       return;
     }
 
     if (currentGuess.length !== WORD_LENGTH) {
       // not enough chars in guess
-      console.log('NOT ENOUGH');
+      openToast('Not enough letters');
       animateRow();
       return;
     }
 
     if (!wordIsInDictionary(currentGuess)) {
       // Word is invalid
-      console.log('INVALID');
+      openToast('Not word in list');
       animateRow();
       return;
     }
