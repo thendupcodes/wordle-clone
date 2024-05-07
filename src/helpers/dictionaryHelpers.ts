@@ -1,4 +1,4 @@
-import words from '@/words.json';
+import words from '@/dictionary/words.json';
 
 export function getWord(): string {
   return words[50];
