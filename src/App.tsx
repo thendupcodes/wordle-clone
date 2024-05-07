@@ -1,4 +1,4 @@
-import ToastProvider from "@/components/ToastNotification/ToastContext";
+import ToastProvider from "@/components/ToastContext";
 import Wordle from "@/components/Wordle";
 
 function App() {

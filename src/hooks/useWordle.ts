@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
 
-import { useToaster } from "@/components/ToastNotification/ToastContext";
+import { useToaster } from "@/components/ToastContext";
 import alphabetLetters from '@/dictionary/alphabets.json';
 
 const TOTAL_GUESSES = 6;
