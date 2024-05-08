@@ -232,7 +232,7 @@ export default function useWordle () {
 
     // The guess is valid so we can reveal whether it is correct or not and move to the next guess
     const storageItems = {
-      date: today,
+      lsDate: today,
       lsCurrentGuess: currentGuess,
       lsPreviousGuesses: previousGuesses,
       lsGuessIndex: guessIndex,
@@ -273,7 +273,7 @@ export default function useWordle () {
       setCurrentGuess(prev => {
         const newGuess = prev + char.toUpperCase();
         gameLocalStorage.setItem(JSON.stringify({
-          date: today,
+          lsDate: today,
           lsCurrentGuess: newGuess,
           lsPreviousGuesses: previousGuesses,
           lsGuessIndex: guessIndex,
@@ -290,7 +290,7 @@ export default function useWordle () {
     setCurrentGuess((prev) => {
       const newGuess = prev.slice(0,-1)
       gameLocalStorage.setItem(JSON.stringify({
-        date: today,
+        lsDate: today,
         lsCurrentGuess: newGuess,
         lsPreviousGuesses: previousGuesses,
         lsGuessIndex: guessIndex,
@@ -338,9 +338,9 @@ export default function useWordle () {
     setToday(todayNum);
 
     if (storageDetails != null) {
-      const { date, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
+      const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
 
-      if (date == null || date != todayNum) {
+      if (lsDate == null || lsDate != todayNum) {
         gameLocalStorage.deleteItem();
       } else {
         setCurrentGuess(lsCurrentGuess);

@@ -1,19 +1,40 @@
 import ToastProvider from "@/components/ToastContext";
 import Wordle from "@/components/Wordle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toggle from "./components/Toggle";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
+  const appLocalStorage = useLocalStorage({ key: 'tt-wordle-app-state' })
+
   const [darkMode, setDarkMode] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+    appLocalStorage.setItem(JSON.stringify({
+      lsDarkMode: !darkMode,
+      lsHighContrast: highContrast,
+    }));
   }
 
   const toggleContrast = () => {
     setHighContrast(!highContrast);
+    appLocalStorage.setItem(JSON.stringify({
+      lsDarkMode: darkMode,
+      lsHighContrast: !highContrast,
+    }));
   }
+
+  useEffect(() => {
+    const storageDetails = appLocalStorage.getItem();
+
+    if (storageDetails != null) {
+      const { lsDarkMode, lsHighContrast } = JSON.parse(storageDetails);
+      setDarkMode(lsDarkMode);
+      setHighContrast(lsHighContrast);
+    }
+  }, []);
 
   return (
     <div className={`App ${darkMode ? 'App--dark' : ''} ${highContrast ? 'App--high-contrast' : ''}`}>
