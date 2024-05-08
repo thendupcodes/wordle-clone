@@ -16,6 +16,12 @@
       font-family: $font-family-block;
       font-size: 36px;
     }
+
+    &-buttons {
+      position: absolute;
+      right: 16px;
+      display: flex;
+    }
   }
 
   &__body {

@@ -2,6 +2,11 @@
   --main-background-color: #{$black};
   --main-bd-color: #{$gray};
   --main-header-color: #{$white};
+  --main-header-tgl-bg-color: #{$white};
+  --main-header-tgl-btn-ft-color: #{$white};
+  --main-header-tgl-btn-bg-color: #{$black};
+  --dark-mode-icon-color: #{$moon-icon-color};
+  --dark-mode-bg-color: #{$moon-bg-color};
   --revealed-color: #{$white};
   --cell-bd-color: #{$dark-gray};
   --filled-ft-color: #{$white};
@@ -27,6 +32,11 @@
   --main-background-color: #{$white};
   --main-bd-color: #{$lightest-gray};
   --main-header-color: #{$black};
+  --main-header-tgl-bg-color: #{$light-gray};
+  --main-header-tgl-btn-ft-color: #{$black};
+  --main-header-tgl-btn-bg-color: #{$white};
+  --dark-mode-icon-color: #{$sun-icon-color};
+  --dark-mode-bg-color: #{$sun-bg-color};
   --revealed-color: #{$white};
   --cell-bd-color: #{$lightest-gray};
   --filled-ft-color: #{$black};
@@ -54,7 +64,3 @@
   height: auto;
   width: 100vw;
 }
-
-
-
-// #D4D6DA
