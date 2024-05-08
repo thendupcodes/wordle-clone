@@ -13,6 +13,7 @@ export default function Wordle () {
     gameOver,
     gameWon,
     winningRow,
+    avoidAnimationIdx,
     handleUserInput,
     submitGuess,
     addChar,
@@ -43,6 +44,7 @@ export default function Wordle () {
               shakeRow={guessIndex === rowIdx && shakeRow}
               gameWon={gameWon}
               winningRow={winningRow}
+              avoidAnimation={rowIdx < guessIndex && (gameWon ? rowIdx < avoidAnimationIdx : rowIdx <= avoidAnimationIdx)}
               isSubmitted={rowIdx < guessIndex}
             />
           )}

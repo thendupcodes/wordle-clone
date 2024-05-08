@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
@@ -46,6 +46,7 @@ export default function useWordle () {
   const [guessIndex, setGuessIndex] = useState(0);
   const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
   const [isRevealing, setIsRevealing] = useState(false);
+  const [avoidAnimationIdx, setAvoidAnimationIdx] = useState(-1);
   const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
@@ -201,7 +202,6 @@ export default function useWordle () {
   }
 
   const submitGuess = () => {
-    console.log('Submit');
     if (gameOver) {
       // User has used up all guesses
       openToast('Impressive!');
@@ -286,7 +286,6 @@ export default function useWordle () {
 
     setCurrentGuess((prev) => {
       const newGuess = prev.slice(0,-1)
-      console.log('setting');
       wordleLocalStorage.setItem(JSON.stringify({
         lsCurrentGuess: newGuess,
         lsPreviousGuesses: previousGuesses,
@@ -329,11 +328,15 @@ export default function useWordle () {
 
   useEffect(() => {
     const word = getWord();
-    const { lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(wordleLocalStorage.getItem());
+    const storageDetails = wordleLocalStorage.getItem();
 
-    setCurrentGuess(lsCurrentGuess);
-    setGuessIndex(lsGuessIndex);
-    setPreviousGuesses(lsPreviousGuesses);
+    if (storageDetails != null) {
+      const { lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
+      setCurrentGuess(lsCurrentGuess);
+      setGuessIndex(lsGuessIndex);
+      setPreviousGuesses(lsPreviousGuesses);
+      setAvoidAnimationIdx(lsGuessIndex - 1);
+    }
 
     setAnswer(word);
   }, []);
@@ -350,6 +353,7 @@ export default function useWordle () {
     gameOver,
     gameWon,
     winningRow,
+    avoidAnimationIdx,
     submitGuess,
     addChar,
     deleteChar,

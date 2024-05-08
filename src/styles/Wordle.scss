@@ -70,6 +70,12 @@
           border: 2px solid $gray;
         }
 
+        &--no-animate {
+          animation: none !important;
+          background-color: var(--bg-color);
+          border-color: var(--bd-color);
+        }
+
         &--bounce {
           background-color: var(--bg-color);
           border-color: var(--bd-color);

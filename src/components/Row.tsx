@@ -1,13 +1,22 @@
 import { FLIP_ANIMATION_DUR, GridCell } from "@/hooks/useWordle";
 import { useEffect, useState } from "react";
 
-export default function Row ({ rowIdx, cells, isSubmitted, shakeRow, gameWon, winningRow }: {
+export default function Row ({
+  rowIdx,
+  cells,
+  isSubmitted,
+  shakeRow,
+  gameWon,
+  winningRow,
+  avoidAnimation,
+}: {
   cells: GridCell[],
   isSubmitted: boolean,
   shakeRow: boolean,
   gameWon: boolean,
   winningRow: number,
   rowIdx: number,
+  avoidAnimation: boolean
 }) {
   const [bounceRow, setBounceRow] = useState(false);
   const [delay, setDelay] = useState(300);
@@ -29,6 +38,8 @@ export default function Row ({ rowIdx, cells, isSubmitted, shakeRow, gameWon, wi
               key={id}
               className={`Wordle__body-grid-cell ${
                 isSubmitted ? 'Wordle__body-grid-cell--submitted' : ''
+              } ${
+                avoidAnimation ? 'Wordle__body-grid-cell--no-animate' : ''
               } ${`Wordle__body-grid-cell--${state}`} ${
                 bounceRow ? 'Wordle__body-grid-cell--bounce' : ''
               }`}
