@@ -13,6 +13,9 @@
   --toast-ft-color: #{$white};
   --dark-mode-icon-color: #{$sun-icon-color};
   --dark-mode-bg-color: #{$sun-bg-color};
+  --contrast-bg-color: #{$default-contrast-bg-color};
+  --contrast-icon-color: #{$default-contrast-icon-color};
+  --contrast-icon-bg-color: #{$default-contrast-icon-bg-color};
   --revealed-color: #{$white};
   --cell-bd-color: #{$lightest-gray};
   --filled-ft-color: #{$black};
@@ -66,6 +69,9 @@
   }
 
   &--high-contrast {
+    --contrast-bg-color: #{$high-contrast-bg-color};
+    --contrast-icon-color: #{$high-contrast-icon-color};
+    --contrast-icon-bg-color: #{$high-contrast-icon-bg-color};
     --correct-bg-color: #{$orange};
     --correct-ft-color: #{$black};
     --partial-bg-color: #{$blue};

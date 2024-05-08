@@ -54,4 +54,16 @@ $toggle-width: 55px;
       color: var(--dark-mode-icon-color);
     }
   }
+
+  &--high-contrast {
+    background: var(--contrast-bg-color);
+
+    .Toggle__icon-wrapper {
+      background: var(--contrast-icon-bg-color);
+    }
+
+    .Toggle__icon {
+      color: var(--contrast-icon-color);
+    }
+  }
 }

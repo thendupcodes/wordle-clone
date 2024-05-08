@@ -32,7 +32,7 @@ function App() {
               />
 
               <Toggle
-                additionalClassNames="Toggle--contrast-mode"
+                additionalClassNames="Toggle--high-contrast"
                 isToggled={highContrast}
                 handleToggle={toggleContrast}
                 offState={<i className="fa-solid fa-circle-half-stroke" />}
