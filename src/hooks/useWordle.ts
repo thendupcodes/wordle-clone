@@ -340,13 +340,15 @@ export default function useWordle () {
     if (storageDetails != null) {
       const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
 
+      const alreadyWon = lsPreviousGuesses.includes(word);
+
       if (lsDate == null || lsDate != todayNum) {
         gameLocalStorage.deleteItem();
       } else {
         setCurrentGuess(lsCurrentGuess);
         setGuessIndex(lsGuessIndex);
         setPreviousGuesses(lsPreviousGuesses);
-        setAvoidAnimationIdx(lsGuessIndex - 1);
+        setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex);
       }
     }
 
