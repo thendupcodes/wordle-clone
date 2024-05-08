@@ -329,7 +329,6 @@ export default function useWordle () {
 
   useEffect(() => {
     const word = getWord();
-    console.log('getting');
     const { lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(wordleLocalStorage.getItem());
 
     setCurrentGuess(lsCurrentGuess);
