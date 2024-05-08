@@ -86,6 +86,7 @@
 
         &--bounce {
           background-color: var(--bg-color);
+          color: var(--correct-ft-color);
           border-color: transparent;
           animation: bounce 1s ease forwards;
         }
