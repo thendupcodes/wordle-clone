@@ -9,14 +9,14 @@ export default function Wordle () {
     grid,
     guessIndex,
     shakeRow,
+    keyboardKeys,
+    gameOver,
+    gameWon,
+    winningRow,
     handleUserInput,
     submitGuess,
     addChar,
     deleteChar,
-    keyboardKeys,
-    gameOver,
-    gameWon,
-    winningRow
   } = useWordle();
 
   useEffect(() => {
@@ -32,25 +32,7 @@ export default function Wordle () {
   }, [handleUserInput, gameOver])
 
   return (
-    // Wrapper 
-    // Header => Title
-    // Body => Grid of 6 rows x 5 cols
-    // Each cell will be a div
-    // Each div will contain an input that the user can type into
-
-    // inputs on each cell
-    // only activate the inputs for the current row
-    // only activate the input for the current cell (based on users input)
-    // user can type only a-z (cap or no cap)
-    // on each value change, jump to next input
-    // on backspace, delete last value
-    // on enter, submit if user has typed all cells in the row
-
     <div className="Wordle">
-      <div className="Wordle__header">
-        WORDLE
-      </div>
-
       <div className="Wordle__body">
         <div className="Wordle__body-grid">
           {grid.map((cells, rowIdx) =>

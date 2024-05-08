@@ -2,10 +2,21 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  height: 100vh;
+  height: calc(100vh - 64px); // Account for header
 
   &__header {
-    height: 50px;
+    height: 64px;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid $gray;
+    box-sizing: border-box;
+
+    &-title {
+      font-family: $font-family-block;
+      font-size: 36px;
+    }
   }
 
   &__body {
@@ -18,7 +29,8 @@
       flex-direction: column;
       justify-content: center;
       gap: 6px;
-      height: 600px;
+      height: 60vh;
+      min-height: 500px;
 
       &-row {
         display: flex;
