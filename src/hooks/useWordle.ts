@@ -5,6 +5,7 @@ import isLetter from "@/helpers/isLetter";
 
 import { useToaster } from "@/components/ToastContext";
 import alphabetLetters from '@/dictionary/alphabets.json';
+import useLocalStorage from "./useLocalStorage";
 
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
@@ -38,16 +39,17 @@ export type GridCell = {
 
 export default function useWordle () {
   const { openToast } = useToaster();
+  const wordleLocalStorage = useLocalStorage({ key: 'wordle-tt' })
 
-  const [answer, setAnswer] = useState('')  
-  const [guessIndex, setGuessIndex] = useState(0);
+  const [answer, setAnswer] = useState('');
   const [currentGuess, setCurrentGuess] = useState('');
-  const [isRevealing, setIsRevealing] = useState(false);
+  const [guessIndex, setGuessIndex] = useState(0);
   const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
+  const [isRevealing, setIsRevealing] = useState(false);
   const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
-  const [shakeRow, setShakeRow] = useState(false); 
+  const [shakeRow, setShakeRow] = useState(false);
 
   const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
     const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
@@ -198,7 +200,8 @@ export default function useWordle () {
     }, 700);
   }
 
-  const submitGuess = useCallback(() => {
+  const submitGuess = () => {
+    console.log('Submit');
     if (gameOver) {
       // User has used up all guesses
       openToast('Impressive!');
@@ -227,31 +230,53 @@ export default function useWordle () {
     }
 
     // The guess is valid so we can reveal whether it is correct or not and move to the next guess
+    const storageItems = {
+      lsCurrentGuess: currentGuess,
+      lsPreviousGuesses: previousGuesses,
+      lsGuessIndex: guessIndex,
+    }
+
     setIsRevealing(true);
     setPreviousGuesses(prev => {
-      const temp = [...prev]; // Create a copy of the guesses array
-      temp[guessIndex] = currentGuess; // Update the current row with the current guess
+      const temp = [...prev, currentGuess]; // Create a copy of the guesses array and update with the current guess
       return temp; // Return the updated guesses array
     });
+    storageItems.lsPreviousGuesses = [...storageItems.lsPreviousGuesses, currentGuess];
 
     if (guessIndex < TOTAL_GUESSES) {
       setCurrentGuess('');
-      setGuessIndex(prev => prev + 1); // Increment current row
+      storageItems.lsCurrentGuess = '';
+
+      setGuessIndex(prev => {
+        const temp = prev + 1;
+        return temp;
+      }); // Increment current row
+      storageItems.lsGuessIndex += 1;
     } else {
       setCurrentGuess(null);
+      storageItems.lsCurrentGuess = null;
     }
+
+    wordleLocalStorage.setItem(JSON.stringify(storageItems));
 
     setTimeout(() => {
       setIsRevealing(false)
     }, FLIP_ANIMATION_DUR);
-  }, [gameOver, previousGuesses, currentGuess, guessIndex]);
+  };
 
   const addChar = (char: string) => {
     if (gameOver) return;
 
     if (currentGuess.length < WORD_LENGTH) {
       setCurrentGuess(prev => {
-        return (prev + char.toUpperCase());
+        const newGuess = prev + char.toUpperCase();
+        wordleLocalStorage.setItem(JSON.stringify({
+          lsCurrentGuess: newGuess,
+          lsPreviousGuesses: previousGuesses,
+          lsGuessIndex: guessIndex,
+        }));
+
+        return newGuess;
       });
     }
   }
@@ -259,7 +284,17 @@ export default function useWordle () {
   const deleteChar = () => {
     if (gameOver) return;
 
-    setCurrentGuess((prev) => prev.slice(0,-1));
+    setCurrentGuess((prev) => {
+      const newGuess = prev.slice(0,-1)
+      console.log('setting');
+      wordleLocalStorage.setItem(JSON.stringify({
+        lsCurrentGuess: newGuess,
+        lsPreviousGuesses: previousGuesses,
+        lsGuessIndex: guessIndex,
+      }));
+
+      return newGuess;
+    });
   }
 
   const handleUserInput = (e: KeyboardEvent) => {
@@ -294,6 +329,12 @@ export default function useWordle () {
 
   useEffect(() => {
     const word = getWord();
+    console.log('getting');
+    const { lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(wordleLocalStorage.getItem());
+
+    setCurrentGuess(lsCurrentGuess);
+    setGuessIndex(lsGuessIndex);
+    setPreviousGuesses(lsPreviousGuesses);
 
     setAnswer(word);
   }, []);
