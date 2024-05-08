@@ -1,12 +1,14 @@
 $yellow: #f1ba0a;
+$light-yellow: transparentize($yellow, 0.1);
 $green: #548c2f;
+$light-green: transparentize($green, 0.2);
+
 $orange: #ef8353;
 $blue: #4f5d74;
 
-
-$lightest-gray: #adb5bd;
+$lightest-gray: #d4d7da;
 $light-gray: #818283;
-$gray: #6c757d;
+$gray: #777d7e;
 $dark-gray: #343a40;
 
 
