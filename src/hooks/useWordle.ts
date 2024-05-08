@@ -70,7 +70,7 @@ export default function useWordle () {
   useEffect(() => {
     if (gameWon) {
       setTimeout(() => {
-        openToast(winPhrases[guessIndex], 3000);
+        openToast(winPhrases[guessIndex - 1], 3000);
       }, FLIP_ANIMATION_DUR);
     }
   }, [gameWon, guessIndex]);
