@@ -12,8 +12,8 @@
   }
 
   &__key {
-    font-weight: $font-weight-medium;
     font-size: 20px;
+    font-weight: $font-weight-heavy;
     height: 60px;
     flex: 1;
     margin: 2px;
@@ -21,20 +21,18 @@
     border-radius: 4px;
     background: $gray;
     color: $white;
+    transition: all 0.3s ease;
 
     &--correct {
       background: $green;
-      transition: all 0.3s ease;
     }
 
     &--partial {
       background: $yellow;
-      transition: all 0.3s ease;
     }
 
     &--wrong {
       background: $dark-gray;
-      transition: all 0.1s ease;
     }
 
     &--enter {
@@ -50,4 +48,26 @@
       flex: 0.5;
     }
   }
+}
+
+
+@media screen and (max-width: $small-device-width) {
+  .Keyboard {
+    width: 90vw;
+  } 
+}
+
+@media screen and (max-width: $min-device-width) {
+  .Keyboard {
+    width: 100vw;
+
+    &__key {
+      height: 50px;
+      font-size: $font-size-md;
+
+      &--enter {
+        font-size: $font-size-xxs;
+      }
+    }
+  } 
 }
