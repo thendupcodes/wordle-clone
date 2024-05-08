@@ -42,6 +42,7 @@ export default function useWordle () {
   const [answer, setAnswer] = useState('')  
   const [guessIndex, setGuessIndex] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
+  const [isRevealing, setIsRevealing] = useState(false);
   const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
   const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
@@ -225,6 +226,8 @@ export default function useWordle () {
       return;
     }
 
+    // The guess is valid so we can reveal whether it is correct or not and move to the next guess
+    setIsRevealing(true);
     setPreviousGuesses(prev => {
       const temp = [...prev]; // Create a copy of the guesses array
       temp[guessIndex] = currentGuess; // Update the current row with the current guess
@@ -237,6 +240,10 @@ export default function useWordle () {
     } else {
       setCurrentGuess(null);
     }
+
+    setTimeout(() => {
+      setIsRevealing(false)
+    }, FLIP_ANIMATION_DUR);
   }, [gameOver, previousGuesses, currentGuess, guessIndex]);
 
   const addChar = (char: string) => {
@@ -256,6 +263,8 @@ export default function useWordle () {
   }
 
   const handleUserInput = (e: KeyboardEvent) => {
+    if (isRevealing) return;
+
     if (isLetter(e.key)) {
       return addChar(e.key);
     } else if (e.key === 'Backspace') {
@@ -290,20 +299,20 @@ export default function useWordle () {
   }, []);
 
   return {
+    answer,
+    guessIndex,
     grid,
     gridGuessHistory,
     gridCurrentGuess,
     gridGuessesLeft,
-    shakeRow,
-    answer,
-    guessIndex,
     keyboardKeys,
+    shakeRow,
+    gameOver,
+    gameWon,
+    winningRow,
     submitGuess,
     addChar,
     deleteChar,
     handleUserInput,
-    gameOver,
-    gameWon,
-    winningRow,
   };
 }
