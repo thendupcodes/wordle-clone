@@ -1,6 +1,6 @@
 import words from '@/dictionary/words.json';
 
-function getFormattedDate() {
+export function getToday() {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1
@@ -12,7 +12,7 @@ function getFormattedDate() {
 
 export function getWord(): string {
   const dictionaryLength = words.length;
-  const today = getFormattedDate();
+  const today = getToday();
   const idx = today % dictionaryLength;
 
   return words[idx];

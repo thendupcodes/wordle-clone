@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
+import { getToday, getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
 import isLetter from "@/helpers/isLetter";
 
 import { useToaster } from "@/components/ToastContext";
@@ -39,8 +39,9 @@ export type GridCell = {
 
 export default function useWordle () {
   const { openToast } = useToaster();
-  const wordleLocalStorage = useLocalStorage({ key: 'wordle-tt' })
+  const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' })
 
+  const [today, setToday] = useState(null);
   const [answer, setAnswer] = useState('');
   const [currentGuess, setCurrentGuess] = useState('');
   const [guessIndex, setGuessIndex] = useState(0);
@@ -231,6 +232,7 @@ export default function useWordle () {
 
     // The guess is valid so we can reveal whether it is correct or not and move to the next guess
     const storageItems = {
+      date: today,
       lsCurrentGuess: currentGuess,
       lsPreviousGuesses: previousGuesses,
       lsGuessIndex: guessIndex,
@@ -257,7 +259,7 @@ export default function useWordle () {
       storageItems.lsCurrentGuess = null;
     }
 
-    wordleLocalStorage.setItem(JSON.stringify(storageItems));
+    gameLocalStorage.setItem(JSON.stringify(storageItems));
 
     setTimeout(() => {
       setIsRevealing(false)
@@ -270,7 +272,8 @@ export default function useWordle () {
     if (currentGuess.length < WORD_LENGTH) {
       setCurrentGuess(prev => {
         const newGuess = prev + char.toUpperCase();
-        wordleLocalStorage.setItem(JSON.stringify({
+        gameLocalStorage.setItem(JSON.stringify({
+          date: today,
           lsCurrentGuess: newGuess,
           lsPreviousGuesses: previousGuesses,
           lsGuessIndex: guessIndex,
@@ -286,7 +289,8 @@ export default function useWordle () {
 
     setCurrentGuess((prev) => {
       const newGuess = prev.slice(0,-1)
-      wordleLocalStorage.setItem(JSON.stringify({
+      gameLocalStorage.setItem(JSON.stringify({
+        date: today,
         lsCurrentGuess: newGuess,
         lsPreviousGuesses: previousGuesses,
         lsGuessIndex: guessIndex,
@@ -328,14 +332,22 @@ export default function useWordle () {
 
   useEffect(() => {
     const word = getWord();
-    const storageDetails = wordleLocalStorage.getItem();
+    const todayNum = getToday();
+    const storageDetails = gameLocalStorage.getItem();
+
+    setToday(todayNum);
 
     if (storageDetails != null) {
-      const { lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
-      setCurrentGuess(lsCurrentGuess);
-      setGuessIndex(lsGuessIndex);
-      setPreviousGuesses(lsPreviousGuesses);
-      setAvoidAnimationIdx(lsGuessIndex - 1);
+      const { date, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
+
+      if (date == null || date != todayNum) {
+        gameLocalStorage.deleteItem();
+      } else {
+        setCurrentGuess(lsCurrentGuess);
+        setGuessIndex(lsGuessIndex);
+        setPreviousGuesses(lsPreviousGuesses);
+        setAvoidAnimationIdx(lsGuessIndex - 1);
+      }
     }
 
     setAnswer(word);
