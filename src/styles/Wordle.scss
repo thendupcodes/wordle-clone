@@ -62,7 +62,7 @@
         text-transform: uppercase;
         transform: rotateX(0deg);
         font-family: $font-family-regular;
-        transition: height 0.3s ease, width 0.3s ease;
+        transition: color 0.3s ease, background 0.3s ease, height 0.3s ease, width 0.3s ease;
 
         &--filled {
           position: relative;
