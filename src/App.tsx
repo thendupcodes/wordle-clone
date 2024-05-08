@@ -1,8 +1,17 @@
+import ToastProvider from "@/components/ToastContext";
+import Wordle from "@/components/Wordle";
+
 function App() {
   return (
-    <>
-      MAKE SOMETHING
-    </>
+    <ToastProvider>
+      <>
+        <div className="Wordle__header">
+          <div className="Wordle__header-title">Wordle</div>
+        </div>
+
+        <Wordle />
+      </>
+    </ToastProvider>
   )
 }
 

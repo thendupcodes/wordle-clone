@@ -1,7 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Kode+Mono:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sacramento&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Odor+Mean+Chey&display=swap');
 
 @import './_variables';
+@import './animations';
+
 @import './App';
+@import './Toast';
+@import './Keyboard';
+@import './Wordle';
 
 :root {
   font-family: $font-family-regular;
@@ -9,8 +14,8 @@
   font-weight: $font-weight-regular;
 
   color-scheme: light dark;
-  color: $body-color;
-  background-color: $dark-gray;
+  color: $white;
+  background-color: $black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,13 +23,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  font-family: $font-family-regular;
-}
-
 a {
   font-weight: $font-weight-regular;
-  color: $teal-3;
+  color: $white;
   text-decoration: none;
   position: relative;
 
@@ -35,13 +36,13 @@ a {
     height: 1px;
     left: 50%;
     position: absolute;
-    background: $teal-4;
+    background: $blue;
     transition: width 0.3s ease 0s, left 0.3s ease 0s;
     width: 0;
   }
 
   &:hover {
-    color: $teal-4;
+    color: $blue;
   
     &:after {
       width: 100%; 
@@ -59,7 +60,7 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
-  background-color: $dark-gray;
+  background-color: $black;
 }
 
 h1 {

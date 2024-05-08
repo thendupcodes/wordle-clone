@@ -1,13 +1,17 @@
-$teal-1: #6fffe8;
-$teal-2: #5bc0bf;
-$teal-3: #3a506c;
-$teal-4: #1c2542;
-$teal-5: #0b132c;
+$yellow: #f1ba0a;
+$green: #548c2f;
+$orange: #ef8353;
+$blue: #4f5d74;
 
-$body-color: $teal-2;
-$black: #000000;
-$dark-gray: #292c35;
-$white: #ffffff;
+
+$lightest-gray: #adb5bd;
+$light-gray: #818283;
+$gray: #6c757d;
+$dark-gray: #343a40;
+
+
+$black: #101010;
+$white: #f7f7f7;
 
 $font-size-xxs: 10px;
 $font-size-xs: 12px;
@@ -25,9 +29,8 @@ $small-device-width: 854px;
 $tablet-width: 1024px;
 $tablet-large-width: 1440px;
 
-$font-family-regular: "Montserrat", sans-serif;
-$font-family-mono: "Kode Mono", "Courier Prime", monospace;
-$font-family-block: "Bebas Neue", sans-serif;
+$font-family-regular: "Libre Franklin", sans-serif;
+$font-family-block: "Odor Mean Chey", serif;
 
 $font-weight-1: 100;
 $font-weight-2: 200;

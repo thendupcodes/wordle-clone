@@ -1,0 +1,73 @@
+.Keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 200px;
+
+  &__row {
+    display: flex;
+    width: 100%;
+  }
+
+  &__key {
+    font-size: 20px;
+    font-weight: $font-weight-heavy;
+    height: 60px;
+    flex: 1;
+    margin: 2px;
+    border: 0;
+    border-radius: 4px;
+    background: $gray;
+    color: $white;
+    transition: all 0.3s ease;
+
+    &--correct {
+      background: $green;
+    }
+
+    &--partial {
+      background: $yellow;
+    }
+
+    &--wrong {
+      background: $dark-gray;
+    }
+
+    &--enter {
+      flex: 1.5;
+      font-size: 12px;
+    }
+
+    &--backspace {
+      flex: 1.5;
+    }
+
+    &--spacer {
+      flex: 0.5;
+    }
+  }
+}
+
+
+@media screen and (max-width: $small-device-width) {
+  .Keyboard {
+    width: 90vw;
+  } 
+}
+
+@media screen and (max-width: $min-device-width) {
+  .Keyboard {
+    width: 100vw;
+
+    &__key {
+      height: 50px;
+      font-size: $font-size-md;
+
+      &--enter {
+        font-size: $font-size-xxs;
+      }
+    }
+  } 
+}
