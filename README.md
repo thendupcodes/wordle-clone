@@ -1,30 +1,31 @@
-# React + TypeScript + Vite
+# Wordle Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to Wordle Clone, a simple word-guessing game inspired by the popular Wordle game.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Guessing Game**: Guess the hidden 5-letter word within 6 attempts.
+- **On-screen Keyboard**: Access an on-screen keyboard that is clickable for easier input while playing the game.
+- **Feedback**: Receive feedback on your guesses with board and keyboard highlighting to help you narrow down the correct word.
+- **Responsive Design**: Play the game on various devices.
+- **Dark Mode Toggle**: Switch between light and dark mode for better readability in different environments.
+- **High Contrast Toggle**: Toggle high contrast mode for improved visibility of letter colours.
+- **Game Progress in Local Storage**: Game progress is stored locally, so you can continue where you left off.
+- **App State in Local Storage**: Application state is stored locally, to maintain dark-mode and contrast settings.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React.js:** Used for building the interactive components and managing the application state.
+- **HTML:** Markup language for structuring the web page.
+- **SCSS:** Used for styling, providing a more maintainable and structured approach to CSS.
+- **TypeScript:** Adds static typing to JavaScript, enhancing code readability and maintainability.
 
-- Configure the top-level `parserOptions` property like this:
+## Usage
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Type in your guess for each word or use your mouse to click on letters on the on-screen keyboard
+- Hit "Enter" on your keyboard or the "ENTER" key on the on-screen keyboard to submit your guess.
+- Receive feedback on your guess:
+  - Green: Correct letter and position. (Orange in high-contrast mode)
+  - Yellow: Correct letter but wrong position. (Blue in high-contrast mode)
+  - Gray: Letter not in the hidden word.
+- Keep guessing until you guess the word or run out of attempts.
