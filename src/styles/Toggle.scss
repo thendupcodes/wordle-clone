@@ -1,0 +1,57 @@
+$toggle-width: 55px;
+
+.Toggle {
+  width: $toggle-width;
+  height: 32px;
+  background: var(--main-header-tgl-bg-color);
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  margin: 0 8px;
+
+  &__icon-wrapper {
+    position: absolute;
+    transition: left 0.3s ease, right 0.3s ease;
+    top: 50%;
+    left: 4px;
+    right: unset;
+    transform: translate(0%, -50%);
+    transform-origin: center;
+    width: 26px;
+    height: 26px;
+    background: var(--main-header-tgl-btn-bg-color);
+    border-radius: 50%;
+  }
+
+  &__icon {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--main-header-tgl-btn-ft-color);
+  }
+
+  &--toggled {
+    .Toggle {
+      &__icon-wrapper {
+        left: calc(100% - 30px);
+      }
+    }
+  }
+
+  &--dark-mode {
+    .Toggle__icon-wrapper {
+      background: var(--dark-mode-bg-color);
+    }
+
+    .Toggle__icon {
+      color: var(--dark-mode-icon-color);
+    }
+  }
+}
