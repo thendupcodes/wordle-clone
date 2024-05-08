@@ -5,6 +5,7 @@
   align-items: center;
   width: 500px;
   height: 200px;
+  min-width: $min-width-limit;
 
   &__row {
     display: flex;
@@ -19,20 +20,23 @@
     margin: 2px;
     border: 0;
     border-radius: 4px;
-    background: $gray;
-    color: $white;
+    background: var(--kb-key-bg-color);
+    color: var(--kb-key-ft-color);
     transition: all 0.3s ease;
 
     &--correct {
-      background: $green;
+      background: var(--kb-key-correct-bg-color);
+      color: var(--kb-key-correct-ft-color);
     }
 
     &--partial {
-      background: $yellow;
+      background: var(--kb-key-partial-bg-color);
+      color: var(--kb-key-partial-ft-color);
     }
 
     &--wrong {
-      background: $dark-gray;
+      background: var(--kb-key-wrong-bg-color);
+      color: var(--kb-key-wrong-ft-color);
     }
 
     &--enter {
@@ -59,7 +63,9 @@
 
 @media screen and (max-width: $min-device-width) {
   .Keyboard {
-    width: 100vw;
+    width: calc(100vw - 8px);
+    height: auto;
+    margin-bottom: 4px;
 
     &__key {
       height: 50px;

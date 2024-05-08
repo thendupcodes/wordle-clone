@@ -1,17 +1,29 @@
-$yellow: #f1ba0a;
+$yellow: #e8b62a;
+$light-yellow: #fdc43f;
 $green: #548c2f;
-$orange: #ef8353;
-$blue: #4f5d74;
+$light-green: #5fad56;
+$orange: #f5783b;
+$blue: #85c0f8;
 
-
-$lightest-gray: #adb5bd;
-$light-gray: #818283;
-$gray: #6c757d;
+$lightest-gray: #d4d7da;
+$light-gray: #adb5bd;
+$gray: #777d7e;
 $dark-gray: #343a40;
-
 
 $black: #101010;
 $white: #f7f7f7;
+
+$moon-icon-color: #faf0ca;
+$moon-bg-color: #0d3b66;
+$sun-icon-color: #f4d35e;
+$sun-bg-color: #168aad;
+
+$default-contrast-bg-color: $yellow;
+$default-contrast-icon-color: $white;
+$default-contrast-icon-bg-color: $green;
+$high-contrast-bg-color: $blue;
+$high-contrast-icon-color: $black;
+$high-contrast-icon-bg-color: $orange;
 
 $font-size-xxs: 10px;
 $font-size-xs: 12px;
@@ -23,6 +35,8 @@ $font-size-xxl: 24px;
 $font-size-icon: 32px;
 $font-size-subheading: 40px;
 $font-size-heading: 80px;
+
+$min-width-limit: 300px;
 
 $min-device-width: 564px;
 $small-device-width: 854px;
