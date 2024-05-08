@@ -18,7 +18,7 @@ export const useToaster = () => useContext(ToastContext);
 export default function ToastProvider ({ children } : { children: ReactElement }) {
   const [toasts, setToasts] = useState([]);
 
-  const openToast = (message: string, duration = 700) => {
+  const openToast = (message: string, duration = 1000) => {
     const newToast = {
       id: Date.now(),
       message: message,
