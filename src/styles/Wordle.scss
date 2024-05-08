@@ -1,8 +1,6 @@
 .Wordle {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   height: calc(100vh - 64px); // Account for header
+  width: 100vw;
 
   &__header {
     height: 64px;
@@ -10,8 +8,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid $gray;
+    border-bottom: 1px solid var(--main-bd-color);
     box-sizing: border-box;
+    color: var(--main-header-color);
 
     &-title {
       font-family: $font-family-block;
@@ -47,7 +46,8 @@
         width: 60px;
         height: 60px;
         border-radius: 0;
-        border: 2px solid $dark-gray;
+        border: 2px solid;
+        border-color: var(--cell-bd-color);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -56,47 +56,54 @@
         text-transform: uppercase;
         transform: rotateX(0deg);
         font-family: $font-family-regular;
-        transition: all 0.3s ease;
+        transition: height 0.3s ease, width 0.3s ease;
 
         &--filled {
           position: relative;
-          color: $white;
-          border: 2px solid $gray;
+          color: var(--filled-ft-color);
+          border: 2px solid var(--filled-bd-color);
           animation: pop 0.1s ease-in;
         }
 
         &--submitted {
           animation: flip 0.7s ease-in forwards;
-          border: 2px solid $gray;
+          border: 2px solid var(--filled-bd-color);
+          color: var(--filled-ft-color);
         }
 
         &--no-animate {
           animation: none !important;
           background-color: var(--bg-color);
-          border-color: var(--bd-color);
+          border-color: transparent;
+          color: var(--ft-color);
         }
 
         &--bounce {
           background-color: var(--bg-color);
-          border-color: var(--bd-color);
+          border-color: transparent;
           animation: bounce 1s ease forwards;
         }
 
         &--correct {
-          --bg-color: #{$green};
-          --bd-color: #{$green};
+          --bg-color: var(--correct-bg-color);
+          --ft-color: var(--correct-ft-color);
         }
 
         &--partial {
-          --bg-color: #{$yellow};
-          --bd-color: #{$yellow};
+          --bg-color: var(--partial-bg-color);
+          --ft-color: var(--partial-ft-color);
         }
 
         &--wrong {
-          --bg-color: #{$dark-gray};
-          --bd-color: #{$dark-gray};
+          --bg-color: var(--wrong-bg-color);
+          --ft-color: var(--wrong-ft-color);
         }
       }
+    }
+
+    &-keyboard {
+      display: flex;
+      justify-content: center;
     }
   }
 }

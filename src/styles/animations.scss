@@ -1,26 +1,30 @@
 @keyframes flip {
   0% {
     transform: rotateX(0deg);
-    background-color: $black;
-    border-color: $gray;
+    background-color: var(--filled-bg-color);
+    border-color: var(--filled-bd-color);
+    color: var(--filled-ft-color);
   }
 
   45% {
     transform: rotateX(90deg);
-    background-color: $black;
-    border-color: $gray;
+    background-color: var(--filled-bg-color);
+    border-color: var(--filled-bd-color);
+    color: var(--filled-ft-color);
   }
 
   55% {
     transform: rotateX(90deg);
     background-color: var(--bg-color);
-    border-color: var(--bd-color);
+    border-color: transparent;
+    color: var(--ft-color);
   }
 
   100% {
     transform: rotateX(0deg);
     background-color: var(--bg-color);
-    border-color: var(--bd-color);
+    border-color: transparent;
+    color: var(--ft-color);
   }
 }
 
