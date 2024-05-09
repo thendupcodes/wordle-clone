@@ -11,6 +11,8 @@
   --main-header-tgl-btn-bg-color: #{$white};
   --toast-bg-color: #{$black};
   --toast-ft-color: #{$white};
+  --tooltip-bg-color: #{$black};
+  --tooltip-ft-color: #{$white};
   --dark-mode-icon-color: #{$sun-icon-color};
   --dark-mode-bg-color: #{$sun-bg-color};
   --contrast-bg-color: #{$default-contrast-bg-color};
@@ -45,6 +47,8 @@
     --main-header-tgl-btn-bg-color: #{$black};
     --toast-bg-color: #{$white};
     --toast-ft-color: #{$black};
+    --tooltip-bg-color: #{$white};
+    --tooltip-ft-color: #{$black};
     --dark-mode-icon-color: #{$moon-icon-color};
     --dark-mode-bg-color: #{$moon-bg-color};
     --revealed-color: #{$white};
