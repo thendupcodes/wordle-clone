@@ -17,12 +17,22 @@
     font-weight: $font-weight-heavy;
     height: 60px;
     flex: 1;
-    margin: 2px;
+    margin: 4px;
     border: 0;
     border-radius: 4px;
     background: var(--kb-key-bg-color);
     color: var(--kb-key-ft-color);
     transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+      transition: all 0.1s ease;
+    }
 
     &--correct {
       background: var(--kb-key-correct-bg-color);
@@ -69,6 +79,7 @@
 
     &__key {
       height: 50px;
+      margin: 2px;
       font-size: $font-size-md;
 
       &--enter {
