@@ -43,6 +43,7 @@ export default function useWordle () {
 
   const [today, setToday] = useState(null);
   const [answer, setAnswer] = useState('');
+  const [gameWonOnLoad, setGameWonOnLoad] = useState(false);
   const [currentGuess, setCurrentGuess] = useState('');
   const [guessIndex, setGuessIndex] = useState(0);
   const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
@@ -72,7 +73,7 @@ export default function useWordle () {
   }, [answer, guessIndex, previousGuesses])
 
   useEffect(() => {
-    if (gameWon) {
+    if (gameWon && !gameWonOnLoad) {
       setTimeout(() => {
         openToast(winPhrases[guessIndex - 1], 3000);
       }, FLIP_ANIMATION_DUR);
@@ -348,6 +349,7 @@ export default function useWordle () {
         setCurrentGuess(lsCurrentGuess);
         setGuessIndex(lsGuessIndex);
         setPreviousGuesses(lsPreviousGuesses);
+        setGameWonOnLoad(alreadyWon);
         setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex);
       }
     }
