@@ -61,7 +61,7 @@ export default function Stats ({ userStats, colors }: StatsProps) {
     const most = Math.max(g1, g2, g3, g4, g5, g6);
 
     return [
-      [g1, g2, g3, g4, g5, g6].map((g) => Math.floor((g/most) * barMaxHeight)),
+      [g1, g2, g3, g4, g5, g6].map((g) => Math.max(Math.floor((g/most) * barMaxHeight), 2)),
       [g1, g2, g3, g4, g5, g6]
     ];
   }, [guessDistribution]);
@@ -133,12 +133,12 @@ export default function Stats ({ userStats, colors }: StatsProps) {
 
         <div className="Stats__guesses-chart">
           <svg width="475" height="300" viewBox="0 0 475 200" style={{ width: '100%', maxWidth: '475px', minHeight: '150px', height: '100%' }} xmlns="http://www.w3.org/2000/svg">
-            <rect x="25" y={barMaxHeight - barHeights[0]} width="50" height={barHeights[0]} fill={barColor} />
-            <rect x="100" y={barMaxHeight - barHeights[1]} width="50" height={barHeights[1]} fill={barColor} />
-            <rect x="175" y={barMaxHeight - barHeights[2]} width="50" height={barHeights[2]} fill={barColor} />
-            <rect x="250" y={barMaxHeight - barHeights[3]} width="50" height={barHeights[3]} fill={barColor} />
-            <rect x="325" y={barMaxHeight - barHeights[4]} width="50" height={barHeights[4]} fill={barColor} />
-            <rect x="400" y={barMaxHeight - barHeights[5]} width="50" height={barHeights[5]} fill={barColor} />
+            <rect x="25" y={barMaxHeight - barHeights[0]} width="50" height={barHeights[0]} rx="4" ry="4" fill={barColor} />
+            <rect x="100" y={barMaxHeight - barHeights[1]} width="50" height={barHeights[1]} rx="4" ry="4" fill={barColor} />
+            <rect x="175" y={barMaxHeight - barHeights[2]} width="50" height={barHeights[2]} rx="4" ry="4" fill={barColor} />
+            <rect x="250" y={barMaxHeight - barHeights[3]} width="50" height={barHeights[3]} rx="4" ry="4" fill={barColor} />
+            <rect x="325" y={barMaxHeight - barHeights[4]} width="50" height={barHeights[4]} rx="4" ry="4" fill={barColor} />
+            <rect x="400" y={barMaxHeight - barHeights[5]} width="50" height={barHeights[5]} rx="4" ry="4" fill={barColor} />
 
             <text x="50" y={barMaxHeight - barHeights[0] - 10} textAnchor="middle" fill={fontColor}>{barValues[0]}</text>
             <text x="125" y={barMaxHeight - barHeights[1] - 10} textAnchor="middle" fill={fontColor}>{barValues[1]}</text>
