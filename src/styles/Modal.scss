@@ -11,7 +11,8 @@
     height: 100%;
     width: 100%;
     background: var(--modal-overlay-bg-color);
-    opacity: 0.9;
+    opacity: 0;
+    animation: modal-fade-in 0.5s ease forwards;
   }
 
   &__body {
