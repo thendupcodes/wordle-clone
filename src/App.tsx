@@ -48,13 +48,13 @@ function App() {
             <div className="Wordle__header-title">WordleClone</div>
 
             <div className="Wordle__header-buttons">
-              <Tooltip direction="bottom-left" delay={0} content="See statistics">
+              <Tooltip direction="bottom" delay={0} content="See statistics">
                 <button onClick={() => setAppTriggerModal(true)} className="Wordle__header-stats-button">
                   <i className="fa-solid fa-chart-column"></i>
                 </button>
               </Tooltip>
 
-              <Tooltip direction="bottom-left" delay={0} content="Toggle dark mode">
+              <Tooltip direction="bottom" delay={0} content="Toggle dark mode">
                 <Toggle
                   additionalClassNames="Toggle--dark-mode"
                   isToggled={darkMode}
