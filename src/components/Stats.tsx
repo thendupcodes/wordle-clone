@@ -29,6 +29,20 @@ export default function Stats ({ userStats, colors }: StatsProps) {
 
   const barMaxHeight = 200;
 
+  const getAndSetCountDown = () => {
+    const now = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    
+    const difference = tomorrow.getTime() - now.getTime();
+    const hours = Math.floor(difference / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+  }
+
   const [barHeights, barValues]: [number[], number[]]= useMemo(() => {
     if (guessDistribution == null) {
       return [
@@ -50,21 +64,13 @@ export default function Stats ({ userStats, colors }: StatsProps) {
       [g1, g2, g3, g4, g5, g6].map((g) => Math.floor((g/most) * barMaxHeight)),
       [g1, g2, g3, g4, g5, g6]
     ];
-  }, [guessDistribution])
+  }, [guessDistribution]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(0, 0, 0, 0);
-      
-      const difference = tomorrow.getTime() - now.getTime();
-      const hours = Math.floor(difference / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    getAndSetCountDown();
 
-      setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+    const timer = setInterval(() => {
+      getAndSetCountDown();
     }, 1000);
 
     return () => clearInterval(timer);
