@@ -7,6 +7,7 @@
   flex-direction: column;
   
   &__heading {
+    margin-top: 16px;
     font-family: $font-family-block;
     font-size: 32px;
     color: var(--modal-ft-color);
@@ -79,6 +80,12 @@
     &-body {
       color: var(--modal-ft-color);
     }
+  }
+
+  &__footer {
+    color: var(--modal-ft-color);
+    margin-top: 24px;
+    font-size: $font-size-xs;
   }
 }
 

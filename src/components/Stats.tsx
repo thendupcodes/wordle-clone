@@ -163,6 +163,10 @@ export default function Stats ({ userStats, colors }: StatsProps) {
 
         <div className="Stats__next-body">{countdown}</div>
       </div>
+
+      <div className="Stats__footer">
+        <p>Thanks for playing!</p>
+      </div>
     </div>
   )
 }

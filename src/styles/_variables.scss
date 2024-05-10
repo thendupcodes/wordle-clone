@@ -70,13 +70,13 @@ $font-weight-heaviest: $font-weight-9;
 }
 
 @mixin box-shadow-left {
-  -webkit-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.3);
-  -moz-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.3);
-  box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.3);
+  -webkit-box-shadow: -4px 2px 6px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: -4px 2px 6px 0px rgba(0,0,0,0.3);
+  box-shadow: -4px 2px 6px 0px rgba(0,0,0,0.3);
 }
 
 @mixin box-shadow-right {
-  -webkit-box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.3);
-  -moz-box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.3);
-  box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.3);
+  -webkit-box-shadow: 4px 2px 6px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 4px 2px 6px 0px rgba(0,0,0,0.3);
+  box-shadow: 4px 2px 6px 0px rgba(0,0,0,0.3);
 }
