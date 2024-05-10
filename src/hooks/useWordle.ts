@@ -108,9 +108,12 @@ export default function useWordle () {
 
   useEffect(() => {
     if (gameWon) {
+      if (!gameWonOnLoad) {
+        updateStats();
+      }
+
       setTimeout(() => {
         if (!gameWonOnLoad) {
-          updateStats();
           openToast(winPhrases[guessIndex - 1], 3000);
           setTimeout(() => {
             openStatsModal();
