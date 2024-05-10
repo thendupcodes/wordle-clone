@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 type ModalProps = {
@@ -9,6 +9,20 @@ type ModalProps = {
 };
 
 export default function Modal({ isOpen, children, onClose, modalStyle }: ModalProps) {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown, false);
+  
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, false);
+    }
+  }, []);
+
   if (!isOpen) return null;
   
   return createPortal((
@@ -20,7 +34,7 @@ export default function Modal({ isOpen, children, onClose, modalStyle }: ModalPr
       <div className="Modal__body">
         <div className="Modal__body-close">
           <button className="Modal__body-close-button" onClick={onClose}>
-            <i className="fa-solid fa-xmark"></i>
+            <i className="fa fa-light fa-xmark"></i>
           </button>
         </div>
 
