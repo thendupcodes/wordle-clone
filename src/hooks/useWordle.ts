@@ -396,7 +396,7 @@ export default function useWordle () {
         setGuessIndex(lsGuessIndex);
         setPreviousGuesses(lsPreviousGuesses);
         setGameWonOnLoad(alreadyWon);
-        setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex);
+        setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
       }
     }
 

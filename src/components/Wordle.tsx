@@ -90,7 +90,7 @@ export default function Wordle ({ darkMode, appTriggerModal, setAppTriggerModal 
               shakeRow={guessIndex === rowIdx && shakeRow}
               gameWon={gameWon}
               winningRow={winningRow}
-              avoidAnimation={rowIdx < guessIndex && (gameWon ? rowIdx < avoidAnimationIdx : rowIdx <= avoidAnimationIdx)}
+              avoidAnimation={rowIdx < guessIndex && (gameWon ? rowIdx < winningRow : rowIdx <= avoidAnimationIdx)}
               isSubmitted={rowIdx < guessIndex}
             />
           )}
