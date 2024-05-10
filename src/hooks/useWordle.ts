@@ -39,7 +39,8 @@ export type GridCell = {
 
 export default function useWordle () {
   const { openToast } = useToaster();
-  const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' })
+  const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' });
+  const statsLocalStorage = useLocalStorage({ key: 'tt-wordle-statistics' });
 
   const [today, setToday] = useState(null);
   const [answer, setAnswer] = useState('');
@@ -53,6 +54,8 @@ export default function useWordle () {
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
   const [shakeRow, setShakeRow] = useState(false);
+  const [userStats, setUserStats] = useState(null);
+  const [isStatsModalOpen, setisStatsModalOpen] = useState(true);
 
   const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
     const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
@@ -72,8 +75,40 @@ export default function useWordle () {
     return [outOfTurns || correctAnswer, correctAnswer, correctRow];
   }, [answer, guessIndex, previousGuesses])
 
+  const updateStats = () => {
+    const currentStatsLS = statsLocalStorage.getItem();
+    
+    const newStats = {
+      games: currentStatsLS != null ? currentStatsLS.games : 0,
+      wins: currentStatsLS != null ? currentStatsLS.wins : 0,
+      guesses: currentStatsLS != null ? currentStatsLS.guesses : 0,
+      guessDistribution: currentStatsLS != null && currentStatsLS.guessDistribution != null
+        ? currentStatsLS.guessDistribution
+        : { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+    };
+
+    newStats.games += 1;
+    newStats.wins = gameWon ? newStats.wins + 1 : newStats.wins;
+    newStats.guesses += guessIndex;
+    newStats.guessDistribution[guessIndex] += 1;
+
+    setUserStats(newStats);
+
+    statsLocalStorage.setItem(JSON.stringify(newStats));
+  }
+
+  const openStatsModal = () => {
+    setisStatsModalOpen(true);
+  }
+
+  const closeStatsModal = () => {
+    setisStatsModalOpen(false);
+  }
+
   useEffect(() => {
     if (gameWon && !gameWonOnLoad) {
+      updateStats();
+      openStatsModal();
       setTimeout(() => {
         openToast(winPhrases[guessIndex - 1], 3000);
       }, FLIP_ANIMATION_DUR);
@@ -335,8 +370,12 @@ export default function useWordle () {
     const word = getWord();
     const todayNum = getToday();
     const storageDetails = gameLocalStorage.getItem();
+    const currentStatsLS = statsLocalStorage.getItem();
 
     setToday(todayNum);
+    if (currentStatsLS != null) {
+      setUserStats(JSON.parse(currentStatsLS));
+    }
 
     if (storageDetails != null) {
       const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
@@ -361,15 +400,16 @@ export default function useWordle () {
     answer,
     guessIndex,
     grid,
-    gridGuessHistory,
-    gridCurrentGuess,
-    gridGuessesLeft,
     keyboardKeys,
     shakeRow,
     gameOver,
     gameWon,
+    previousGuesses,
     winningRow,
     avoidAnimationIdx,
+    userStats,
+    isStatsModalOpen,
+    closeStatsModal,
     submitGuess,
     addChar,
     deleteChar,

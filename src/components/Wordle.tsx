@@ -1,10 +1,15 @@
 import { useEffect } from 'react';
 
 import Keyboard from '@/components/Keyboard';
+import Modal from '@/components/Modal';
 import Row from '@/components/Row';
+import Stats from '@/components/Stats';
+
 import useWordle from '@/hooks/useWordle';
 
-export default function Wordle () {  
+type WordleProps = { darkMode: boolean };
+
+export default function Wordle ({ darkMode }: WordleProps) {  
   const {
     grid,
     guessIndex,
@@ -14,11 +19,18 @@ export default function Wordle () {
     gameWon,
     winningRow,
     avoidAnimationIdx,
+    userStats,
+    isStatsModalOpen,
+    closeStatsModal,
     handleUserInput,
     submitGuess,
     addChar,
     deleteChar,
   } = useWordle();
+
+  const onClose = () => {
+    closeStatsModal();
+  }
 
   useEffect(() => {
     window.addEventListener('keyup', handleUserInput);
@@ -31,6 +43,24 @@ export default function Wordle () {
       window.removeEventListener('keyup', handleUserInput);
     }
   }, [handleUserInput, gameOver])
+
+  const modalStyle = (darkMode ? {
+      '--modal-overlay-bg-color': '#222222',
+      '--modal-bg-color': '#101010',
+      '--modal-ft-color': '#f7f7f7',
+    } : {
+      '--modal-overlay-bg-color': '#101010',
+      '--modal-bg-color': '#f7f7f7',
+      '--modal-ft-color': '#101010',
+    }) as React.CSSProperties
+
+  const statsColors = darkMode ? {
+    barColor: '#777d7e',
+    fontColor: '#f7f7f7'
+  } : {
+    barColor: '#adb5bd',
+    fontColor: '#101010'
+  }
 
   return (
     <div className="Wordle">
@@ -58,6 +88,12 @@ export default function Wordle () {
             deleteChar={deleteChar}
           />
         </div>
+
+        <Modal isOpen={isStatsModalOpen} onClose={onClose} modalStyle={modalStyle}>
+          <>
+            <Stats userStats={userStats} statsColors={statsColors} />
+          </>
+        </Modal>
       </div>
     </div>
   );
