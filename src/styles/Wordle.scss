@@ -125,7 +125,6 @@
 
     &__header {
       height: 50px;
-      justify-content: start;
 
       &-title {
         font-size: 24px;
@@ -149,6 +148,19 @@
           height: 50px;
           font-size: 24px;
         }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: $small-device-width) {
+  .Wordle {
+    &__header {
+      justify-content: start;
+
+      &-title {
+        margin-left: 24px
       }
     }
   }

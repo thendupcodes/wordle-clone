@@ -11,7 +11,7 @@
     height: 100%;
     width: 100%;
     background: var(--modal-overlay-bg-color);
-    opacity: 0.5;
+    opacity: 0.9;
   }
 
   &__body {
@@ -41,4 +41,20 @@
       }
     }
   }
+}
+
+@media screen and (max-width: $min-device-width) {
+  .Modal {
+    &__body {
+      top: 5%;
+      height: calc(100vh - 20%);
+
+      &-children {
+        height: calc(100% - 40px);
+        display: flex;
+        align-items: center;
+        overflow-y: scroll;
+      }
+    }
+  } 
 }

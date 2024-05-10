@@ -70,8 +70,6 @@ export default function Stats ({ userStats, colors }: StatsProps) {
     return () => clearInterval(timer);
   }, []);
 
-  console.log({ userStats, barHeights, barValues });
-
   if (userStats == null) return (
     <div className="Stats">
       <div className="Stats__heading">WordleClone</div>
@@ -124,7 +122,7 @@ export default function Stats ({ userStats, colors }: StatsProps) {
         <div className="Stats__guesses-heading">Guess distribution</div>
 
         <div className="Stats__guesses-chart">
-          <svg width="475" height="300" viewBox="0 0 475 200" xmlns="http://www.w3.org/2000/svg">
+          <svg width="475" height="300" viewBox="0 0 475 200" style={{ width: '100%', maxWidth: '475px', minHeight: '150px', height: '100%' }} xmlns="http://www.w3.org/2000/svg">
             <rect x="25" y={barMaxHeight - barHeights[0]} width="50" height={barHeights[0]} fill={barColor} />
             <rect x="100" y={barMaxHeight - barHeights[1]} width="50" height={barHeights[1]} fill={barColor} />
             <rect x="175" y={barMaxHeight - barHeights[2]} width="50" height={barHeights[2]} fill={barColor} />
