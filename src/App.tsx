@@ -44,7 +44,7 @@ function App() {
       <ToastProvider>
         <>
           <div className="Wordle__header">
-            <div className="Wordle__header-title">Wordle</div>
+            <div className="Wordle__header-title">WordleClone</div>
 
             <div className="Wordle__header-buttons">
               <Tooltip direction="bottom-left" delay={0} content="Toggle dark mode">
@@ -69,7 +69,7 @@ function App() {
             </div>
           </div>
 
-          <Wordle />
+          <Wordle darkMode={darkMode} />
         </>
       </ToastProvider>
     </div>
