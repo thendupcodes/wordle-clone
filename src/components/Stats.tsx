@@ -80,7 +80,11 @@ export default function Stats ({ userStats, colors }: StatsProps) {
     <div className="Stats">
       <div className="Stats__heading">WordleClone</div>
 
-      <div className="Stats__body">Hey wordsmith! Eager to unveil your stats? Finish today's wordle and your stats will be revealed at the end of the challenge. Happy guessing!</div>
+      <div className="Stats__body Stats__body--no-stats">
+        <p>Hey wordsmith! Eager to unveil your stats?</p>
+        <p>Finish today's wordle and your stats will be revealed at the end of the challenge.</p>
+        <p>Happy guessing!</p>
+      </div>
     </div>
   );
   
