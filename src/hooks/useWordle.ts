@@ -39,10 +39,12 @@ export type GridCell = {
 
 export default function useWordle () {
   const { openToast } = useToaster();
-  const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' })
+  const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' });
+  const statsLocalStorage = useLocalStorage({ key: 'tt-wordle-statistics' });
 
   const [today, setToday] = useState(null);
   const [answer, setAnswer] = useState('');
+  const [gameWonOnLoad, setGameWonOnLoad] = useState(false);
   const [currentGuess, setCurrentGuess] = useState('');
   const [guessIndex, setGuessIndex] = useState(0);
   const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
@@ -52,6 +54,8 @@ export default function useWordle () {
   const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
   const [shakeRow, setShakeRow] = useState(false);
+  const [userStats, setUserStats] = useState(null);
+  const [isStatsModalOpen, setisStatsModalOpen] = useState(false);
 
   const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
     const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
@@ -71,10 +75,49 @@ export default function useWordle () {
     return [outOfTurns || correctAnswer, correctAnswer, correctRow];
   }, [answer, guessIndex, previousGuesses])
 
+  const updateStats = () => {
+    const currentStatsLS = statsLocalStorage.getItem();
+    const currentStats = currentStatsLS == null ? {} : JSON.parse(currentStatsLS);
+    
+    const newStats = {
+      games: currentStats.games != null ? currentStats.games : 0,
+      wins: currentStats.wins != null ? currentStats.wins : 0,
+      guesses: currentStats.guesses != null ? currentStats.guesses : 0,
+      guessDistribution: currentStats.guessDistribution != null
+        ? currentStats.guessDistribution
+        : { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+    };
+
+    newStats.games += 1;
+    newStats.wins = gameWon ? newStats.wins + 1 : newStats.wins;
+    newStats.guesses += guessIndex;
+    newStats.guessDistribution[guessIndex] += 1;
+
+    setUserStats(newStats);
+
+    statsLocalStorage.setItem(JSON.stringify(newStats));
+  }
+
+  const openStatsModal = () => {
+    setisStatsModalOpen(true);
+  }
+
+  const closeStatsModal = () => {
+    setisStatsModalOpen(false);
+  }
+
   useEffect(() => {
     if (gameWon) {
       setTimeout(() => {
-        openToast(winPhrases[guessIndex - 1], 3000);
+        if (!gameWonOnLoad) {
+          updateStats();
+          openToast(winPhrases[guessIndex - 1], 3000);
+          setTimeout(() => {
+            openStatsModal();
+          }, 2000);
+        } else {
+          openStatsModal();
+        }
       }, FLIP_ANIMATION_DUR);
     }
   }, [gameWon, guessIndex]);
@@ -334,8 +377,12 @@ export default function useWordle () {
     const word = getWord();
     const todayNum = getToday();
     const storageDetails = gameLocalStorage.getItem();
+    const currentStatsLS = statsLocalStorage.getItem();
 
     setToday(todayNum);
+    if (currentStatsLS != null) {
+      setUserStats(JSON.parse(currentStatsLS));
+    }
 
     if (storageDetails != null) {
       const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
@@ -348,7 +395,8 @@ export default function useWordle () {
         setCurrentGuess(lsCurrentGuess);
         setGuessIndex(lsGuessIndex);
         setPreviousGuesses(lsPreviousGuesses);
-        setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex);
+        setGameWonOnLoad(alreadyWon);
+        setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
       }
     }
 
@@ -359,15 +407,17 @@ export default function useWordle () {
     answer,
     guessIndex,
     grid,
-    gridGuessHistory,
-    gridCurrentGuess,
-    gridGuessesLeft,
     keyboardKeys,
     shakeRow,
     gameOver,
     gameWon,
+    previousGuesses,
     winningRow,
     avoidAnimationIdx,
+    userStats,
+    isStatsModalOpen,
+    openStatsModal,
+    closeStatsModal,
     submitGuess,
     addChar,
     deleteChar,

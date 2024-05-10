@@ -9,8 +9,11 @@
   --main-header-tgl-bg-color: #{$light-gray};
   --main-header-tgl-btn-ft-color: #{$black};
   --main-header-tgl-btn-bg-color: #{$white};
+  --main-header-btn-color: #{$black};
   --toast-bg-color: #{$black};
   --toast-ft-color: #{$white};
+  --tooltip-bg-color: #{$black};
+  --tooltip-ft-color: #{$white};
   --dark-mode-icon-color: #{$sun-icon-color};
   --dark-mode-bg-color: #{$sun-bg-color};
   --contrast-bg-color: #{$default-contrast-bg-color};
@@ -43,8 +46,11 @@
     --main-header-tgl-bg-color: #{$white};
     --main-header-tgl-btn-ft-color: #{$white};
     --main-header-tgl-btn-bg-color: #{$black};
+    --main-header-btn-color: #{$white};
     --toast-bg-color: #{$white};
     --toast-ft-color: #{$black};
+    --tooltip-bg-color: #{$white};
+    --tooltip-ft-color: #{$black};
     --dark-mode-icon-color: #{$moon-icon-color};
     --dark-mode-bg-color: #{$moon-bg-color};
     --revealed-color: #{$white};

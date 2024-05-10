@@ -4,17 +4,19 @@ const firstRowKeys = ['Q','W','E','R','T','Y','U','I','O','P'];
 const secondRowKeys = ['A','S','D','F','G','H','J','K','L'];
 const thirdRowKeys = ['Z','X','C','V','B','N','M',];
 
+type KeyboardProps = {
+  keyboardKeys: Record<string, KeyboardLetter['state']>,
+  submitGuess: () => void,
+  addChar: (char: string) => void,
+  deleteChar: () => void
+};
+
 export default function Keyboard ({
   keyboardKeys,
   addChar,
   deleteChar,
   submitGuess,
-}: {
-  keyboardKeys: Record<string, KeyboardLetter['state']>,
-  submitGuess: () => void,
-  addChar: (char: string) => void,
-  deleteChar: () => void
-}) {
+}: KeyboardProps) {
   return (
     <div className="Keyboard">
       <div className="Keyboard__row Keyboard__row--first">

@@ -1,4 +1,4 @@
-$toggle-width: 55px;
+$toggle-width: 50px;
 
 .Toggle {
   width: $toggle-width;
@@ -15,6 +15,8 @@ $toggle-width: 55px;
   margin: 0 8px;
 
   &__icon-wrapper {
+    @include box-shadow-right;
+
     position: absolute;
     transition: left 0.3s ease, right 0.3s ease;
     top: 50%;
@@ -40,6 +42,8 @@ $toggle-width: 55px;
   &--toggled {
     .Toggle {
       &__icon-wrapper {
+        @include box-shadow-left;
+
         left: calc(100% - 30px);
       }
     }

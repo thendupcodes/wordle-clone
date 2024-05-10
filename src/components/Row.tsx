@@ -1,6 +1,16 @@
 import { FLIP_ANIMATION_DUR, GridCell } from "@/hooks/useWordle";
 import { useEffect, useState } from "react";
 
+type RowProps = {
+  cells: GridCell[],
+  isSubmitted: boolean,
+  shakeRow: boolean,
+  gameWon: boolean,
+  winningRow: number,
+  rowIdx: number,
+  avoidAnimation: boolean
+};
+
 export default function Row ({
   rowIdx,
   cells,
@@ -9,15 +19,7 @@ export default function Row ({
   gameWon,
   winningRow,
   avoidAnimation,
-}: {
-  cells: GridCell[],
-  isSubmitted: boolean,
-  shakeRow: boolean,
-  gameWon: boolean,
-  winningRow: number,
-  rowIdx: number,
-  avoidAnimation: boolean
-}) {
+}: RowProps) {
   const [bounceRow, setBounceRow] = useState(false);
   const [delay, setDelay] = useState(300);
 

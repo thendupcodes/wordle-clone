@@ -62,3 +62,21 @@ $font-weight-regular: $font-weight-4;
 $font-weight-medium: $font-weight-6;
 $font-weight-heavy: $font-weight-7;
 $font-weight-heaviest: $font-weight-9;
+
+@mixin box-shadow-light {
+  -webkit-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.1);
+  box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.1);
+}
+
+@mixin box-shadow-left {
+  -webkit-box-shadow: -4px 2px 6px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: -4px 2px 6px 0px rgba(0,0,0,0.3);
+  box-shadow: -4px 2px 6px 0px rgba(0,0,0,0.3);
+}
+
+@mixin box-shadow-right {
+  -webkit-box-shadow: 4px 2px 6px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 4px 2px 6px 0px rgba(0,0,0,0.3);
+  box-shadow: 4px 2px 6px 0px rgba(0,0,0,0.3);
+}

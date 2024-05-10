@@ -1,10 +1,19 @@
 import { useEffect } from 'react';
 
 import Keyboard from '@/components/Keyboard';
+import Modal from '@/components/Modal';
 import Row from '@/components/Row';
+import Stats from '@/components/Stats';
+
 import useWordle from '@/hooks/useWordle';
 
-export default function Wordle () {  
+type WordleProps = {
+  darkMode: boolean,
+  appTriggerModal: boolean,
+  setAppTriggerModal: React.Dispatch<React.SetStateAction<boolean>>
+};
+
+export default function Wordle ({ darkMode, appTriggerModal, setAppTriggerModal }: WordleProps) {  
   const {
     grid,
     guessIndex,
@@ -14,11 +23,19 @@ export default function Wordle () {
     gameWon,
     winningRow,
     avoidAnimationIdx,
+    userStats,
+    isStatsModalOpen,
+    openStatsModal,
+    closeStatsModal,
     handleUserInput,
     submitGuess,
     addChar,
     deleteChar,
   } = useWordle();
+
+  const onClose = () => {
+    closeStatsModal();
+  }
 
   useEffect(() => {
     window.addEventListener('keyup', handleUserInput);
@@ -32,6 +49,35 @@ export default function Wordle () {
     }
   }, [handleUserInput, gameOver])
 
+  const modalStyle = (darkMode ? {
+      '--modal-overlay-bg-color': '#222222',
+      '--modal-bg-color': '#101010',
+      '--modal-ft-color': '#f7f7f7',
+    } : {
+      '--modal-overlay-bg-color': '#101010',
+      '--modal-bg-color': '#f7f7f7',
+      '--modal-ft-color': '#101010',
+    }) as React.CSSProperties
+
+  const statsColors = darkMode ? {
+    barColor: '#777d7e',
+    fontColor: '#f7f7f7'
+  } : {
+    barColor: '#adb5bd',
+    fontColor: '#101010'
+  }
+
+  useEffect(() => {
+    // App triggered modal open
+    if (appTriggerModal) {
+      openStatsModal();
+    }
+  }, [appTriggerModal]);
+
+  useEffect(() => {
+    setAppTriggerModal(isStatsModalOpen);
+  }, [isStatsModalOpen]);
+
   return (
     <div className="Wordle">
       <div className="Wordle__body">
@@ -44,7 +90,7 @@ export default function Wordle () {
               shakeRow={guessIndex === rowIdx && shakeRow}
               gameWon={gameWon}
               winningRow={winningRow}
-              avoidAnimation={rowIdx < guessIndex && (gameWon ? rowIdx < avoidAnimationIdx : rowIdx <= avoidAnimationIdx)}
+              avoidAnimation={rowIdx < guessIndex && (gameWon ? rowIdx < winningRow : rowIdx <= avoidAnimationIdx)}
               isSubmitted={rowIdx < guessIndex}
             />
           )}
@@ -58,6 +104,12 @@ export default function Wordle () {
             deleteChar={deleteChar}
           />
         </div>
+
+        <Modal isOpen={isStatsModalOpen} onClose={onClose} modalStyle={modalStyle}>
+          <>
+            <Stats userStats={userStats} colors={statsColors} />
+          </>
+        </Modal>
       </div>
     </div>
   );

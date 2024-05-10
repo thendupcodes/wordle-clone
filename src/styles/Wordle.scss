@@ -22,6 +22,18 @@
       position: absolute;
       right: 16px;
       display: flex;
+      align-items: center;
+    }
+
+    &-stats-button {
+      font-size: $font-size-xxl;
+      margin: 0 8px;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      color: var(--main-header-btn-color);
+      vertical-align: middle;
     }
   }
 
@@ -29,6 +41,7 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
+    align-items: center;
     height: 100%;
 
     &-grid {
@@ -124,7 +137,6 @@
 
     &__header {
       height: 50px;
-      justify-content: start;
 
       &-title {
         font-size: 24px;
@@ -148,6 +160,19 @@
           height: 50px;
           font-size: 24px;
         }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: $small-device-width) {
+  .Wordle {
+    &__header {
+      justify-content: start;
+
+      &-title {
+        margin-left: 24px
       }
     }
   }

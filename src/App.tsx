@@ -1,7 +1,10 @@
-import ToastProvider from "@/components/ToastContext";
-import Wordle from "@/components/Wordle";
 import { useEffect, useState } from "react";
-import Toggle from "./components/Toggle";
+
+import ToastProvider from "@/components/ToastContext";
+import Toggle from "@/components/Toggle";
+import Tooltip from "@/components/Tooltip";
+import Wordle from "@/components/Wordle";
+
 import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
@@ -9,6 +12,7 @@ function App() {
 
   const [darkMode, setDarkMode] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
+  const [appTriggerModal, setAppTriggerModal] = useState(false);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -41,28 +45,38 @@ function App() {
       <ToastProvider>
         <>
           <div className="Wordle__header">
-            <div className="Wordle__header-title">Wordle</div>
+            <div className="Wordle__header-title">WordleClone</div>
 
             <div className="Wordle__header-buttons">
-              <Toggle
-                additionalClassNames="Toggle--dark-mode"
-                isToggled={darkMode}
-                handleToggle={toggleDarkMode}
-                offState={<i className="fa-solid fa-sun" />}
-                onState={<i className="fa-solid fa-moon" />}
-              />
+              <Tooltip direction="bottom" delay={0} content="See statistics">
+                <button onClick={() => setAppTriggerModal(true)} className="Wordle__header-stats-button">
+                  <i className="fa-solid fa-chart-column"></i>
+                </button>
+              </Tooltip>
 
-              <Toggle
-                additionalClassNames="Toggle--high-contrast"
-                isToggled={highContrast}
-                handleToggle={toggleContrast}
-                offState={<i className="fa-solid fa-circle-half-stroke" />}
-                onState={<i className="fa-solid fa-circle-half-stroke fa-flip-horizontal" />}
-              />
+              <Tooltip direction="bottom" delay={0} content="Toggle dark mode">
+                <Toggle
+                  additionalClassNames="Toggle--dark-mode"
+                  isToggled={darkMode}
+                  handleToggle={toggleDarkMode}
+                  offState={<i className="fa-solid fa-sun" />}
+                  onState={<i className="fa-solid fa-moon" />}
+                />
+              </Tooltip>
+
+              <Tooltip direction="bottom-left" delay={0} content="Toggle contrast">
+                <Toggle
+                  additionalClassNames="Toggle--high-contrast"
+                  isToggled={highContrast}
+                  handleToggle={toggleContrast}
+                  offState={<i className="fa-solid fa-circle-half-stroke" />}
+                  onState={<i className="fa-solid fa-circle-half-stroke fa-flip-horizontal" />}
+                />
+              </Tooltip>
             </div>
           </div>
 
-          <Wordle />
+          <Wordle darkMode={darkMode} appTriggerModal={appTriggerModal} setAppTriggerModal={setAppTriggerModal} />
         </>
       </ToastProvider>
     </div>
