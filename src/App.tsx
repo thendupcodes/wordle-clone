@@ -12,6 +12,7 @@ function App() {
 
   const [darkMode, setDarkMode] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
+  const [appTriggerModal, setAppTriggerModal] = useState(false);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -47,6 +48,12 @@ function App() {
             <div className="Wordle__header-title">WordleClone</div>
 
             <div className="Wordle__header-buttons">
+              <Tooltip direction="bottom-left" delay={0} content="See statistics">
+                <button onClick={() => setAppTriggerModal(true)} className="Wordle__header-stats-button">
+                  <i className="fa-solid fa-chart-column"></i>
+                </button>
+              </Tooltip>
+
               <Tooltip direction="bottom-left" delay={0} content="Toggle dark mode">
                 <Toggle
                   additionalClassNames="Toggle--dark-mode"
@@ -69,7 +76,7 @@ function App() {
             </div>
           </div>
 
-          <Wordle darkMode={darkMode} />
+          <Wordle darkMode={darkMode} appTriggerModal={appTriggerModal} setAppTriggerModal={setAppTriggerModal} />
         </>
       </ToastProvider>
     </div>

@@ -7,9 +7,13 @@ import Stats from '@/components/Stats';
 
 import useWordle from '@/hooks/useWordle';
 
-type WordleProps = { darkMode: boolean };
+type WordleProps = {
+  darkMode: boolean,
+  appTriggerModal: boolean,
+  setAppTriggerModal: React.Dispatch<React.SetStateAction<boolean>>
+};
 
-export default function Wordle ({ darkMode }: WordleProps) {  
+export default function Wordle ({ darkMode, appTriggerModal, setAppTriggerModal }: WordleProps) {  
   const {
     grid,
     guessIndex,
@@ -21,6 +25,7 @@ export default function Wordle ({ darkMode }: WordleProps) {
     avoidAnimationIdx,
     userStats,
     isStatsModalOpen,
+    openStatsModal,
     closeStatsModal,
     handleUserInput,
     submitGuess,
@@ -61,6 +66,17 @@ export default function Wordle ({ darkMode }: WordleProps) {
     barColor: '#adb5bd',
     fontColor: '#101010'
   }
+
+  useEffect(() => {
+    // App triggered modal open
+    if (appTriggerModal) {
+      openStatsModal();
+    }
+  }, [appTriggerModal]);
+
+  useEffect(() => {
+    setAppTriggerModal(isStatsModalOpen);
+  }, [isStatsModalOpen]);
 
   return (
     <div className="Wordle">

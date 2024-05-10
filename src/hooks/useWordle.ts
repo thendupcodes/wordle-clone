@@ -55,7 +55,7 @@ export default function useWordle () {
   const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
   const [shakeRow, setShakeRow] = useState(false);
   const [userStats, setUserStats] = useState(null);
-  const [isStatsModalOpen, setisStatsModalOpen] = useState(true);
+  const [isStatsModalOpen, setisStatsModalOpen] = useState(false);
 
   const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
     const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
@@ -77,13 +77,14 @@ export default function useWordle () {
 
   const updateStats = () => {
     const currentStatsLS = statsLocalStorage.getItem();
+    const currentStats = currentStatsLS == null ? {} : JSON.parse(currentStatsLS);
     
     const newStats = {
-      games: currentStatsLS != null ? currentStatsLS.games : 0,
-      wins: currentStatsLS != null ? currentStatsLS.wins : 0,
-      guesses: currentStatsLS != null ? currentStatsLS.guesses : 0,
-      guessDistribution: currentStatsLS != null && currentStatsLS.guessDistribution != null
-        ? currentStatsLS.guessDistribution
+      games: currentStats.games != null ? currentStats.games : 0,
+      wins: currentStats.wins != null ? currentStats.wins : 0,
+      guesses: currentStats.guesses != null ? currentStats.guesses : 0,
+      guessDistribution: currentStats.guessDistribution != null
+        ? currentStats.guessDistribution
         : { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
     };
 
@@ -106,11 +107,17 @@ export default function useWordle () {
   }
 
   useEffect(() => {
-    if (gameWon && !gameWonOnLoad) {
-      updateStats();
-      openStatsModal();
+    if (gameWon) {
       setTimeout(() => {
-        openToast(winPhrases[guessIndex - 1], 3000);
+        if (!gameWonOnLoad) {
+          updateStats();
+          openToast(winPhrases[guessIndex - 1], 3000);
+          setTimeout(() => {
+            openStatsModal();
+          }, 2000);
+        } else {
+          openStatsModal();
+        }
       }, FLIP_ANIMATION_DUR);
     }
   }, [gameWon, guessIndex]);
@@ -409,6 +416,7 @@ export default function useWordle () {
     avoidAnimationIdx,
     userStats,
     isStatsModalOpen,
+    openStatsModal,
     closeStatsModal,
     submitGuess,
     addChar,
