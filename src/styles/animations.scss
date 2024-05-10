@@ -112,3 +112,19 @@
     opacity: 0;
   }
 }
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(400px);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
