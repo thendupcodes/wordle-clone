@@ -57,4 +57,21 @@
       color: var(--modal-ft-color);
     }
   }
+
+  &__next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &-heading {
+      text-transform: uppercase;
+      font-weight: $font-weight-heavy;
+      color: var(--modal-ft-color);
+    }
+
+    &-body {
+      color: var(--modal-ft-color);
+    }
+  }
 }

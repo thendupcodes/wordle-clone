@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Stats = {
   games: number,
@@ -23,6 +23,7 @@ type StatsProps = {
 }
 
 export default function Stats ({ userStats, colors }: StatsProps) {
+  const [countdown, setCountdown] = useState('');
   const { games, wins, guessDistribution } = userStats || {};
   const { barColor, fontColor } = colors;
 
@@ -50,6 +51,24 @@ export default function Stats ({ userStats, colors }: StatsProps) {
       [g1, g2, g3, g4, g5, g6]
     ];
   }, [guessDistribution])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      
+      const difference = tomorrow.getTime() - now.getTime();
+      const hours = Math.floor(difference / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   console.log({ userStats, barHeights, barValues });
 
@@ -132,9 +151,9 @@ export default function Stats ({ userStats, colors }: StatsProps) {
       </div>
 
       <div className="Stats__next">
-        <div className="Stats__next-title">Next game in:</div>
+        <div className="Stats__next-heading">Next game in</div>
 
-        <div className="Stats__next-body">5hrs 4mins 32sec</div>
+        <div className="Stats__next-body">{countdown}</div>
       </div>
     </div>
   )
