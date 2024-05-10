@@ -10,7 +10,9 @@
     padding: 4px 8px;
     background: var(--tooltip-bg-color);
     color: var(--tooltip-ft-color);
-    min-width: 140px;
+    min-width: 60px;
+    width: fit-content;
+    text-wrap: nowrap;
     text-align: center;
     visibility: visible;
     font-size: $font-size-sm;
