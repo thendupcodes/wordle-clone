@@ -116,7 +116,9 @@ export default function useWordle () {
             openStatsModal();
           }, 2000);
         } else {
-          openStatsModal();
+          setTimeout(() => {
+            openStatsModal();
+          }, 1000);
         }
       }, FLIP_ANIMATION_DUR);
     }
