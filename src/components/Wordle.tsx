@@ -91,7 +91,7 @@ export default function Wordle ({ darkMode }: WordleProps) {
 
         <Modal isOpen={isStatsModalOpen} onClose={onClose} modalStyle={modalStyle}>
           <>
-            <Stats userStats={userStats} statsColors={statsColors} />
+            <Stats userStats={userStats} colors={statsColors} />
           </>
         </Modal>
       </div>

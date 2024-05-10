@@ -16,15 +16,15 @@ type Stats = {
 
 type StatsProps = {
   userStats: Stats
-  statColors: {
+  colors: {
     barColor: string,
     fontColor: string,
   }
 }
 
-export default function Stats ({ userStats, statsColors }: StatsProps) {
+export default function Stats ({ userStats, colors }: StatsProps) {
   const { games, wins, guessDistribution } = userStats || {};
-  const { barColor, fontColor } = statsColors;
+  const { barColor, fontColor } = colors;
 
   const barMaxHeight = 200;
 
