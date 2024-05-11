@@ -63,6 +63,9 @@ $font-weight-medium: $font-weight-6;
 $font-weight-heavy: $font-weight-7;
 $font-weight-heaviest: $font-weight-9;
 
+$z-layer-modal: 900;
+$z-layer-body: 100;
+
 @mixin box-shadow-light {
   -webkit-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.1);

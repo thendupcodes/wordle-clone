@@ -2,6 +2,8 @@
   background: var(--main-background-color);
   height: auto;
   width: 100vw;
+  position: relative;
+  z-index: $z-layer-body;
 
   --main-background-color: #{$white};
   --main-bd-color: #{$lightest-gray};
