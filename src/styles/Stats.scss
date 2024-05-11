@@ -92,5 +92,33 @@
 @media screen and (max-width: $min-device-width) {
   .Stats {
     width: calc(100vw - 100px);
+
+    &__heading {
+      margin-top: 0;
+      font-size: $font-size-xxxl;
+    }
+
+    &__body {
+      margin: 8px 0;
+
+      &-item {
+        &-value {
+          font-size: $font-size-xxl;
+          line-height: 24px;
+        }
+
+        &-key {
+          font-size: $font-size-sm;
+        }
+      }
+    }
+
+    &__guesses {
+      margin: 8px 0;
+    }
+    
+    &__footer {
+      margin-top: 16px;
+    }
   } 
 }

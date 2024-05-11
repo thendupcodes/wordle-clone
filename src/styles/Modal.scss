@@ -51,7 +51,7 @@
   .Modal {
     &__body {
       top: 5%;
-      height: calc(100vh - 20%);
+      height: calc(100dvh - 20%);
 
       &-children {
         height: 100%;
