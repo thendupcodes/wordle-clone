@@ -12,6 +12,14 @@ Welcome to Wordle Clone, a simple word-guessing game inspired by the popular Wor
 - **High Contrast Toggle**: Toggle high contrast mode for improved visibility of letter colours.
 - **Game Progress in Local Storage**: Game progress is stored locally, so you can continue where you left off.
 - **App State in Local Storage**: Application state is stored locally, to maintain dark-mode and contrast settings.
+- **Stats in Local Storage**: User stats are stored locally, so you can see your total games, win%, guess distribution, etc.
+
+## Utility components built
+
+- **Tooltip**: Enhances UX with hover-over details for elements.
+- **Toggle**: Enables easy switching between two binary states.
+- **Modal**: Prompts user actions or alerts with overlay dialogs.
+- **Toast-Notification**: Brief, non-intrusive alerts for user feedback.
 
 ## Technologies Used
 
