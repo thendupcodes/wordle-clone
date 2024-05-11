@@ -1,7 +1,9 @@
 .App {
   background: var(--main-background-color);
-  height: auto;
+  height: 100vh;
   width: 100vw;
+  position: relative;
+  z-index: $z-layer-body;
 
   --main-background-color: #{$white};
   --main-bd-color: #{$lightest-gray};
@@ -87,5 +89,15 @@
     --kb-key-partial-bg-color: #{$blue};
     --kb-key-partial-ft-color: #{$black};
     --kb-key-wrong-ft-color: #{$white};
+  }
+}
+
+
+@media screen and (max-width: $small-device-width) {
+  .App {
+    width: 100dvw;
+    height: 100dvh;
+    max-width: 100dvw;
+    max-height: 100dvh;
   }
 }

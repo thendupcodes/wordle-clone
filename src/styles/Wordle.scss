@@ -1,11 +1,11 @@
 .Wordle {
-  height: calc(100vh - 64px); // Account for header
-  width: 100vw;
+  height: calc(100% - 64px); // Account for header
+  width: 100%;
   min-width: $min-width-limit;
 
   &__header {
     height: 64px;
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +40,7 @@
   &__body {
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: space-around;
     align-items: center;
     height: 100%;
 
@@ -49,8 +49,6 @@
       flex-direction: column;
       justify-content: center;
       gap: 6px;
-      height: 60vh;
-      min-height: 500px;
 
       &-row {
         display: flex;
@@ -126,14 +124,39 @@
     &-keyboard {
       display: flex;
       justify-content: center;
+      margin-bottom: 200px;
     }
   }
 }
 
+@media screen and (max-width: $small-device-width) {
+  .Wordle {
+    &__header {
+      justify-content: start;
+
+      &-title {
+        margin-left: 24px
+      }
+    }
+
+    &__body {
+      justify-content: space-between;
+
+      &-grid {
+        height: 70%;
+      }
+
+      &-keyboard {
+        width: calc(100% - 8px);
+        margin-bottom: 16px;      
+      }
+    }
+  }
+}
 
 @media screen and (max-width: $min-device-width) {
   .Wordle {
-    height: calc(100vh - 50px); // Account for header
+    height: calc(100dvh - 50px); // Account for header
 
     &__header {
       height: 50px;
@@ -145,10 +168,7 @@
     }
 
     &__body {
-      justify-content: space-between;
-
       &-grid {
-        min-height: 420px;
         gap: 4px;
 
         &-row {
@@ -161,18 +181,10 @@
           font-size: 24px;
         }
       }
-    }
-  }
-}
 
-
-@media screen and (max-width: $small-device-width) {
-  .Wordle {
-    &__header {
-      justify-content: start;
-
-      &-title {
-        margin-left: 24px
+      &-keyboard {
+        width: calc(100% - 8px);
+        margin-bottom: 2px;
       }
     }
   }

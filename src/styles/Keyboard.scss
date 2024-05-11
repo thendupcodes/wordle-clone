@@ -5,7 +5,6 @@
   align-items: center;
   width: 500px;
   height: 200px;
-  min-width: $min-width-limit;
 
   &__row {
     display: flex;
@@ -24,10 +23,6 @@
     color: var(--kb-key-ft-color);
     transition: all 0.3s ease;
     cursor: pointer;
-
-    &:hover {
-      transform: scale(1.1);
-    }
 
     &:active {
       transform: scale(0.95);
@@ -67,24 +62,39 @@
 
 @media screen and (max-width: $small-device-width) {
   .Keyboard {
-    width: 90vw;
+    width: 100%;
+    max-width: 100%;
+    height: fit-content;
+
+    &__key {
+      padding: 0px;
+    }
   } 
 }
 
 @media screen and (max-width: $min-device-width) {
   .Keyboard {
-    width: calc(100vw - 8px);
-    height: auto;
+    max-width: 100dvw;
     margin-bottom: 4px;
 
     &__key {
-      height: 50px;
+      height: 45px;
       margin: 2px;
-      font-size: $font-size-md;
+      font-size: $font-size-xs;
 
       &--enter {
-        font-size: $font-size-xxs;
+        font-size: $font-size-xxxs;
       }
     }
   } 
+}
+
+@media (hover: hover) {
+  .Keyboard {
+    &__key {
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 }

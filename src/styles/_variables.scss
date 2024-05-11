@@ -25,6 +25,7 @@ $high-contrast-bg-color: $blue;
 $high-contrast-icon-color: $black;
 $high-contrast-icon-bg-color: $orange;
 
+$font-size-xxxs: 9px;
 $font-size-xxs: 10px;
 $font-size-xs: 12px;
 $font-size-sm: 14px;
@@ -32,6 +33,7 @@ $font-size-md: 16px;
 $font-size-lg: 18px;
 $font-size-xl: 20px;
 $font-size-xxl: 24px;
+$font-size-xxxl: 28px;
 $font-size-icon: 32px;
 $font-size-subheading: 40px;
 $font-size-heading: 80px;
@@ -62,6 +64,9 @@ $font-weight-regular: $font-weight-4;
 $font-weight-medium: $font-weight-6;
 $font-weight-heavy: $font-weight-7;
 $font-weight-heaviest: $font-weight-9;
+
+$z-layer-modal: 900;
+$z-layer-body: 100;
 
 @mixin box-shadow-light {
   -webkit-box-shadow: -4px 4px 8px 0px rgba(0,0,0,0.1);
