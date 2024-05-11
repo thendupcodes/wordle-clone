@@ -78,7 +78,8 @@
     margin-bottom: 4px;
 
     &__key {
-      height: 45px;
+      max-height: 55px;
+      height: 10dvh;
       margin: 2px;
       font-size: $font-size-xs;
 
