@@ -24,10 +24,6 @@
     transition: all 0.3s ease;
     cursor: pointer;
 
-    &:hover {
-      transform: scale(1.1);
-    }
-
     &:active {
       transform: scale(0.95);
       transition: all 0.1s ease;
@@ -71,7 +67,7 @@
     height: fit-content;
 
     &__key {
-      padding: 1px 3px;
+      padding: 0px;
     }
   } 
 }
@@ -91,4 +87,14 @@
       }
     }
   } 
+}
+
+@media (hover: hover) {
+  .Keyboard {
+    &__key {
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 }

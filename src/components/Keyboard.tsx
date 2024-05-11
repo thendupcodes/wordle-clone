@@ -17,6 +17,22 @@ export default function Keyboard ({
   deleteChar,
   submitGuess,
 }: KeyboardProps) {
+  const handleAdd = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, k: string) => {
+    console.log({ e });
+    e.preventDefault();
+    addChar(k);
+  }
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    submitGuess()
+  }
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    deleteChar()
+  }
+
   return (
     <div className="Keyboard">
       <div className="Keyboard__row Keyboard__row--first">
@@ -25,7 +41,7 @@ export default function Keyboard ({
             key={k}
             className={`Keyboard__key Keyboard__key--${k} Keyboard__key--${keyboardKeys[k]}`}
             data-key={k}
-            onClick={() => addChar(k)}
+            onClick={(e) => handleAdd(e, k)}
           >
             {k}
           </button>
@@ -40,7 +56,7 @@ export default function Keyboard ({
             key={k}
             className={`Keyboard__key Keyboard__key--${k} Keyboard__key--${keyboardKeys[k]}`}
             data-key={k}
-            onClick={() => addChar(k)}
+            onClick={(e) => handleAdd(e, k)}
           >
             {k}
           </button>
@@ -54,7 +70,7 @@ export default function Keyboard ({
           key='enter'
           className="Keyboard__key Keyboard__key--enter Keyboard__key--default"
           data-key="enter"
-          onClick={() => submitGuess()}
+          onClick={handleSubmit}
         >
           ENTER
         </button>
@@ -64,7 +80,7 @@ export default function Keyboard ({
             key={k}
             className={`Keyboard__key Keyboard__key--${k} Keyboard__key--${keyboardKeys[k]}`}
             data-key={k}
-            onClick={() => addChar(k)}
+            onClick={(e) => handleAdd(e, k)}
           >
             {k}
           </button>
@@ -74,7 +90,7 @@ export default function Keyboard ({
           key='backspace'
           className="Keyboard__key Keyboard__key--backspace Keyboard__key--default"
           data-key="backspace"
-          onClick={() => deleteChar()}
+          onClick={handleDelete}
         >
           <i className="fa-solid fa-delete-left" />
         </button>

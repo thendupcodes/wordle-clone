@@ -27,11 +27,6 @@
       border-style: solid;
     }
 
-    &:hover {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
     &--hide {
       opacity: 0;
       visibility: hidden;
@@ -138,6 +133,17 @@
         left: 25%;
         transform: translate(-50%, -100%);
         border-color: transparent transparent var(--tooltip-bg-color) transparent;
+      }
+    }
+  }
+}
+
+@media (hover: hover) {
+  .Tooltip {
+    &__tootip {
+      &:hover {
+        opacity: 1 !important;
+        visibility: visible !important;
       }
     }
   }
