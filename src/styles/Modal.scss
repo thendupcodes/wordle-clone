@@ -1,64 +1,64 @@
 .Modal {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  z-index: $z-layer-modal;
+	height: 100vh;
+	width: 100vw;
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	z-index: $z-layer-modal;
 
-  &__overlay {
-    height: 100%;
-    width: 100%;
-    background: var(--modal-overlay-bg-color);
-    opacity: 0;
-    animation: modal-fade-in 0.5s ease forwards;
-  }
+	&__overlay {
+		height: 100%;
+		width: 100%;
+		background: var(--modal-overlay-bg-color);
+		opacity: 0;
+		animation: modal-fade-in 0.5s ease forwards;
+	}
 
-  &__body {
-    @include box-shadow-light;
+	&__body {
+		@include box-shadow-light;
 
-    background: var(--modal-bg-color);
-    position: absolute;
-    top: 10%;
-    border-radius: 8px;
-    padding: 16px;
-    animation: slide-up 0.5s ease forwards;
+		background: var(--modal-bg-color);
+		position: absolute;
+		top: 10%;
+		border-radius: 8px;
+		padding: 16px;
+		animation: slide-up 0.5s ease forwards;
 
-    &-close {
-      position: absolute;
-      right: 16px;
-      top: 16px;
+		&-close {
+			position: absolute;
+			right: 16px;
+			top: 16px;
 
-      &-button {
-        background: transparent;
-        border: 0;
-        padding: 0;
-        font-size: $font-size-icon;
-        cursor: pointer;
-        color: var(--modal-ft-color);
+			&-button {
+				background: transparent;
+				border: 0;
+				padding: 0;
+				font-size: $font-size-icon;
+				cursor: pointer;
+				color: var(--modal-ft-color);
 
-        &:hover {
-          background-color: transparent;
-        }
-      }
-    }
-  }
+				&:hover {
+					background-color: transparent;
+				}
+			}
+		}
+	}
 }
 
 @media screen and (max-width: $min-device-width) {
-  .Modal {
-    &__body {
-      top: 5%;
-      height: calc(100dvh - 20%);
+	.Modal {
+		&__body {
+			top: 5%;
+			height: calc(100dvh - 20%);
 
-      &-children {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        overflow-y: scroll;
-      }
-    }
-  } 
+			&-children {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				overflow-y: scroll;
+			}
+		}
+	}
 }
