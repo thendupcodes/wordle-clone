@@ -1,101 +1,100 @@
 .Keyboard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 500px;
-  height: 200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 500px;
+	height: 200px;
 
-  &__row {
-    display: flex;
-    width: 100%;
-  }
+	&__row {
+		display: flex;
+		width: 100%;
+	}
 
-  &__key {
-    font-size: 20px;
-    font-weight: $font-weight-heavy;
-    height: 60px;
-    flex: 1;
-    margin: 4px;
-    border: 0;
-    border-radius: 4px;
-    background: var(--kb-key-bg-color);
-    color: var(--kb-key-ft-color);
-    transition: all 0.3s ease;
-    cursor: pointer;
+	&__key {
+		font-size: 20px;
+		font-weight: $font-weight-heavy;
+		height: 60px;
+		flex: 1;
+		margin: 4px;
+		border: 0;
+		border-radius: 4px;
+		background: var(--kb-key-bg-color);
+		color: var(--kb-key-ft-color);
+		transition: all 0.3s ease;
+		cursor: pointer;
 
-    &:active {
-      transform: scale(0.95);
-      transition: all 0.1s ease;
-    }
+		&:active {
+			transform: scale(0.95);
+			transition: all 0.1s ease;
+		}
 
-    &--correct {
-      background: var(--kb-key-correct-bg-color);
-      color: var(--kb-key-correct-ft-color);
-    }
+		&--correct {
+			background: var(--kb-key-correct-bg-color);
+			color: var(--kb-key-correct-ft-color);
+		}
 
-    &--partial {
-      background: var(--kb-key-partial-bg-color);
-      color: var(--kb-key-partial-ft-color);
-    }
+		&--partial {
+			background: var(--kb-key-partial-bg-color);
+			color: var(--kb-key-partial-ft-color);
+		}
 
-    &--wrong {
-      background: var(--kb-key-wrong-bg-color);
-      color: var(--kb-key-wrong-ft-color);
-    }
+		&--wrong {
+			background: var(--kb-key-wrong-bg-color);
+			color: var(--kb-key-wrong-ft-color);
+		}
 
-    &--enter {
-      flex: 1.5;
-      font-size: 12px;
-    }
+		&--enter {
+			flex: 1.5;
+			font-size: 12px;
+		}
 
-    &--backspace {
-      flex: 1.5;
-    }
+		&--backspace {
+			flex: 1.5;
+		}
 
-    &--spacer {
-      flex: 0.5;
-    }
-  }
+		&--spacer {
+			flex: 0.5;
+		}
+	}
 }
 
-
 @media screen and (max-width: $small-device-width) {
-  .Keyboard {
-    width: 100%;
-    max-width: 100%;
-    height: fit-content;
+	.Keyboard {
+		width: 100%;
+		max-width: 100%;
+		height: fit-content;
 
-    &__key {
-      padding: 0px;
-    }
-  } 
+		&__key {
+			padding: 0px;
+		}
+	}
 }
 
 @media screen and (max-width: $min-device-width) {
-  .Keyboard {
-    max-width: 100dvw;
-    margin-bottom: 8px;
+	.Keyboard {
+		max-width: 100dvw;
+		margin-bottom: 8px;
 
-    &__key {
-      max-height: 60px;
-      height: 10dvh;
-      margin: 2px;
-      font-size: $font-size-xs;
+		&__key {
+			max-height: 60px;
+			height: 10dvh;
+			margin: 2px;
+			font-size: $font-size-xs;
 
-      &--enter {
-        font-size: $font-size-xxxs;
-      }
-    }
-  } 
+			&--enter {
+				font-size: $font-size-xxxs;
+			}
+		}
+	}
 }
 
 @media (hover: hover) {
-  .Keyboard {
-    &__key {
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
-  }
+	.Keyboard {
+		&__key {
+			&:hover {
+				transform: scale(1.1);
+			}
+		}
+	}
 }
