@@ -1,11 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import { getToday, getWord, wordIsInDictionary } from "@/helpers/dictionaryHelpers";
-import isLetter from "@/helpers/isLetter";
+import {
+	getToday,
+	getWord,
+	wordIsInDictionary,
+} from '@/helpers/dictionaryHelpers';
+import isLetter from '@/helpers/isLetter';
 
-import { useToaster } from "@/components/ToastContext";
+import { useToaster } from '@/components/ToastContext';
 import alphabetLetters from '@/dictionary/alphabets.json';
-import useLocalStorage from "./useLocalStorage";
+import useLocalStorage from './useLocalStorage';
 
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
@@ -17,13 +21,24 @@ const KEY_STATE_CORRECT = 'correct';
 const KEY_STATE_PARTIAL = 'partial';
 const KEY_STATE_WRONG = 'wrong';
 
-const winPhrases = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'];
+const winPhrases = [
+	'Genius!',
+	'Magnificent!',
+	'Impressive!',
+	'Splendid!',
+	'Great!',
+	'Phew!',
+];
 
 export type KeyboardLetter = {
-  id: string;
-  key: string;
-  state: typeof KEY_STATE_DEFAULT | typeof KEY_STATE_CORRECT | typeof KEY_STATE_PARTIAL | typeof KEY_STATE_WRONG;
-}
+	id: string;
+	key: string;
+	state:
+		| typeof KEY_STATE_DEFAULT
+		| typeof KEY_STATE_CORRECT
+		| typeof KEY_STATE_PARTIAL
+		| typeof KEY_STATE_WRONG;
+};
 
 const CELL_STATE_CORRECT = 'correct';
 const CELL_STATE_PARTIAL_CORRECT = 'partial';
@@ -32,400 +47,423 @@ const CELL_STATE_EMPTY = 'empty';
 const CELL_STATE_FILLED = 'filled';
 
 export type GridCell = {
-  id: string;
-  key: string;
-  state: typeof CELL_STATE_CORRECT | typeof CELL_STATE_PARTIAL_CORRECT | typeof CELL_STATE_NOT_CORRECT | typeof CELL_STATE_EMPTY | typeof CELL_STATE_FILLED;
-}
+	id: string;
+	key: string;
+	state:
+		| typeof CELL_STATE_CORRECT
+		| typeof CELL_STATE_PARTIAL_CORRECT
+		| typeof CELL_STATE_NOT_CORRECT
+		| typeof CELL_STATE_EMPTY
+		| typeof CELL_STATE_FILLED;
+};
 
-export default function useWordle () {
-  const { openToast } = useToaster();
-  const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' });
-  const statsLocalStorage = useLocalStorage({ key: 'tt-wordle-statistics' });
+export default function useWordle() {
+	const { openToast } = useToaster();
+	const gameLocalStorage = useLocalStorage({ key: 'tt-wordle-game-state' });
+	const statsLocalStorage = useLocalStorage({ key: 'tt-wordle-statistics' });
 
-  const [today, setToday] = useState(null);
-  const [answer, setAnswer] = useState('');
-  const [gameWonOnLoad, setGameWonOnLoad] = useState(false);
-  const [currentGuess, setCurrentGuess] = useState('');
-  const [guessIndex, setGuessIndex] = useState(0);
-  const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
-  const [isRevealing, setIsRevealing] = useState(false);
-  const [avoidAnimationIdx, setAvoidAnimationIdx] = useState(-1);
-  const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
-  const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
-  const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
-  const [shakeRow, setShakeRow] = useState(false);
-  const [userStats, setUserStats] = useState(null);
-  const [isStatsModalOpen, setisStatsModalOpen] = useState(false);
+	const [today, setToday] = useState(null);
+	const [answer, setAnswer] = useState('');
+	const [gameWonOnLoad, setGameWonOnLoad] = useState(false);
+	const [currentGuess, setCurrentGuess] = useState('');
+	const [guessIndex, setGuessIndex] = useState(0);
+	const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
+	const [isRevealing, setIsRevealing] = useState(false);
+	const [avoidAnimationIdx, setAvoidAnimationIdx] = useState(-1);
+	const [gridGuessHistory, setGridGuessHistory] = useState<GridCell[][]>([]);
+	const [gridCurrentGuess, setGridCurrentGuess] = useState<GridCell[]>([]);
+	const [gridGuessesLeft, setGridGuessesLeft] = useState<GridCell[][]>([]);
+	const [shakeRow, setShakeRow] = useState(false);
+	const [userStats, setUserStats] = useState(null);
+	const [isStatsModalOpen, setisStatsModalOpen] = useState(false);
 
-  const [keyboardKeys, setKeyboardKeys] = useState<Record<string, KeyboardLetter['state']>>(() => {
-    const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
+	const [keyboardKeys, setKeyboardKeys] = useState<
+		Record<string, KeyboardLetter['state']>
+	>(() => {
+		const alphabetKeys: Record<string, KeyboardLetter['state']> = {};
 
-    alphabetLetters.forEach((letter) => {
-      alphabetKeys[letter] = KEY_STATE_DEFAULT;
-    })
+		alphabetLetters.forEach((letter) => {
+			alphabetKeys[letter] = KEY_STATE_DEFAULT;
+		});
 
-    return alphabetKeys;
-  });
+		return alphabetKeys;
+	});
 
-  const [gameOver, gameWon, winningRow] = useMemo(() => {
-    const outOfTurns = guessIndex >= TOTAL_GUESSES;
-    const correctAnswer = previousGuesses.includes(answer);
-    const correctRow = correctAnswer ? guessIndex - 1 : null;
+	const [gameOver, gameWon, winningRow] = useMemo(() => {
+		const outOfTurns = guessIndex >= TOTAL_GUESSES;
+		const correctAnswer = previousGuesses.includes(answer);
+		const correctRow = correctAnswer ? guessIndex - 1 : null;
 
-    return [outOfTurns || correctAnswer, correctAnswer, correctRow];
-  }, [answer, guessIndex, previousGuesses])
+		return [outOfTurns || correctAnswer, correctAnswer, correctRow];
+	}, [answer, guessIndex, previousGuesses]);
 
-  const updateStats = () => {
-    const currentStatsLS = statsLocalStorage.getItem();
-    const currentStats = currentStatsLS == null ? {} : JSON.parse(currentStatsLS);
-    
-    const newStats = {
-      games: currentStats.games != null ? currentStats.games : 0,
-      wins: currentStats.wins != null ? currentStats.wins : 0,
-      guesses: currentStats.guesses != null ? currentStats.guesses : 0,
-      guessDistribution: currentStats.guessDistribution != null
-        ? currentStats.guessDistribution
-        : { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
-    };
+	const updateStats = () => {
+		const currentStatsLS = statsLocalStorage.getItem();
+		const currentStats =
+			currentStatsLS == null ? {} : JSON.parse(currentStatsLS);
 
-    newStats.games += 1;
-    newStats.wins = gameWon ? newStats.wins + 1 : newStats.wins;
-    newStats.guesses += guessIndex;
-    newStats.guessDistribution[guessIndex] += 1;
+		const newStats = {
+			games: currentStats.games != null ? currentStats.games : 0,
+			wins: currentStats.wins != null ? currentStats.wins : 0,
+			guesses: currentStats.guesses != null ? currentStats.guesses : 0,
+			guessDistribution:
+				currentStats.guessDistribution != null
+					? currentStats.guessDistribution
+					: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+		};
 
-    setUserStats(newStats);
+		newStats.games += 1;
+		newStats.wins = gameWon ? newStats.wins + 1 : newStats.wins;
+		newStats.guesses += guessIndex;
+		newStats.guessDistribution[guessIndex] += 1;
 
-    statsLocalStorage.setItem(JSON.stringify(newStats));
-  }
+		setUserStats(newStats);
 
-  const openStatsModal = () => {
-    setisStatsModalOpen(true);
-  }
+		statsLocalStorage.setItem(JSON.stringify(newStats));
+	};
 
-  const closeStatsModal = () => {
-    setisStatsModalOpen(false);
-  }
+	const openStatsModal = () => {
+		setisStatsModalOpen(true);
+	};
 
-  useEffect(() => {
-    if (gameWon) {
-      if (!gameWonOnLoad) {
-        updateStats();
-      }
+	const closeStatsModal = () => {
+		setisStatsModalOpen(false);
+	};
 
-      setTimeout(() => {
-        if (!gameWonOnLoad) {
-          openToast(winPhrases[guessIndex - 1], 3000);
-          setTimeout(() => {
-            openStatsModal();
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            openStatsModal();
-          }, 1000);
-        }
-      }, FLIP_ANIMATION_DUR);
-    }
-  }, [gameWon, guessIndex]);
+	useEffect(() => {
+		if (gameWon) {
+			if (!gameWonOnLoad) {
+				updateStats();
+			}
 
-  useEffect(() => {
-    const gridRows: GridCell[][] = [];
+			setTimeout(() => {
+				if (!gameWonOnLoad) {
+					openToast(winPhrases[guessIndex - 1], 3000);
+					setTimeout(() => {
+						openStatsModal();
+					}, 2000);
+				} else {
+					setTimeout(() => {
+						openStatsModal();
+					}, 1000);
+				}
+			}, FLIP_ANIMATION_DUR);
+		}
+	}, [gameWon, guessIndex]);
 
-    for (let i = 0; i < previousGuesses.length; i++) {
-      const gridRow: GridCell[] = [];
-      const answerCompare = answer.split('');
+	useEffect(() => {
+		const gridRows: GridCell[][] = [];
 
-      // Instantiate all characters as being wrong, we will add correct classes next
-      for (let j = 0; j < WORD_LENGTH; j++) {
-        gridRow.push({
-          id: `guess_history_${i}_letter_${j}`,
-          key: previousGuesses[i][j],
-          state: CELL_STATE_NOT_CORRECT,
-        });
-      }
+		for (let i = 0; i < previousGuesses.length; i++) {
+			const gridRow: GridCell[] = [];
+			const answerCompare = answer.split('');
 
-      // Style the characters that are in the word AND in the correct spot
-      gridRow.forEach((ltr, idx) => {
-        if (answer[idx] === ltr.key) {
-          ltr.state = CELL_STATE_CORRECT;
-          
-          // Modify the answer being compared for cases like duplicate letters in the guess
-          //   e.g. if answer=BREAK and guess=KAYAK, only 1 K and 1 A should be styled correctly
-          answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
-        }
-      });
+			// Instantiate all characters as being wrong, we will add correct classes next
+			for (let j = 0; j < WORD_LENGTH; j++) {
+				gridRow.push({
+					id: `guess_history_${i}_letter_${j}`,
+					key: previousGuesses[i][j],
+					state: CELL_STATE_NOT_CORRECT,
+				});
+			}
 
-      // Style the charactes that are in the word BUT NOT in the correct spot
-      gridRow.forEach((ltr, idx) => {
-        if (answerCompare.includes(ltr.key) && gridRow[idx].state != CELL_STATE_CORRECT) {
-          gridRow[idx].state = CELL_STATE_PARTIAL_CORRECT;
-          answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
-        }
-      });
-      
-      setTimeout(() => {
-        setKeyboardKeys((prev) => {
-          const newKeys = {...prev};
-        
-          gridRow.forEach((letter) => {
-            switch (letter.state) {
-              case CELL_STATE_CORRECT:
-                newKeys[letter.key] = KEY_STATE_CORRECT;
-                return;
-  
-              case CELL_STATE_PARTIAL_CORRECT:
-                if (newKeys[letter.key] != KEY_STATE_CORRECT) {
-                  newKeys[letter.key] = KEY_STATE_PARTIAL;
-                }
-                return;
-  
-              case CELL_STATE_NOT_CORRECT:
-                if (newKeys[letter.key] != KEY_STATE_CORRECT && newKeys[letter.key] != KEY_STATE_PARTIAL) {
-                  newKeys[letter.key] = KEY_STATE_WRONG;
-                }
-                return;
-  
-              // no default
-            }  
-          })
-  
-          return newKeys;
-        });
-      }, FLIP_ANIMATION_DUR);
-      gridRows.push(gridRow);
-    }
+			// Style the characters that are in the word AND in the correct spot
+			gridRow.forEach((ltr, idx) => {
+				if (answer[idx] === ltr.key) {
+					ltr.state = CELL_STATE_CORRECT;
 
-    setGridGuessHistory(gridRows);
-  }, [answer, previousGuesses])
+					// Modify the answer being compared for cases like duplicate letters in the guess
+					//   e.g. if answer=BREAK and guess=KAYAK, only 1 K and 1 A should be styled correctly
+					answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
+				}
+			});
 
-  useEffect(() => {
-    if (currentGuess != null && guessIndex < TOTAL_GUESSES) {
-      const gridRow: GridCell[] = []
-      for (let i = 0; i < WORD_LENGTH; i++) {
-        const gridCell: GridCell = {
-          id: `guess_cur_letter_${i}`,
-          key: '',
-          state: 'empty',
-        }
+			// Style the charactes that are in the word BUT NOT in the correct spot
+			gridRow.forEach((ltr, idx) => {
+				if (
+					answerCompare.includes(ltr.key) &&
+					gridRow[idx].state != CELL_STATE_CORRECT
+				) {
+					gridRow[idx].state = CELL_STATE_PARTIAL_CORRECT;
+					answerCompare.splice(answerCompare.indexOf(ltr.key), 1);
+				}
+			});
 
-        if (currentGuess[i] != null) {
-          gridCell.key = currentGuess[i];
-          gridCell.state = 'filled';
-        }
+			setTimeout(() => {
+				setKeyboardKeys((prev) => {
+					const newKeys = { ...prev };
 
-        gridRow.push(gridCell);
-      }
+					gridRow.forEach((letter) => {
+						switch (letter.state) {
+							case CELL_STATE_CORRECT:
+								newKeys[letter.key] = KEY_STATE_CORRECT;
+								return;
 
-      setGridCurrentGuess(gridRow);
-    } else {
-      setGridCurrentGuess(null);
-    }
-  }, [currentGuess, guessIndex])
+							case CELL_STATE_PARTIAL_CORRECT:
+								if (newKeys[letter.key] != KEY_STATE_CORRECT) {
+									newKeys[letter.key] = KEY_STATE_PARTIAL;
+								}
+								return;
 
-  useEffect(() => {
-    const gridRows: GridCell[][] = [];
+							case CELL_STATE_NOT_CORRECT:
+								if (
+									newKeys[letter.key] != KEY_STATE_CORRECT &&
+									newKeys[letter.key] != KEY_STATE_PARTIAL
+								) {
+									newKeys[letter.key] = KEY_STATE_WRONG;
+								}
+								return;
 
-    for (let i = 0; i < TOTAL_GUESSES - previousGuesses.length - 1; i++) {
-      const gridRow: GridCell[] = [];
+							// no default
+						}
+					});
 
-      for (let j = 0; j < WORD_LENGTH; j++) {
-        const gridCell: GridCell = {
-          id: `guess_rem_${i}_letter_${j}`,
-          key: '',
-          state: 'empty',
-        }
-        gridRow.push(gridCell);
-      }
+					return newKeys;
+				});
+			}, FLIP_ANIMATION_DUR);
+			gridRows.push(gridRow);
+		}
 
-      gridRows.push(gridRow);
-    }
+		setGridGuessHistory(gridRows);
+	}, [answer, previousGuesses]);
 
-    setGridGuessesLeft(gridRows);
-  }, [previousGuesses])
+	useEffect(() => {
+		if (currentGuess != null && guessIndex < TOTAL_GUESSES) {
+			const gridRow: GridCell[] = [];
+			for (let i = 0; i < WORD_LENGTH; i++) {
+				const gridCell: GridCell = {
+					id: `guess_cur_letter_${i}`,
+					key: '',
+					state: 'empty',
+				};
 
-  const animateRow = () => {
-    setShakeRow(true);
+				if (currentGuess[i] != null) {
+					gridCell.key = currentGuess[i];
+					gridCell.state = 'filled';
+				}
 
-    setTimeout(() => {
-      setShakeRow(false);
-    }, 700);
-  }
+				gridRow.push(gridCell);
+			}
 
-  const submitGuess = () => {
-    if (gameOver) {
-      // User has used up all guesses
-      openToast('Impressive!');
-      return;
-    }
+			setGridCurrentGuess(gridRow);
+		} else {
+			setGridCurrentGuess(null);
+		}
+	}, [currentGuess, guessIndex]);
 
-    if (previousGuesses.includes(currentGuess)) {
-      // Already guessed case
-      openToast('Already guessed word');
-      animateRow();
-      return;
-    }
+	useEffect(() => {
+		const gridRows: GridCell[][] = [];
 
-    if (currentGuess.length !== WORD_LENGTH) {
-      // not enough chars in guess
-      openToast('Not enough letters');
-      animateRow();
-      return;
-    }
+		for (let i = 0; i < TOTAL_GUESSES - previousGuesses.length - 1; i++) {
+			const gridRow: GridCell[] = [];
 
-    if (!wordIsInDictionary(currentGuess)) {
-      // Word is invalid
-      openToast('Not word in list');
-      animateRow();
-      return;
-    }
+			for (let j = 0; j < WORD_LENGTH; j++) {
+				const gridCell: GridCell = {
+					id: `guess_rem_${i}_letter_${j}`,
+					key: '',
+					state: 'empty',
+				};
+				gridRow.push(gridCell);
+			}
 
-    // The guess is valid so we can reveal whether it is correct or not and move to the next guess
-    const storageItems = {
-      lsDate: today,
-      lsCurrentGuess: currentGuess,
-      lsPreviousGuesses: previousGuesses,
-      lsGuessIndex: guessIndex,
-    }
+			gridRows.push(gridRow);
+		}
 
-    setIsRevealing(true);
-    setPreviousGuesses(prev => {
-      const temp = [...prev, currentGuess]; // Create a copy of the guesses array and update with the current guess
-      return temp; // Return the updated guesses array
-    });
-    storageItems.lsPreviousGuesses = [...storageItems.lsPreviousGuesses, currentGuess];
+		setGridGuessesLeft(gridRows);
+	}, [previousGuesses]);
 
-    if (guessIndex < TOTAL_GUESSES) {
-      setCurrentGuess('');
-      storageItems.lsCurrentGuess = '';
+	const animateRow = () => {
+		setShakeRow(true);
 
-      setGuessIndex(prev => {
-        const temp = prev + 1;
-        return temp;
-      }); // Increment current row
-      storageItems.lsGuessIndex += 1;
-    } else {
-      setCurrentGuess(null);
-      storageItems.lsCurrentGuess = null;
-    }
+		setTimeout(() => {
+			setShakeRow(false);
+		}, 700);
+	};
 
-    gameLocalStorage.setItem(JSON.stringify(storageItems));
+	const submitGuess = () => {
+		if (gameOver) {
+			// User has used up all guesses
+			openToast('Impressive!');
+			return;
+		}
 
-    setTimeout(() => {
-      setIsRevealing(false)
-    }, FLIP_ANIMATION_DUR);
-  };
+		if (previousGuesses.includes(currentGuess)) {
+			// Already guessed case
+			openToast('Already guessed word');
+			animateRow();
+			return;
+		}
 
-  const addChar = (char: string) => {
-    if (gameOver) return;
+		if (currentGuess.length !== WORD_LENGTH) {
+			// not enough chars in guess
+			openToast('Not enough letters');
+			animateRow();
+			return;
+		}
 
-    if (currentGuess.length < WORD_LENGTH) {
-      setCurrentGuess(prev => {
-        const newGuess = prev + char.toUpperCase();
-        gameLocalStorage.setItem(JSON.stringify({
-          lsDate: today,
-          lsCurrentGuess: newGuess,
-          lsPreviousGuesses: previousGuesses,
-          lsGuessIndex: guessIndex,
-        }));
+		if (!wordIsInDictionary(currentGuess)) {
+			// Word is invalid
+			openToast('Not word in list');
+			animateRow();
+			return;
+		}
 
-        return newGuess;
-      });
-    }
-  }
+		// The guess is valid so we can reveal whether it is correct or not and move to the next guess
+		const storageItems = {
+			lsDate: today,
+			lsCurrentGuess: currentGuess,
+			lsPreviousGuesses: previousGuesses,
+			lsGuessIndex: guessIndex,
+		};
 
-  const deleteChar = () => {
-    if (gameOver) return;
+		setIsRevealing(true);
+		setPreviousGuesses((prev) => {
+			const temp = [...prev, currentGuess]; // Create a copy of the guesses array and update with the current guess
+			return temp; // Return the updated guesses array
+		});
+		storageItems.lsPreviousGuesses = [
+			...storageItems.lsPreviousGuesses,
+			currentGuess,
+		];
 
-    setCurrentGuess((prev) => {
-      const newGuess = prev.slice(0,-1)
-      gameLocalStorage.setItem(JSON.stringify({
-        lsDate: today,
-        lsCurrentGuess: newGuess,
-        lsPreviousGuesses: previousGuesses,
-        lsGuessIndex: guessIndex,
-      }));
+		if (guessIndex < TOTAL_GUESSES) {
+			setCurrentGuess('');
+			storageItems.lsCurrentGuess = '';
 
-      return newGuess;
-    });
-  }
+			setGuessIndex((prev) => {
+				const temp = prev + 1;
+				return temp;
+			}); // Increment current row
+			storageItems.lsGuessIndex += 1;
+		} else {
+			setCurrentGuess(null);
+			storageItems.lsCurrentGuess = null;
+		}
 
-  const handleUserInput = (e: KeyboardEvent) => {
-    if (isRevealing) return;
+		gameLocalStorage.setItem(JSON.stringify(storageItems));
 
-    if (isLetter(e.key)) {
-      return addChar(e.key);
-    } else if (e.key === 'Backspace') {
-      return deleteChar();
-    } else if (e.key === 'Enter') {
-      return submitGuess();
-    } 
-  }
+		setTimeout(() => {
+			setIsRevealing(false);
+		}, FLIP_ANIMATION_DUR);
+	};
 
-  const grid = useMemo(() => {
-    const result = [];
+	const addChar = (char: string) => {
+		if (gameOver) return;
 
-    if (gridGuessHistory.length > 0) {
-      result.push(...gridGuessHistory);
-    }
+		if (currentGuess.length < WORD_LENGTH) {
+			setCurrentGuess((prev) => {
+				const newGuess = prev + char.toUpperCase();
+				gameLocalStorage.setItem(
+					JSON.stringify({
+						lsDate: today,
+						lsCurrentGuess: newGuess,
+						lsPreviousGuesses: previousGuesses,
+						lsGuessIndex: guessIndex,
+					})
+				);
 
-    if (gridCurrentGuess != null) {
-      result.push(gridCurrentGuess);
-    }
+				return newGuess;
+			});
+		}
+	};
 
-    if (gridGuessesLeft.length > 0) {
-      result.push(...gridGuessesLeft);
-    }
+	const deleteChar = () => {
+		if (gameOver) return;
 
-    return result
-  }, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft])
+		setCurrentGuess((prev) => {
+			const newGuess = prev.slice(0, -1);
+			gameLocalStorage.setItem(
+				JSON.stringify({
+					lsDate: today,
+					lsCurrentGuess: newGuess,
+					lsPreviousGuesses: previousGuesses,
+					lsGuessIndex: guessIndex,
+				})
+			);
 
-  useEffect(() => {
-    const word = getWord();
-    const todayNum = getToday();
-    const storageDetails = gameLocalStorage.getItem();
-    const currentStatsLS = statsLocalStorage.getItem();
+			return newGuess;
+		});
+	};
 
-    setToday(todayNum);
-    if (currentStatsLS != null) {
-      setUserStats(JSON.parse(currentStatsLS));
-    }
+	const handleUserInput = (e: KeyboardEvent) => {
+		if (isRevealing) return;
 
-    if (storageDetails != null) {
-      const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } = JSON.parse(storageDetails);
+		if (isLetter(e.key)) {
+			return addChar(e.key);
+		} else if (e.key === 'Backspace') {
+			return deleteChar();
+		} else if (e.key === 'Enter') {
+			return submitGuess();
+		}
+	};
 
-      const alreadyWon = lsPreviousGuesses.includes(word);
+	const grid = useMemo(() => {
+		const result = [];
 
-      if (lsDate == null || lsDate != todayNum) {
-        gameLocalStorage.deleteItem();
-      } else {
-        setCurrentGuess(lsCurrentGuess);
-        setGuessIndex(lsGuessIndex);
-        setPreviousGuesses(lsPreviousGuesses);
-        setGameWonOnLoad(alreadyWon);
-        setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
-      }
-    }
+		if (gridGuessHistory.length > 0) {
+			result.push(...gridGuessHistory);
+		}
 
-    setAnswer(word);
-  }, []);
+		if (gridCurrentGuess != null) {
+			result.push(gridCurrentGuess);
+		}
 
-  return {
-    answer,
-    guessIndex,
-    grid,
-    keyboardKeys,
-    shakeRow,
-    gameOver,
-    gameWon,
-    previousGuesses,
-    winningRow,
-    avoidAnimationIdx,
-    userStats,
-    isStatsModalOpen,
-    openStatsModal,
-    closeStatsModal,
-    submitGuess,
-    addChar,
-    deleteChar,
-    handleUserInput,
-  };
+		if (gridGuessesLeft.length > 0) {
+			result.push(...gridGuessesLeft);
+		}
+
+		return result;
+	}, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft]);
+
+	useEffect(() => {
+		const word = getWord();
+		const todayNum = getToday();
+		const storageDetails = gameLocalStorage.getItem();
+		const currentStatsLS = statsLocalStorage.getItem();
+
+		setToday(todayNum);
+		if (currentStatsLS != null) {
+			setUserStats(JSON.parse(currentStatsLS));
+		}
+
+		if (storageDetails != null) {
+			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } =
+				JSON.parse(storageDetails);
+
+			const alreadyWon = lsPreviousGuesses.includes(word);
+
+			if (lsDate == null || lsDate != todayNum) {
+				gameLocalStorage.deleteItem();
+			} else {
+				setCurrentGuess(lsCurrentGuess);
+				setGuessIndex(lsGuessIndex);
+				setPreviousGuesses(lsPreviousGuesses);
+				setGameWonOnLoad(alreadyWon);
+				setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
+			}
+		}
+
+		setAnswer(word);
+	}, []);
+
+	return {
+		answer,
+		guessIndex,
+		grid,
+		keyboardKeys,
+		shakeRow,
+		gameOver,
+		gameWon,
+		previousGuesses,
+		winningRow,
+		avoidAnimationIdx,
+		userStats,
+		isStatsModalOpen,
+		openStatsModal,
+		closeStatsModal,
+		submitGuess,
+		addChar,
+		deleteChar,
+		handleUserInput,
+	};
 }

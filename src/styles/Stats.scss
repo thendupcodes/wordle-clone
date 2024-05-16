@@ -1,124 +1,124 @@
 .Stats {
-  min-width: 300px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  
-  &__heading {
-    margin-top: 16px;
-    font-family: $font-family-block;
-    font-size: 32px;
-    color: var(--modal-ft-color);
-  }
+	min-width: 300px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 
-  &__body {
-    display: flex;
-    width: 100%;
-    margin: 24px 0;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    color: var(--modal-ft-color);
+	&__heading {
+		margin-top: 16px;
+		font-family: $font-family-block;
+		font-size: 32px;
+		color: var(--modal-ft-color);
+	}
 
-    &--no-stats {
-      font-size: $font-size-lg;
-    }
+	&__body {
+		display: flex;
+		width: 100%;
+		margin: 24px 0;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		color: var(--modal-ft-color);
 
-    &-heading {
-      text-transform: uppercase;
-      font-weight: $font-weight-heavy;
-      color: var(--modal-ft-color);
-    }
+		&--no-stats {
+			font-size: $font-size-lg;
+		}
 
-    &-items {
-      display: flex;
-      width: 100%;
-      box-sizing: border-box;
-      justify-content: space-around;
-      padding: 0 16px;
-      margin-top: 8px;
-    }
+		&-heading {
+			text-transform: uppercase;
+			font-weight: $font-weight-heavy;
+			color: var(--modal-ft-color);
+		}
 
-    &-item {
-      text-align: center;
-      color: var(--modal-ft-color);
+		&-items {
+			display: flex;
+			width: 100%;
+			box-sizing: border-box;
+			justify-content: space-around;
+			padding: 0 16px;
+			margin-top: 8px;
+		}
 
-      &-value {
-        font-size: $font-size-icon;
-      }
-    }
-  }
+		&-item {
+			text-align: center;
+			color: var(--modal-ft-color);
 
-  &__guesses {
-    margin: 24px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+			&-value {
+				font-size: $font-size-icon;
+			}
+		}
+	}
 
-    &-heading {
-      text-transform: uppercase;
-      font-weight: $font-weight-heavy;
-      color: var(--modal-ft-color);
-    }
-  }
+	&__guesses {
+		margin: 24px 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 
-  &__next {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+		&-heading {
+			text-transform: uppercase;
+			font-weight: $font-weight-heavy;
+			color: var(--modal-ft-color);
+		}
+	}
 
-    &-heading {
-      text-transform: uppercase;
-      font-weight: $font-weight-heavy;
-      color: var(--modal-ft-color);
-    }
+	&__next {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 
-    &-body {
-      color: var(--modal-ft-color);
-    }
-  }
+		&-heading {
+			text-transform: uppercase;
+			font-weight: $font-weight-heavy;
+			color: var(--modal-ft-color);
+		}
 
-  &__footer {
-    color: var(--modal-ft-color);
-    margin-top: 24px;
-    font-size: $font-size-xs;
-  }
+		&-body {
+			color: var(--modal-ft-color);
+		}
+	}
+
+	&__footer {
+		color: var(--modal-ft-color);
+		margin-top: 24px;
+		font-size: $font-size-xs;
+	}
 }
 
 @media screen and (max-width: $min-device-width) {
-  .Stats {
-    width: calc(100vw - 100px);
+	.Stats {
+		width: calc(100vw - 100px);
 
-    &__heading {
-      margin-top: 0;
-      font-size: $font-size-xxxl;
-    }
+		&__heading {
+			margin-top: 0;
+			font-size: $font-size-xxxl;
+		}
 
-    &__body {
-      margin: 8px 0;
+		&__body {
+			margin: 8px 0;
 
-      &-item {
-        &-value {
-          font-size: $font-size-xxl;
-          line-height: 24px;
-        }
+			&-item {
+				&-value {
+					font-size: $font-size-xxl;
+					line-height: 24px;
+				}
 
-        &-key {
-          font-size: $font-size-sm;
-        }
-      }
-    }
+				&-key {
+					font-size: $font-size-sm;
+				}
+			}
+		}
 
-    &__guesses {
-      margin: 8px 0;
-    }
-    
-    &__footer {
-      margin-top: 16px;
-    }
-  } 
+		&__guesses {
+			margin: 8px 0;
+		}
+
+		&__footer {
+			margin-top: 16px;
+		}
+	}
 }

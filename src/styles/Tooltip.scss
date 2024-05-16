@@ -1,150 +1,158 @@
 .Tooltip {
-  &-Container {
-    position: relative;
-    display: inline-block;
-  }
+	&-Container {
+		position: relative;
+		display: inline-block;
+	}
 
-  &__tooltip {
-    position: absolute;
-    border-radius: 8px;
-    padding: 4px 8px;
-    background: var(--tooltip-bg-color);
-    color: var(--tooltip-ft-color);
-    min-width: 60px;
-    width: fit-content;
-    text-wrap: nowrap;
-    text-align: center;
-    visibility: visible;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-regular;
-    opacity: 1;
-    z-index: 1;
-    
-    &:after {
-      content: " ";
-      position: absolute;
-      border-width: 4px;
-      border-style: solid;
-    }
+	&__tooltip {
+		position: absolute;
+		border-radius: 8px;
+		padding: 4px 8px;
+		background: var(--tooltip-bg-color);
+		color: var(--tooltip-ft-color);
+		min-width: 60px;
+		width: fit-content;
+		text-wrap: nowrap;
+		text-align: center;
+		visibility: visible;
+		font-size: $font-size-sm;
+		font-weight: $font-weight-regular;
+		opacity: 1;
+		z-index: 1;
 
-    &--hide {
-      opacity: 0;
-      visibility: hidden;
-    }
+		&:after {
+			content: ' ';
+			position: absolute;
+			border-width: 4px;
+			border-style: solid;
+		}
 
-    &--top {
-      top: -8px;
-      left: 50%;
-      transform: translate(-50%, -100%);
+		&--hide {
+			opacity: 0;
+			visibility: hidden;
+		}
 
-      &:after {
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        border-color: var(--tooltip-bg-color) transparent transparent transparent;
-      }
-    }
+		&--top {
+			top: -8px;
+			left: 50%;
+			transform: translate(-50%, -100%);
 
-    &--left {
-      top: 50%;
-      left: calc(0% - 8px);
-      transform: translate(-100%, -50%);
+			&:after {
+				top: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				border-color: var(--tooltip-bg-color) transparent transparent
+					transparent;
+			}
+		}
 
-      &:after {
-        top: 50%;
-        left: 100%;
-        transform: translateY(-50%);
-        border-color: transparent transparent transparent var(--tooltip-bg-color);
-      }
-    }
+		&--left {
+			top: 50%;
+			left: calc(0% - 8px);
+			transform: translate(-100%, -50%);
 
-    &--bottom {
-      top: calc(100% + 8px);
-      left: 50%;
-      transform: translate(-50%, 0%);
+			&:after {
+				top: 50%;
+				left: 100%;
+				transform: translateY(-50%);
+				border-color: transparent transparent transparent
+					var(--tooltip-bg-color);
+			}
+		}
 
-      &:after {
-        top: 0%;
-        left: 50%;
-        transform: translate(-50%, -100%);
-        border-color: transparent transparent var(--tooltip-bg-color) transparent;
-      }
-    }
+		&--bottom {
+			top: calc(100% + 8px);
+			left: 50%;
+			transform: translate(-50%, 0%);
 
-    &--right {
-      top: 50%;
-      left: calc(100% + 8px);
-      transform: translate(0, -50%);
-      
-      &:after {
-        top: 50%;
-        left: 0;
-        transform: translate(-100%, -50%);
-        border-color: transparent var(--tooltip-bg-color) transparent transparent;
-      }
-    }
+			&:after {
+				top: 0%;
+				left: 50%;
+				transform: translate(-50%, -100%);
+				border-color: transparent transparent var(--tooltip-bg-color)
+					transparent;
+			}
+		}
 
-    &--top-left {
-      top: -8px;
-      left: 50%;
-      transform: translate(-75%, -100%);
+		&--right {
+			top: 50%;
+			left: calc(100% + 8px);
+			transform: translate(0, -50%);
 
-      &:after {
-        top: 100%;
-        left: 75%;
-        transform: translateX(-50%);
-        border-color: var(--tooltip-bg-color) transparent transparent transparent;
-      }
-    }
+			&:after {
+				top: 50%;
+				left: 0;
+				transform: translate(-100%, -50%);
+				border-color: transparent var(--tooltip-bg-color) transparent
+					transparent;
+			}
+		}
 
-    &--top-right {
-      top: -8px;
-      right: 50%;
-      transform: translate(75%, -100%);
+		&--top-left {
+			top: -8px;
+			left: 50%;
+			transform: translate(-75%, -100%);
 
-      &:after {
-        top: 100%;
-        left: 25%;
-        transform: translateX(-50%);
-        border-color: var(--tooltip-bg-color) transparent transparent transparent;
-      }
-    }
+			&:after {
+				top: 100%;
+				left: 75%;
+				transform: translateX(-50%);
+				border-color: var(--tooltip-bg-color) transparent transparent
+					transparent;
+			}
+		}
 
-    &--bottom-left {
-      top: calc(100% + 8px);
-      left: 50%;
-      transform: translate(-75%, 0%);
+		&--top-right {
+			top: -8px;
+			right: 50%;
+			transform: translate(75%, -100%);
 
-      &:after {
-        top: 0%;
-        left: 75%;
-        transform: translate(-50%, -100%);
-        border-color: transparent transparent var(--tooltip-bg-color) transparent;
-      }
-    }
+			&:after {
+				top: 100%;
+				left: 25%;
+				transform: translateX(-50%);
+				border-color: var(--tooltip-bg-color) transparent transparent
+					transparent;
+			}
+		}
 
-    &--bottom-right {
-      top: calc(100% + 8px);
-      right: 50%;
-      transform: translate(75%, 0%);
+		&--bottom-left {
+			top: calc(100% + 8px);
+			left: 50%;
+			transform: translate(-75%, 0%);
 
-      &:after {
-        top: 0%;
-        left: 25%;
-        transform: translate(-50%, -100%);
-        border-color: transparent transparent var(--tooltip-bg-color) transparent;
-      }
-    }
-  }
+			&:after {
+				top: 0%;
+				left: 75%;
+				transform: translate(-50%, -100%);
+				border-color: transparent transparent var(--tooltip-bg-color)
+					transparent;
+			}
+		}
+
+		&--bottom-right {
+			top: calc(100% + 8px);
+			right: 50%;
+			transform: translate(75%, 0%);
+
+			&:after {
+				top: 0%;
+				left: 25%;
+				transform: translate(-50%, -100%);
+				border-color: transparent transparent var(--tooltip-bg-color)
+					transparent;
+			}
+		}
+	}
 }
 
 @media (hover: hover) {
-  .Tooltip {
-    &__tootip {
-      &:hover {
-        opacity: 1 !important;
-        visibility: visible !important;
-      }
-    }
-  }
+	.Tooltip {
+		&__tootip {
+			&:hover {
+				opacity: 1 !important;
+				visibility: visible !important;
+			}
+		}
+	}
 }
