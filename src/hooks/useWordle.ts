@@ -22,12 +22,12 @@ const KEY_STATE_PARTIAL = 'partial';
 const KEY_STATE_WRONG = 'wrong';
 
 const winPhrases = [
-	'You genius!',
+	'You are a genius!',
 	'Amazing!',
-	'Third time\'s the charm!',
+	'Well played, GG!',
 	'Not too shabby!',
 	'Good run!',
-	'Well, that was a close one!',
+	'Well, that was close!',
 ];
 
 const losingPhrase = 'You\'ll get it next time!';
