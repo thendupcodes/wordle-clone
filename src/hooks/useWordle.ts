@@ -22,13 +22,15 @@ const KEY_STATE_PARTIAL = 'partial';
 const KEY_STATE_WRONG = 'wrong';
 
 const winPhrases = [
-	'Genius!',
-	'Magnificent!',
-	'Impressive!',
-	'Splendid!',
-	'Great!',
-	'Phew!',
+	'You genius!',
+	'Amazing!',
+	'Third time\'s the charm!',
+	'Not too shabby!',
+	'Good run!',
+	'Well, that was a close one!',
 ];
+
+const losingPhrase = 'You\'ll get it next time!';
 
 export type KeyboardLetter = {
 	id: string;
