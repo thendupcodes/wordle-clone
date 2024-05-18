@@ -164,6 +164,135 @@ export default function useWordle() {
 		setisStatsModalOpen(false);
 	};
 
+	const animateRow = () => {
+		setShakeRow(true);
+
+		setTimeout(() => {
+			setShakeRow(false);
+		}, 700);
+	};
+
+	const submitGuess = () => {
+		if (gameOver) {
+			// User has used up all guesses
+			return;
+		}
+
+		if (previousGuesses.includes(currentGuess)) {
+			// Already guessed case
+			openToast('Already guessed word');
+			animateRow();
+			return;
+		}
+
+		if (currentGuess.length !== WORD_LENGTH) {
+			// not enough chars in guess
+			openToast('Not enough letters');
+			animateRow();
+			return;
+		}
+
+		if (!wordIsInDictionary(currentGuess)) {
+			// Word is invalid
+			openToast('Not word in list');
+			animateRow();
+			return;
+		}
+
+		// The guess is valid so we can reveal whether it is correct or not and move to the next guess
+		setIsRevealing(true);
+		setPreviousGuesses((prev) => [...prev, currentGuess]); // Create a copy of the guesses array and update with the current guess
+
+		if (guessIndex < TOTAL_GUESSES) {
+			setCurrentGuess('');
+			setGuessIndex((prev) => prev + 1); // Increment current row
+		} else {
+			setCurrentGuess(null);
+		}
+
+		updateGameState();
+
+		setTimeout(() => {
+			setIsRevealing(false);
+		}, FLIP_ANIMATION_DUR);
+	};
+
+	const addChar = (char: string) => {
+		if (gameOver) return;
+
+		if (currentGuess.length < WORD_LENGTH) {
+			setCurrentGuess((prev) => {
+				const newGuess = prev + char.toUpperCase();
+				gameLocalStorage.setItem(
+					JSON.stringify({
+						lsDate: today,
+						lsCurrentGuess: newGuess,
+						lsPreviousGuesses: previousGuesses,
+						lsGuessIndex: guessIndex,
+						lsGameOver: gameOver,
+					})
+				);
+
+				return newGuess;
+			});
+		}
+	};
+
+	const deleteChar = () => {
+		if (gameOver) return;
+
+		setCurrentGuess((prev) => {
+			const newGuess = prev.slice(0, -1);
+			gameLocalStorage.setItem(
+				JSON.stringify({
+					lsDate: today,
+					lsCurrentGuess: newGuess,
+					lsPreviousGuesses: previousGuesses,
+					lsGuessIndex: guessIndex,
+					lsGameOver: gameOver,
+				})
+			);
+
+			return newGuess;
+		});
+	};
+
+	const handleUserInput = (e: KeyboardEvent) => {
+		if (isRevealing) return;
+
+		if (isLetter(e.key)) {
+			return addChar(e.key);
+		} else if (e.key === 'Backspace') {
+			return deleteChar();
+		} else if (e.key === 'Enter') {
+			return submitGuess();
+		}
+	};
+
+	const grid = useMemo(() => {
+		const result = [];
+
+		if (gridGuessHistory.length > 0) {
+			result.push(...gridGuessHistory);
+		}
+
+		if (gridCurrentGuess != null) {
+			result.push(gridCurrentGuess);
+		}
+
+		if (gridGuessesLeft.length > 0) {
+			result.push(...gridGuessesLeft);
+		}
+
+		return result;
+	}, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft]);
+
+	useEffect(() => {
+		if (gameOver && gameOverOnLoad != null && !gameOverOnLoad) {
+			updateGameState();
+		}
+	}, [gameOver]);
+
 	useEffect(() => {
 		// Hook for determining whether to show the stats modal (on game win or page load)
 		if (gameOver) {
@@ -307,149 +436,6 @@ export default function useWordle() {
 		setGridGuessesLeft(gridRows);
 	}, [previousGuesses]);
 
-	const animateRow = () => {
-		setShakeRow(true);
-
-		setTimeout(() => {
-			setShakeRow(false);
-		}, 700);
-	};
-
-	const submitGuess = () => {
-		if (gameOver) {
-			// User has used up all guesses
-			return;
-		}
-
-		if (previousGuesses.includes(currentGuess)) {
-			// Already guessed case
-			openToast('Already guessed word');
-			animateRow();
-			return;
-		}
-
-		if (currentGuess.length !== WORD_LENGTH) {
-			// not enough chars in guess
-			openToast('Not enough letters');
-			animateRow();
-			return;
-		}
-
-		if (!wordIsInDictionary(currentGuess)) {
-			// Word is invalid
-			openToast('Not word in list');
-			animateRow();
-			return;
-		}
-
-		// The guess is valid so we can reveal whether it is correct or not and move to the next guess
-		const storageItems = {
-			lsDate: today,
-			lsCurrentGuess: currentGuess,
-			lsPreviousGuesses: previousGuesses,
-			lsGuessIndex: guessIndex,
-			lsGameOver: gameOver,
-		};
-
-		setIsRevealing(true);
-		setPreviousGuesses((prev) => {
-			const temp = [...prev, currentGuess]; // Create a copy of the guesses array and update with the current guess
-			return temp; // Return the updated guesses array
-		});
-		storageItems.lsPreviousGuesses = [
-			...storageItems.lsPreviousGuesses,
-			currentGuess,
-		];
-
-		if (guessIndex < TOTAL_GUESSES) {
-			setCurrentGuess('');
-			storageItems.lsCurrentGuess = '';
-
-			setGuessIndex((prev) => {
-				const temp = prev + 1;
-				return temp;
-			}); // Increment current row
-			storageItems.lsGuessIndex += 1;
-		} else {
-			setCurrentGuess(null);
-			storageItems.lsCurrentGuess = null;
-		}
-
-		gameLocalStorage.setItem(JSON.stringify(storageItems));
-
-		setTimeout(() => {
-			setIsRevealing(false);
-		}, FLIP_ANIMATION_DUR);
-	};
-
-	const addChar = (char: string) => {
-		if (gameOver) return;
-
-		if (currentGuess.length < WORD_LENGTH) {
-			setCurrentGuess((prev) => {
-				const newGuess = prev + char.toUpperCase();
-				gameLocalStorage.setItem(
-					JSON.stringify({
-						lsDate: today,
-						lsCurrentGuess: newGuess,
-						lsPreviousGuesses: previousGuesses,
-						lsGuessIndex: guessIndex,
-					})
-				);
-
-				return newGuess;
-			});
-		}
-	};
-
-	const deleteChar = () => {
-		if (gameOver) return;
-
-		setCurrentGuess((prev) => {
-			const newGuess = prev.slice(0, -1);
-			gameLocalStorage.setItem(
-				JSON.stringify({
-					lsDate: today,
-					lsCurrentGuess: newGuess,
-					lsPreviousGuesses: previousGuesses,
-					lsGuessIndex: guessIndex,
-				})
-			);
-
-			return newGuess;
-		});
-	};
-
-	const handleUserInput = (e: KeyboardEvent) => {
-		if (isRevealing) return;
-
-		if (isLetter(e.key)) {
-			return addChar(e.key);
-		} else if (e.key === 'Backspace') {
-			return deleteChar();
-		} else if (e.key === 'Enter') {
-			return submitGuess();
-		}
-	};
-
-	const grid = useMemo(() => {
-		const result = [];
-
-		if (gridGuessHistory.length > 0) {
-			result.push(...gridGuessHistory);
-		}
-
-		if (gridCurrentGuess != null) {
-			result.push(gridCurrentGuess);
-		}
-
-		if (gridGuessesLeft.length > 0) {
-			result.push(...gridGuessesLeft);
-		}
-
-		return result;
-	}, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft]);
-
 	useEffect(() => {
 		const word = getWord();
 		const todayNum = getToday();
@@ -464,8 +450,6 @@ export default function useWordle() {
 		if (storageDetails != null) {
 			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex, lsGameOver } = JSON.parse(storageDetails);
 
-			const alreadyWon = lsPreviousGuesses.includes(word);
-
 			if (lsDate == null || lsDate != todayNum) {
 				gameLocalStorage.deleteItem();
 			} else {
@@ -473,7 +457,7 @@ export default function useWordle() {
 				setGuessIndex(lsGuessIndex);
 				setPreviousGuesses(lsPreviousGuesses);
 				setGameOverOnLoad(lsGameOver);
-				setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
+				setAvoidAnimationIdx(lsGameOver ? 0 : lsGuessIndex - 1);
 			}
 		}
 
