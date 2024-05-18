@@ -31,6 +31,7 @@ const winPhrases = [
 ];
 
 const losingPhrase = 'You\'ll get it next time!';
+const tryAgainPhrase = 'Try again tomorrow!';
 
 export type KeyboardLetter = {
 	id: string;
@@ -129,9 +130,6 @@ export default function useWordle() {
 	};
 
 	const updateGameState = () => {
-		console.log('called');
-		console.log({ today, currentGuess, previousGuesses, guessIndex, gameOver });
-
 		const storageItems = {
 			lsDate: today,
 			lsCurrentGuess: currentGuess,
@@ -297,19 +295,26 @@ export default function useWordle() {
 		// Hook for determining whether to show the stats modal (on game win or page load)
 		if (gameOver) {
 			if (gameOverOnLoad != null && !gameOverOnLoad) {
+				// Update the stats if the user has played out the game (game didnt end on load)
 				updateStats(gameWon);
+			} else if (gameWon != null && !gameWon) {
+				setTimeout(() => {
+					openToast(tryAgainPhrase, 3000);
+				}, 1000);
 			}
 	
 			setTimeout(() => {
-				if (!gameOverOnLoad) {
+				if (gameOverOnLoad != null && !gameOverOnLoad) {
 					openToast(gameWon ? winPhrases[guessIndex - 1] : losingPhrase , 3000);
 					setTimeout(() => {
 						openStatsModal();
 					}, 2000);
 				} else {
-					setTimeout(() => {
-						openStatsModal();
-					}, 1000);
+					if (gameWon) {
+						setTimeout(() => {
+							openStatsModal();
+						}, 1000);
+					}
 				}
 			}, FLIP_ANIMATION_DUR);
 		}
@@ -450,6 +455,8 @@ export default function useWordle() {
 		if (storageDetails != null) {
 			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex, lsGameOver } = JSON.parse(storageDetails);
 
+			const alreadyWon = lsPreviousGuesses.includes(word);
+
 			if (lsDate == null || lsDate != todayNum) {
 				gameLocalStorage.deleteItem();
 			} else {
@@ -457,7 +464,7 @@ export default function useWordle() {
 				setGuessIndex(lsGuessIndex);
 				setPreviousGuesses(lsPreviousGuesses);
 				setGameOverOnLoad(lsGameOver);
-				setAvoidAnimationIdx(lsGameOver ? 0 : lsGuessIndex - 1);
+				setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
 			}
 		}
 
