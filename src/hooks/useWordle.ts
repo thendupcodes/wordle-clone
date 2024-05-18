@@ -66,7 +66,7 @@ export default function useWordle() {
 
 	const [today, setToday] = useState(null);
 	const [answer, setAnswer] = useState('');
-	const [gameWonOnLoad, setGameWonOnLoad] = useState(false);
+	const [gameOverOnLoad, setGameOverOnLoad] = useState(false);
 	const [currentGuess, setCurrentGuess] = useState('');
 	const [guessIndex, setGuessIndex] = useState(0);
 	const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
@@ -99,7 +99,7 @@ export default function useWordle() {
 		return [outOfTurns || correctAnswer, correctAnswer, correctRow];
 	}, [answer, guessIndex, previousGuesses]);
 
-	const updateStats = () => {
+	const updateStats = (winState = true) => {
 		const currentStatsLS = statsLocalStorage.getItem();
 		const currentStats =
 			currentStatsLS == null ? {} : JSON.parse(currentStatsLS);
@@ -115,9 +115,13 @@ export default function useWordle() {
 		};
 
 		newStats.games += 1;
-		newStats.wins = gameWon ? newStats.wins + 1 : newStats.wins;
-		newStats.guesses += guessIndex;
-		newStats.guessDistribution[guessIndex] += 1;
+		
+		if (winState) {
+			newStats.wins = gameWon ? newStats.wins + 1 : newStats.wins;
+			newStats.guesses += guessIndex;
+			newStats.guessDistribution[guessIndex] += 1;
+		}
+		
 
 		setUserStats(newStats);
 
@@ -133,14 +137,15 @@ export default function useWordle() {
 	};
 
 	useEffect(() => {
-		if (gameWon) {
-			if (!gameWonOnLoad) {
-				updateStats();
+		console.log({ gameOver, gameOverOnLoad });
+		if (gameOver) {
+			if (gameOverOnLoad != null && !gameOverOnLoad) {
+				updateStats(gameWon);
 			}
-
+	
 			setTimeout(() => {
-				if (!gameWonOnLoad) {
-					openToast(winPhrases[guessIndex - 1], 3000);
+				if (!gameOverOnLoad) {
+					openToast(gameWon ? winPhrases[guessIndex - 1] : losingPhrase , 3000);
 					setTimeout(() => {
 						openStatsModal();
 					}, 2000);
@@ -151,7 +156,7 @@ export default function useWordle() {
 				}
 			}, FLIP_ANIMATION_DUR);
 		}
-	}, [gameWon, guessIndex]);
+	}, [gameWon, gameOver, gameOverOnLoad, guessIndex]);
 
 	useEffect(() => {
 		const gridRows: GridCell[][] = [];
@@ -285,7 +290,6 @@ export default function useWordle() {
 	const submitGuess = () => {
 		if (gameOver) {
 			// User has used up all guesses
-			openToast('Impressive!');
 			return;
 		}
 
@@ -316,6 +320,7 @@ export default function useWordle() {
 			lsCurrentGuess: currentGuess,
 			lsPreviousGuesses: previousGuesses,
 			lsGuessIndex: guessIndex,
+			lsGameOver: gameOver,
 		};
 
 		setIsRevealing(true);
@@ -429,8 +434,7 @@ export default function useWordle() {
 		}
 
 		if (storageDetails != null) {
-			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex } =
-				JSON.parse(storageDetails);
+			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex, lsGameOver } = JSON.parse(storageDetails);
 
 			const alreadyWon = lsPreviousGuesses.includes(word);
 
@@ -440,7 +444,7 @@ export default function useWordle() {
 				setCurrentGuess(lsCurrentGuess);
 				setGuessIndex(lsGuessIndex);
 				setPreviousGuesses(lsPreviousGuesses);
-				setGameWonOnLoad(alreadyWon);
+				setGameOverOnLoad(lsGameOver);
 				setAvoidAnimationIdx(alreadyWon ? 0 : lsGuessIndex - 1);
 			}
 		}
