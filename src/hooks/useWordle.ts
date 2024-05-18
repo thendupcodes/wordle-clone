@@ -23,7 +23,7 @@ const KEY_STATE_WRONG = 'wrong';
 
 const winPhrases = [
 	'You are a genius!',
-	'Amazing!',
+	'Woah, amazing!',
 	'Well played, GG!',
 	'Not too shabby!',
 	'Good run!',
@@ -103,8 +103,6 @@ export default function useWordle() {
 	const grid = useMemo(() => {
 		const result = [];
 
-		console.log({ gridGuessHistory, gridCurrentGuess, gridGuessesLeft });
-
 		if (gridGuessHistory.length > 0) {
 			result.push(...gridGuessHistory);
 		}
@@ -157,8 +155,6 @@ export default function useWordle() {
 			lsGuessIndex: guessIndex,
 			lsGameOver: gameOver,
 		};
-
-		console.log({ currentGuess, previousGuesses, guessIndex, gameOver })
 
 		if (guessIndex < TOTAL_GUESSES) {
 			storageItems.lsCurrentGuess = '';
