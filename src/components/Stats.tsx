@@ -29,6 +29,10 @@ export default function Stats({ userStats, colors }: StatsProps) {
 
 	const barMaxHeight = 200;
 
+	const winPct = useMemo(() => {
+		return Math.round((wins / games) * 100);
+	}, [wins, games])
+
 	const getAndSetCountDown = () => {
 		const now = new Date();
 		const tomorrow = new Date();
@@ -115,7 +119,7 @@ export default function Stats({ userStats, colors }: StatsProps) {
 					</div>
 
 					<div className="Stats__body-item">
-						<div className="Stats__body-item-value">{(wins / games) * 100}</div>
+						<div className="Stats__body-item-value">{winPct}</div>
 
 						<div className="Stats__body-item-key">Win %</div>
 					</div>
