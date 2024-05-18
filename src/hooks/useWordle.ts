@@ -100,6 +100,26 @@ export default function useWordle() {
 		return [outOfTurns || correctAnswer, correctAnswer, correctRow];
 	}, [answer, guessIndex, previousGuesses]);
 
+	const grid = useMemo(() => {
+		const result = [];
+
+		console.log({ gridGuessHistory, gridCurrentGuess, gridGuessesLeft });
+
+		if (gridGuessHistory.length > 0) {
+			result.push(...gridGuessHistory);
+		}
+
+		if (gridCurrentGuess != null) {
+			result.push(gridCurrentGuess);
+		}
+
+		if (gridGuessesLeft.length > 0) {
+			result.push(...gridGuessesLeft);
+		}
+
+		return result;
+	}, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft]);
+
 	const updateStats = (winState = true) => {
 		const currentStatsLS = statsLocalStorage.getItem();
 		const currentStats =
@@ -138,14 +158,17 @@ export default function useWordle() {
 			lsGameOver: gameOver,
 		};
 
-		storageItems.lsPreviousGuesses = [
-			...storageItems.lsPreviousGuesses,
-			currentGuess,
-		];
+		console.log({ currentGuess, previousGuesses, guessIndex, gameOver })
 
 		if (guessIndex < TOTAL_GUESSES) {
 			storageItems.lsCurrentGuess = '';
-			if (!gameOver) storageItems.lsGuessIndex += 1; // only bump the index in LS if the user has yet to finish the game
+			if (!gameOver) {
+				storageItems.lsGuessIndex += 1; // only bump the index in LS if the user has yet to finish the game
+				storageItems.lsPreviousGuesses = [
+					...storageItems.lsPreviousGuesses,
+					currentGuess,
+				];
+			}
 		} else {
 			storageItems.lsGameOver = true;
 			storageItems.lsCurrentGuess = null;
@@ -199,8 +222,8 @@ export default function useWordle() {
 
 		// The guess is valid so we can reveal whether it is correct or not and move to the next guess
 		setIsRevealing(true);
-		setPreviousGuesses((prev) => [...prev, currentGuess]); // Create a copy of the guesses array and update with the current guess
 
+		setPreviousGuesses((prev) => [...prev, currentGuess]); // Create a copy of the guesses array and update with the current guess
 		if (guessIndex < TOTAL_GUESSES) {
 			setCurrentGuess('');
 			setGuessIndex((prev) => prev + 1); // Increment current row
@@ -266,24 +289,6 @@ export default function useWordle() {
 			return submitGuess();
 		}
 	};
-
-	const grid = useMemo(() => {
-		const result = [];
-
-		if (gridGuessHistory.length > 0) {
-			result.push(...gridGuessHistory);
-		}
-
-		if (gridCurrentGuess != null) {
-			result.push(gridCurrentGuess);
-		}
-
-		if (gridGuessesLeft.length > 0) {
-			result.push(...gridGuessesLeft);
-		}
-
-		return result;
-	}, [gridGuessHistory, gridCurrentGuess, gridGuessesLeft]);
 
 	useEffect(() => {
 		if (gameOver && gameOverOnLoad != null && !gameOverOnLoad) {

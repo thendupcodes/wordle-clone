@@ -59,23 +59,23 @@ export default function Wordle({
 					'--modal-overlay-bg-color': '#222222',
 					'--modal-bg-color': '#101010',
 					'--modal-ft-color': '#f7f7f7',
-			  }
+				}
 			: {
 					'--modal-overlay-bg-color': '#101010',
 					'--modal-bg-color': '#f7f7f7',
 					'--modal-ft-color': '#101010',
-			  }
+				}
 	) as React.CSSProperties;
 
 	const statsColors = darkMode
 		? {
 				barColor: '#777d7e',
 				fontColor: '#f7f7f7',
-		  }
+			}
 		: {
 				barColor: '#adb5bd',
 				fontColor: '#101010',
-		  };
+			};
 
 	useEffect(() => {
 		// App triggered modal open
