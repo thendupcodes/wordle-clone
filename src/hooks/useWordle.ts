@@ -128,6 +128,34 @@ export default function useWordle() {
 		statsLocalStorage.setItem(JSON.stringify(newStats));
 	};
 
+	const updateGameState = () => {
+		console.log('called');
+		console.log({ today, currentGuess, previousGuesses, guessIndex, gameOver });
+
+		const storageItems = {
+			lsDate: today,
+			lsCurrentGuess: currentGuess,
+			lsPreviousGuesses: previousGuesses,
+			lsGuessIndex: guessIndex,
+			lsGameOver: gameOver,
+		};
+
+		storageItems.lsPreviousGuesses = [
+			...storageItems.lsPreviousGuesses,
+			currentGuess,
+		];
+
+		if (guessIndex < TOTAL_GUESSES) {
+			storageItems.lsCurrentGuess = '';
+			if (!gameOver) storageItems.lsGuessIndex += 1; // only bump the index in LS if the user has yet to finish the game
+		} else {
+			storageItems.lsGameOver = true;
+			storageItems.lsCurrentGuess = null;
+		}
+
+		gameLocalStorage.setItem(JSON.stringify(storageItems));
+	}
+
 	const openStatsModal = () => {
 		setisStatsModalOpen(true);
 	};
@@ -137,7 +165,7 @@ export default function useWordle() {
 	};
 
 	useEffect(() => {
-		console.log({ gameOver, gameOverOnLoad });
+		// Hook for determining whether to show the stats modal (on game win or page load)
 		if (gameOver) {
 			if (gameOverOnLoad != null && !gameOverOnLoad) {
 				updateStats(gameWon);
