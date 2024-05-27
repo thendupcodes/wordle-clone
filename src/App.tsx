@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import Help from '@/components/Help';
+import Modal from '@/components/Modal';
 import ToastProvider from '@/components/ToastContext';
 import Toggle from '@/components/Toggle';
 import Tooltip from '@/components/Tooltip';
 import Wordle from '@/components/Wordle';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
-import Modal from './components/Modal';
 
 function App() {
 	const appLocalStorage = useLocalStorage({ key: 'tt-wordle-app-state' });
@@ -139,7 +140,7 @@ function App() {
 						modalStyle={modalStyle}
 					>
 						<>
-							HELP ME
+							<Help highContrast={highContrast} />
 						</>
 					</Modal>
 				</>
