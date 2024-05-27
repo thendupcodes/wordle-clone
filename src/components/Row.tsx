@@ -54,7 +54,7 @@ export default function Row({
 							isSubmitted
 								? {
 										animationDelay: `${idx * delay}ms`,
-								  }
+									}
 								: null
 						}
 					>

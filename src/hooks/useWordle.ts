@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
 	getToday,
-	getWord,
+	getTodaysAnswer,
 	wordIsInDictionary,
 } from '@/helpers/dictionaryHelpers';
 import isLetter from '@/helpers/isLetter';
@@ -14,7 +14,7 @@ import useLocalStorage from './useLocalStorage';
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
 
-export const FLIP_ANIMATION_DUR = 1900; // flip animation=700ms + delay=1200ms
+export const FLIP_ANIMATION_DUR = 1700; // flip animation=500ms + delay=1200ms
 
 const KEY_STATE_DEFAULT = 'default';
 const KEY_STATE_CORRECT = 'correct';
@@ -29,9 +29,6 @@ const winPhrases = [
 	'Good run!',
 	'Well, that was close!',
 ];
-
-const losingPhrase = 'You\'ll get it next time!';
-const tryAgainPhrase = 'Try again tomorrow!';
 
 export type KeyboardLetter = {
 	id: string;
@@ -300,13 +297,13 @@ export default function useWordle() {
 				updateStats(gameWon);
 			} else if (gameWon != null && !gameWon) {
 				setTimeout(() => {
-					openToast(tryAgainPhrase, 3000);
-				}, 1000);
+					openToast(answer, 3000);
+				}, 2000);
 			}
 	
 			setTimeout(() => {
 				if (gameOverOnLoad != null && !gameOverOnLoad) {
-					openToast(gameWon ? winPhrases[guessIndex - 1] : losingPhrase , 3000);
+					openToast(gameWon ? winPhrases[guessIndex - 1] : answer , 3000);
 					setTimeout(() => {
 						openStatsModal();
 					}, 2000);
@@ -443,7 +440,7 @@ export default function useWordle() {
 	}, [previousGuesses]);
 
 	useEffect(() => {
-		const word = getWord();
+		const todaysAnswer = getTodaysAnswer();
 		const todayNum = getToday();
 		const storageDetails = gameLocalStorage.getItem();
 		const currentStatsLS = statsLocalStorage.getItem();
@@ -456,7 +453,7 @@ export default function useWordle() {
 		if (storageDetails != null) {
 			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex, lsGameOver } = JSON.parse(storageDetails);
 
-			const alreadyWon = lsPreviousGuesses.includes(word);
+			const alreadyWon = lsPreviousGuesses.includes(todaysAnswer);
 
 			if (lsDate == null || lsDate != todayNum) {
 				gameLocalStorage.deleteItem();
@@ -469,7 +466,7 @@ export default function useWordle() {
 			}
 		}
 
-		setAnswer(word);
+		setAnswer(todaysAnswer);
 	}, []);
 
 	return {
