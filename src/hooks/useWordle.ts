@@ -30,7 +30,6 @@ const winPhrases = [
 	'Well, that was close!',
 ];
 
-const losingPhrase = 'You\'ll get it next time!';
 const tryAgainPhrase = 'Try again tomorrow!';
 
 export type KeyboardLetter = {
@@ -306,7 +305,7 @@ export default function useWordle() {
 	
 			setTimeout(() => {
 				if (gameOverOnLoad != null && !gameOverOnLoad) {
-					openToast(gameWon ? winPhrases[guessIndex - 1] : losingPhrase , 3000);
+					openToast(gameWon ? winPhrases[guessIndex - 1] : answer , 3000);
 					setTimeout(() => {
 						openStatsModal();
 					}, 2000);
