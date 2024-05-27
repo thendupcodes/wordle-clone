@@ -30,8 +30,6 @@ const winPhrases = [
 	'Well, that was close!',
 ];
 
-const tryAgainPhrase = 'Try again tomorrow!';
-
 export type KeyboardLetter = {
 	id: string;
 	key: string;
@@ -299,7 +297,7 @@ export default function useWordle() {
 				updateStats(gameWon);
 			} else if (gameWon != null && !gameWon) {
 				setTimeout(() => {
-					openToast(tryAgainPhrase, 3000);
+					openToast(answer, 3000);
 				}, 1000);
 			}
 	
