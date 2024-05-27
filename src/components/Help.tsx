@@ -22,13 +22,22 @@ export default function Help({ highContrast }: HelpProps) {
 
             <li>After you submit a guess, each letter will change color to give you hints about the hidden word.</li>
 
-            <HelpWord word="SPELL" colors={['y', 'n', 'n', 'n', 'n']} />
+            <li>Examples:
+              <div className="Help__body-content-example">
+                <HelpWord word="SPELL" state="correct" stateIdx={1} highContrast={highContrast} />
+                <strong>{highContrast ? 'Orange' : 'Green'}</strong>: The letter is in the word and in the correct position.
+              </div>
 
-            <ul>
-              <li><strong>{highContrast ? 'Orange' : 'Green'}</strong>: The letter is in the word and in the correct position.</li>
-              <li><strong>{highContrast ? 'Blue' : 'Yellow'}</strong>: The letter is in the word but in the wrong position.</li>
-              <li><strong>Gray</strong>: The letter is not in the word at all.</li>
-            </ul>
+              <div className="Help__body-content-example">
+                <HelpWord word="SPELL" state="partial" stateIdx={2} highContrast={highContrast} />
+                <strong>{highContrast ? 'Blue' : 'Yellow'}</strong>: The letter is in the word but in the wrong position.
+              </div>
+
+              <div className="Help__body-content-example">
+                <HelpWord word="SPELL" state="wrong" stateIdx={4} highContrast={highContrast} />
+                <strong>Gray</strong>: The letter is not in the word at all.
+              </div>
+            </li>
           </ul>
         </div>
       </div>
