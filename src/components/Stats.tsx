@@ -126,183 +126,185 @@ export default function Stats({ userStats, colors }: StatsProps) {
 				</div>
 			</div>
 
-			<div className="Stats__guesses">
-				<div className="Stats__guesses-heading">Guess distribution</div>
+			{wins > 0 && (
+				<div className="Stats__guesses">
+					<div className="Stats__guesses-heading">Guess distribution</div>
 
-				<div className="Stats__guesses-chart">
-					<svg
-						width="475"
-						height="300"
-						viewBox="0 0 475 200"
-						style={{
-							width: '100%',
-							maxWidth: '475px',
-							minHeight: '150px',
-							height: '100%',
-						}}
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<rect
-							x="25"
-							y={barMaxHeight - barHeights[0]}
-							width="50"
-							height={barHeights[0]}
-							rx="4"
-							ry="4"
-							fill={barColor}
-						/>
-						<rect
-							x="100"
-							y={barMaxHeight - barHeights[1]}
-							width="50"
-							height={barHeights[1]}
-							rx="4"
-							ry="4"
-							fill={barColor}
-						/>
-						<rect
-							x="175"
-							y={barMaxHeight - barHeights[2]}
-							width="50"
-							height={barHeights[2]}
-							rx="4"
-							ry="4"
-							fill={barColor}
-						/>
-						<rect
-							x="250"
-							y={barMaxHeight - barHeights[3]}
-							width="50"
-							height={barHeights[3]}
-							rx="4"
-							ry="4"
-							fill={barColor}
-						/>
-						<rect
-							x="325"
-							y={barMaxHeight - barHeights[4]}
-							width="50"
-							height={barHeights[4]}
-							rx="4"
-							ry="4"
-							fill={barColor}
-						/>
-						<rect
-							x="400"
-							y={barMaxHeight - barHeights[5]}
-							width="50"
-							height={barHeights[5]}
-							rx="4"
-							ry="4"
-							fill={barColor}
-						/>
+					<div className="Stats__guesses-chart">
+						<svg
+							width="475"
+							height="300"
+							viewBox="0 0 475 200"
+							style={{
+								width: '100%',
+								maxWidth: '475px',
+								minHeight: '150px',
+								height: '100%',
+							}}
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<rect
+								x="25"
+								y={barMaxHeight - barHeights[0]}
+								width="50"
+								height={barHeights[0]}
+								rx="4"
+								ry="4"
+								fill={barColor}
+							/>
+							<rect
+								x="100"
+								y={barMaxHeight - barHeights[1]}
+								width="50"
+								height={barHeights[1]}
+								rx="4"
+								ry="4"
+								fill={barColor}
+							/>
+							<rect
+								x="175"
+								y={barMaxHeight - barHeights[2]}
+								width="50"
+								height={barHeights[2]}
+								rx="4"
+								ry="4"
+								fill={barColor}
+							/>
+							<rect
+								x="250"
+								y={barMaxHeight - barHeights[3]}
+								width="50"
+								height={barHeights[3]}
+								rx="4"
+								ry="4"
+								fill={barColor}
+							/>
+							<rect
+								x="325"
+								y={barMaxHeight - barHeights[4]}
+								width="50"
+								height={barHeights[4]}
+								rx="4"
+								ry="4"
+								fill={barColor}
+							/>
+							<rect
+								x="400"
+								y={barMaxHeight - barHeights[5]}
+								width="50"
+								height={barHeights[5]}
+								rx="4"
+								ry="4"
+								fill={barColor}
+							/>
 
-						<text
-							x="50"
-							y={barMaxHeight - barHeights[0] - 10}
-							textAnchor="middle"
-							fill={fontColor}
-						>
-							{barValues[0]}
-						</text>
-						<text
-							x="125"
-							y={barMaxHeight - barHeights[1] - 10}
-							textAnchor="middle"
-							fill={fontColor}
-						>
-							{barValues[1]}
-						</text>
-						<text
-							x="200"
-							y={barMaxHeight - barHeights[2] - 10}
-							textAnchor="middle"
-							fill={fontColor}
-						>
-							{barValues[2]}
-						</text>
-						<text
-							x="275"
-							y={barMaxHeight - barHeights[3] - 10}
-							textAnchor="middle"
-							fill={fontColor}
-						>
-							{barValues[3]}
-						</text>
-						<text
-							x="350"
-							y={barMaxHeight - barHeights[4] - 10}
-							textAnchor="middle"
-							fill={fontColor}
-						>
-							{barValues[4]}
-						</text>
-						<text
-							x="425"
-							y={barMaxHeight - barHeights[5] - 10}
-							textAnchor="middle"
-							fill={fontColor}
-						>
-							{barValues[5]}
-						</text>
+							<text
+								x="50"
+								y={barMaxHeight - barHeights[0] - 10}
+								textAnchor="middle"
+								fill={fontColor}
+							>
+								{barValues[0]}
+							</text>
+							<text
+								x="125"
+								y={barMaxHeight - barHeights[1] - 10}
+								textAnchor="middle"
+								fill={fontColor}
+							>
+								{barValues[1]}
+							</text>
+							<text
+								x="200"
+								y={barMaxHeight - barHeights[2] - 10}
+								textAnchor="middle"
+								fill={fontColor}
+							>
+								{barValues[2]}
+							</text>
+							<text
+								x="275"
+								y={barMaxHeight - barHeights[3] - 10}
+								textAnchor="middle"
+								fill={fontColor}
+							>
+								{barValues[3]}
+							</text>
+							<text
+								x="350"
+								y={barMaxHeight - barHeights[4] - 10}
+								textAnchor="middle"
+								fill={fontColor}
+							>
+								{barValues[4]}
+							</text>
+							<text
+								x="425"
+								y={barMaxHeight - barHeights[5] - 10}
+								textAnchor="middle"
+								fill={fontColor}
+							>
+								{barValues[5]}
+							</text>
 
-						<text
-							x="50"
-							y="225"
-							textAnchor="middle"
-							fill={fontColor}
-							fontWeight="bold"
-						>
-							1
-						</text>
-						<text
-							x="125"
-							y="225"
-							textAnchor="middle"
-							fill={fontColor}
-							fontWeight="bold"
-						>
-							2
-						</text>
-						<text
-							x="200"
-							y="225"
-							textAnchor="middle"
-							fill={fontColor}
-							fontWeight="bold"
-						>
-							3
-						</text>
-						<text
-							x="275"
-							y="225"
-							textAnchor="middle"
-							fill={fontColor}
-							fontWeight="bold"
-						>
-							4
-						</text>
-						<text
-							x="350"
-							y="225"
-							textAnchor="middle"
-							fill={fontColor}
-							fontWeight="bold"
-						>
-							5
-						</text>
-						<text
-							x="425"
-							y="225"
-							textAnchor="middle"
-							fill={fontColor}
-							fontWeight="bold"
-						>
-							6
-						</text>
-					</svg>
+							<text
+								x="50"
+								y="225"
+								textAnchor="middle"
+								fill={fontColor}
+								fontWeight="bold"
+							>
+								1
+							</text>
+							<text
+								x="125"
+								y="225"
+								textAnchor="middle"
+								fill={fontColor}
+								fontWeight="bold"
+							>
+								2
+							</text>
+							<text
+								x="200"
+								y="225"
+								textAnchor="middle"
+								fill={fontColor}
+								fontWeight="bold"
+							>
+								3
+							</text>
+							<text
+								x="275"
+								y="225"
+								textAnchor="middle"
+								fill={fontColor}
+								fontWeight="bold"
+							>
+								4
+							</text>
+							<text
+								x="350"
+								y="225"
+								textAnchor="middle"
+								fill={fontColor}
+								fontWeight="bold"
+							>
+								5
+							</text>
+							<text
+								x="425"
+								y="225"
+								textAnchor="middle"
+								fill={fontColor}
+								fontWeight="bold"
+							>
+								6
+							</text>
+						</svg>
+					</div>
 				</div>
-			</div>
+			)}
 
 			<div className="Stats__next">
 				<div className="Stats__next-heading">Next game in</div>
