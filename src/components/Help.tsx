@@ -11,7 +11,7 @@ export default function Help({ highContrast, helpStyle }: HelpProps) {
       <div className="Help__heading">WordleClone</div>
 
       <div className="Help__main">
-        Welcome to WordleClone! The goal of the game is to guess the hidden 5-letter word in six tries or less, BUT THERE IS A TWIST! In this game, all the words are terms or abbreviations you would hear in the software engineering world.
+        Welcome to WordleClone! The goal of the game is to guess the hidden 5-letter word in six tries or less, BUT THERE IS A TWIST! In this game, all the answers are inspired by terms that you would encounter as a software engineer, developer or professional in the tech industry.
       </div>
 
       <div className="Help__body">
