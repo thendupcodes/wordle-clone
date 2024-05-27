@@ -100,9 +100,9 @@ export default function Wordle({
 							shakeRow={guessIndex === rowIdx && shakeRow}
 							gameWon={gameWon}
 							winningRow={winningRow}
-							avoidAnimation={
-								rowIdx < guessIndex &&
-								(gameWon ? rowIdx < winningRow : rowIdx <= avoidAnimationIdx)
+							avoidAnimation={gameOver && !gameWon ? false :
+								(rowIdx < guessIndex &&
+								(gameWon ? rowIdx < winningRow : rowIdx <= avoidAnimationIdx))
 							}
 							isSubmitted={rowIdx < guessIndex}
 						/>

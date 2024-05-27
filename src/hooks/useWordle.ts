@@ -14,7 +14,7 @@ import useLocalStorage from './useLocalStorage';
 const TOTAL_GUESSES = 6;
 const WORD_LENGTH = 5;
 
-export const FLIP_ANIMATION_DUR = 1900; // flip animation=700ms + delay=1200ms
+export const FLIP_ANIMATION_DUR = 1700; // flip animation=500ms + delay=1200ms
 
 const KEY_STATE_DEFAULT = 'default';
 const KEY_STATE_CORRECT = 'correct';
@@ -298,7 +298,7 @@ export default function useWordle() {
 			} else if (gameWon != null && !gameWon) {
 				setTimeout(() => {
 					openToast(answer, 3000);
-				}, 1000);
+				}, 2000);
 			}
 	
 			setTimeout(() => {
