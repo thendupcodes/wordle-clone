@@ -73,16 +73,6 @@
 			}
 		}
 	}
-
-	@media (hover: hover) {
-		.Keyboard {
-			&__key {
-				&:hover {
-					transform: scale(1);
-				}
-			}
-		}
-	}
 }
 
 @media screen and (max-width: $min-device-width) {
@@ -103,11 +93,13 @@
 	}
 }
 
-@media (hover: hover) {
-	.Keyboard {
-		&__key {
-			&:hover {
-				transform: scale(1.1);
+@media screen and (min-width: $tablet-width) {
+	@media (hover: hover) {
+		.Keyboard {
+			&__key {
+				&:hover {
+					transform: scale(1.1);
+				}
 			}
 		}
 	}

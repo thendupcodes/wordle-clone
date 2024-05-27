@@ -19,6 +19,25 @@ export function getTodaysAnswer(): string {
 	return techWords[idx];
 }
 
+function binarySearch (words: string[], word: string) {
+  let left = 0;
+  let right = words.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (words[mid] === word) {
+      return true; // Word found
+    } else if (words[mid] < word) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+
+  return false; // Word not found
+}
+
 export function wordIsInDictionary(word: string): boolean {
-	return dictionary.includes(word);
+	return binarySearch(dictionary, word);
 }
