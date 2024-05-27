@@ -1,16 +1,49 @@
 .Help-Word {
+  --cell-bd-color: #{$dark-gray};
+  --correct-bg-color: #{$green};
+  --correct-ft-color: #{$white};
+  --partial-bg-color: #{$yellow};
+  --partial-ft-color: #{$white};
+  --wrong-bg-color: #{$dark-gray};
+  --wrong-ft-color: #{$white};
+
+  &--high-contrast {
+		--correct-bg-color: #{$orange};
+		--correct-ft-color: #{$black};
+		--partial-bg-color: #{$blue};
+		--partial-ft-color: #{$black};
+	}
+
   display: flex;
   justify-content: start;
 
   &__letter {
+    font-size: 20px;
+    font-weight: bold;
 
     &-container {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
+      margin: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
-      
+      border: 1px solid var(--cell-bd-color);
+
+      &--correct {
+        background: var(--correct-bg-color);
+        color: var(--correct-ft-color);
+      }
+
+      &--partial {
+        background: var(--partial-bg-color);
+        color: var(--partial-ft-color);
+      }
+
+      &--wrong {
+        background: var(--wrong-bg-color);
+        color: var(--wrong-ft-color);
+      }
     }
   }
 }
