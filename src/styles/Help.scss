@@ -20,18 +20,14 @@
 	}
 
 	&__body {
-		display: flex;
-		width: 100%;
-		margin: 24px 0 0;
-		justify-content: center;
-		flex-direction: column;
+		display: block;
+    margin: 16px 16px 0;
 		color: var(--modal-ft-color);
 
 		&-heading {
 			text-transform: uppercase;
 			font-weight: $font-weight-heavy;
 			color: var(--modal-ft-color);
-      margin: 0 16px;
 		}
 
     &-content {
@@ -59,7 +55,13 @@
 		}
 
 		&__body {
-			margin: 8px 0;
+			margin: 8px 16px 0;
+
+      &-content {
+        ul {
+          padding-inline-start: 16px;
+        }
+      }
 		}
 	}
 }

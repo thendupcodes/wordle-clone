@@ -67,6 +67,20 @@
 
 		&__key {
 			padding: 0px;
+
+			&:active {
+				transform: scale(1);
+			}
+		}
+	}
+
+	@media (hover: hover) {
+		.Keyboard {
+			&__key {
+				&:hover {
+					transform: scale(1);
+				}
+			}
 		}
 	}
 }
