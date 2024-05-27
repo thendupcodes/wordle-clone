@@ -24,17 +24,17 @@ export default function Help({ highContrast }: HelpProps) {
 
             <li>Examples:
               <div className="Help__body-content-example">
-                <HelpWord word="SPELL" state="correct" stateIdx={1} highContrast={highContrast} />
+                <HelpWord word="REGEX" state="correct" stateIdx={1} highContrast={highContrast} />
                 <strong>{highContrast ? 'Orange' : 'Green'}</strong>: The letter is in the word and in the correct position.
               </div>
 
               <div className="Help__body-content-example">
-                <HelpWord word="SPELL" state="partial" stateIdx={2} highContrast={highContrast} />
+                <HelpWord word="HTTPS" state="partial" stateIdx={2} highContrast={highContrast} />
                 <strong>{highContrast ? 'Blue' : 'Yellow'}</strong>: The letter is in the word but in the wrong position.
               </div>
 
               <div className="Help__body-content-example">
-                <HelpWord word="SPELL" state="wrong" stateIdx={4} highContrast={highContrast} />
+                <HelpWord word="SCRUM" state="wrong" stateIdx={4} highContrast={highContrast} />
                 <strong>Gray</strong>: The letter is not in the word at all.
               </div>
             </li>
