@@ -1,3 +1,5 @@
+import HelpWord from "./HelpWord";
+
 type HelpProps = {
   highContrast: boolean
 ;}
@@ -19,6 +21,8 @@ export default function Help({ highContrast }: HelpProps) {
             <li>Type a 5-letter word and press the "Enter" key to submit your guess.</li>
 
             <li>After you submit a guess, each letter will change color to give you hints about the hidden word.</li>
+
+            <HelpWord word="SPELL" colors={['y', 'n', 'n', 'n', 'n']} />
 
             <ul>
               <li><strong>{highContrast ? 'Orange' : 'Green'}</strong>: The letter is in the word and in the correct position.</li>
