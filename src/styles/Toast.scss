@@ -22,7 +22,8 @@
 	color: var(--toast-ft-color);
 	background: var(--toast-bg-color);
 	opacity: 0;
-	animation: fade-in-fade-out 2s ease;
+	animation-name: fade-in-fade-out;
+	animation-timing-function: ease;
 }
 
 @media screen and (max-width: $min-device-width) {

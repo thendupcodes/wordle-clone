@@ -9,6 +9,7 @@ import {
 type Toast = {
 	id: number;
 	message: string;
+	style: React.CSSProperties;
 };
 
 type ToastContextType = {
@@ -32,6 +33,9 @@ export default function ToastProvider({
 		const newToast = {
 			id: Date.now(),
 			message: message,
+			style: {
+				animationDuration: `${duration}ms`
+			}
 		};
 
 		setToasts((prev) => [newToast, ...prev]);
@@ -42,7 +46,9 @@ export default function ToastProvider({
 	};
 
 	const closeToast = (id: number) => {
-		setToasts((prev) => prev.filter((t) => t.id != id));
+		setTimeout(() => {
+			setToasts((prev) => prev.filter((t) => t.id != id));
+		}, 300);
 	};
 
 	const contextVal = useMemo(() => {
@@ -60,7 +66,7 @@ export default function ToastProvider({
 				{toasts.length > 0 &&
 					toasts.map((t) => {
 						return (
-							<div className="Toast" key={t.id}>
+							<div className="Toast" key={t.id} style={t.style}>
 								{t.message}
 							</div>
 						);
