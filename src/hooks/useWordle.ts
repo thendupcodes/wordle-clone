@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
 	getToday,
-	getWord,
+	getTodaysAnswer,
 	wordIsInDictionary,
 } from '@/helpers/dictionaryHelpers';
 import isLetter from '@/helpers/isLetter';
@@ -443,7 +443,7 @@ export default function useWordle() {
 	}, [previousGuesses]);
 
 	useEffect(() => {
-		const word = getWord();
+		const todaysAnswer = getTodaysAnswer();
 		const todayNum = getToday();
 		const storageDetails = gameLocalStorage.getItem();
 		const currentStatsLS = statsLocalStorage.getItem();
@@ -456,7 +456,7 @@ export default function useWordle() {
 		if (storageDetails != null) {
 			const { lsDate, lsCurrentGuess, lsPreviousGuesses, lsGuessIndex, lsGameOver } = JSON.parse(storageDetails);
 
-			const alreadyWon = lsPreviousGuesses.includes(word);
+			const alreadyWon = lsPreviousGuesses.includes(todaysAnswer);
 
 			if (lsDate == null || lsDate != todayNum) {
 				gameLocalStorage.deleteItem();
@@ -469,7 +469,7 @@ export default function useWordle() {
 			}
 		}
 
-		setAnswer(word);
+		setAnswer(todaysAnswer);
 	}, []);
 
 	return {

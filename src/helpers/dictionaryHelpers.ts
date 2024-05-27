@@ -1,4 +1,5 @@
-import words from '@/dictionary/words.json';
+import dictionary from '@/dictionary/dictionary.json';
+import techWords from '@/dictionary/techWords.json';
 
 export function getToday() {
 	const today = new Date();
@@ -10,14 +11,14 @@ export function getToday() {
 	return parseInt(`${year}${month}${day}`, 10);
 }
 
-export function getWord(): string {
-	const dictionaryLength = words.length;
+export function getTodaysAnswer(): string {
+	const dictionaryLength = techWords.length;
 	const today = getToday();
 	const idx = today % dictionaryLength;
 
-	return words[idx];
+	return techWords[idx];
 }
 
 export function wordIsInDictionary(word: string): boolean {
-	return words.includes(word);
+	return dictionary.includes(word);
 }
