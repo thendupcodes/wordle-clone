@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import Help from '@/components/Help';
+import Modal from '@/components/Modal';
 import ToastProvider from '@/components/ToastContext';
 import Toggle from '@/components/Toggle';
 import Tooltip from '@/components/Tooltip';
 import Wordle from '@/components/Wordle';
 
-import useLocalStorage from './hooks/useLocalStorage';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 function App() {
 	const appLocalStorage = useLocalStorage({ key: 'tt-wordle-app-state' });
@@ -13,6 +15,53 @@ function App() {
 	const [darkMode, setDarkMode] = useState(false);
 	const [highContrast, setHighContrast] = useState(false);
 	const [appTriggerModal, setAppTriggerModal] = useState(false);
+	const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+
+	const modalStyle = (
+		darkMode
+			? {
+					'--modal-overlay-bg-color': '#222222',
+					'--modal-bg-color': '#101010',
+					'--modal-ft-color': '#f7f7f7',
+				}
+			: {
+					'--modal-overlay-bg-color': '#101010',
+					'--modal-bg-color': '#f7f7f7',
+					'--modal-ft-color': '#101010',
+				}
+	) as React.CSSProperties;
+
+	const helpStyle = (
+		highContrast
+			? {  
+				'--cell-bd-color': '#adb5bd',
+				'--correct-bg-color': '#f5783b',
+				'--correct-ft-color': '#101010',
+				'--partial-bg-color': '#85c0f8',
+				'--partial-ft-color': '#101010',
+				'--wrong-bg-color': darkMode ? '#343a40' : '#777d7e',
+				'--wrong-ft-color': '#f7f7f7',
+			}
+		: (
+			{
+				'--cell-bd-color': '#adb5bd',
+				'--correct-bg-color': '#548c2f',
+				'--correct-ft-color': '#f7f7f7',
+				'--partial-bg-color': '#e8b62a',
+				'--partial-ft-color': '#f7f7f7',
+				'--wrong-bg-color': darkMode ? '#343a40' : '#777d7e',
+				'--wrong-ft-color': '#f7f7f7',
+			}
+		)
+	) as React.CSSProperties;
+
+	const openHelpModal = () => {
+		setIsHelpModalOpen(true);
+	}
+
+	const closeHelpModal = () => {
+		setIsHelpModalOpen(false);
+	};
 
 	const toggleDarkMode = () => {
 		setDarkMode(!darkMode);
@@ -56,12 +105,21 @@ function App() {
 						<div className="Wordle__header-title">WordleClone</div>
 
 						<div className="Wordle__header-buttons">
+							<Tooltip direction="bottom" delay={0} content="How to play">
+								<button
+									onClick={openHelpModal}
+									className="Wordle__header-help-button"
+								>
+									<i className="fa-regular fa-circle-question"></i>
+								</button>
+							</Tooltip>
+
 							<Tooltip direction="bottom" delay={0} content="See statistics">
 								<button
 									onClick={() => setAppTriggerModal(true)}
 									className="Wordle__header-stats-button"
 								>
-									<i className="fa-solid fa-chart-column"></i>
+									<i className="fa-solid fa-square-poll-vertical"></i>
 								</button>
 							</Tooltip>
 
@@ -95,9 +153,20 @@ function App() {
 
 					<Wordle
 						darkMode={darkMode}
+						modalStyle={modalStyle}
 						appTriggerModal={appTriggerModal}
 						setAppTriggerModal={setAppTriggerModal}
 					/>
+
+					<Modal
+						isOpen={isHelpModalOpen}
+						onClose={closeHelpModal}
+						modalStyle={modalStyle}
+					>
+						<>
+							<Help highContrast={highContrast} helpStyle={helpStyle} />
+						</>
+					</Modal>
 				</>
 			</ToastProvider>
 		</div>

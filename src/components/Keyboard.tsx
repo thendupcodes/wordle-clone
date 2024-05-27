@@ -21,7 +21,6 @@ export default function Keyboard({
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
 		k: string
 	) => {
-		console.log({ e });
 		e.preventDefault();
 		addChar(k);
 	};

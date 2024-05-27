@@ -25,7 +25,8 @@
 			align-items: center;
 		}
 
-		&-stats-button {
+		&-stats-button,
+		&-help-button {
 			font-size: $font-size-xxl;
 			margin: 0 8px;
 			background: transparent;
@@ -135,7 +136,9 @@
 		&__header {
 			justify-content: start;
 
+
 			&-title {
+				font-size: 24px;
 				margin-left: 24px;
 			}
 		}
@@ -163,8 +166,12 @@
 			height: 50px;
 
 			&-title {
-				font-size: 24px;
-				margin-left: 24px;
+				font-size: 20px;
+			}
+
+			&-help-button,
+			&-stats-button {
+				font-size: 20px;
 			}
 		}
 

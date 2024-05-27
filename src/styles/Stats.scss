@@ -91,7 +91,7 @@
 
 @media screen and (max-width: $min-device-width) {
 	.Stats {
-		width: calc(100vw - 100px);
+		width: calc(100dvw - 100px);
 
 		&__heading {
 			margin-top: 0;

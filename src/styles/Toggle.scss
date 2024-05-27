@@ -71,3 +71,10 @@ $toggle-width: 50px;
 		}
 	}
 }
+
+
+@media screen and (max-width: $small-device-width) {
+	.Toggle {
+		width: 40px;
+	}
+}

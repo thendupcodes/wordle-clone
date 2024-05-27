@@ -1,0 +1,37 @@
+.Help-Word {
+  display: flex;
+  justify-content: start;
+
+  &__letter {
+    font-size: 20px;
+    font-weight: bold;
+
+    &-container {
+      width: 40px;
+      height: 40px;
+      margin: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--cell-bd-color);
+
+      &--correct {
+        background: var(--correct-bg-color);
+        color: var(--correct-ft-color);
+        border: 1px solid var(--correct-bg-color);
+      }
+
+      &--partial {
+        background: var(--partial-bg-color);
+        color: var(--partial-ft-color);
+        border: 1px solid var(--partial-bg-color);
+      }
+
+      &--wrong {
+        background: var(--wrong-bg-color);
+        color: var(--wrong-ft-color);
+        border: 1px solid var(--wrong-bg-color);
+      }
+    }
+  }
+}
