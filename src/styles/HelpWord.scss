@@ -1,19 +1,4 @@
 .Help-Word {
-  --cell-bd-color: #{$dark-gray};
-  --correct-bg-color: #{$green};
-  --correct-ft-color: #{$white};
-  --partial-bg-color: #{$yellow};
-  --partial-ft-color: #{$white};
-  --wrong-bg-color: #{$dark-gray};
-  --wrong-ft-color: #{$white};
-
-  &--high-contrast {
-		--correct-bg-color: #{$orange};
-		--correct-ft-color: #{$black};
-		--partial-bg-color: #{$blue};
-		--partial-ft-color: #{$black};
-	}
-
   display: flex;
   justify-content: start;
 
@@ -33,16 +18,19 @@
       &--correct {
         background: var(--correct-bg-color);
         color: var(--correct-ft-color);
+        border: 1px solid var(--correct-bg-color);
       }
 
       &--partial {
         background: var(--partial-bg-color);
         color: var(--partial-ft-color);
+        border: 1px solid var(--partial-bg-color);
       }
 
       &--wrong {
         background: var(--wrong-bg-color);
         color: var(--wrong-ft-color);
+        border: 1px solid var(--wrong-bg-color);
       }
     }
   }

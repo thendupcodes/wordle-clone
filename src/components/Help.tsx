@@ -1,12 +1,13 @@
 import HelpWord from "./HelpWord";
 
 type HelpProps = {
-  highContrast: boolean
-;}
+  highContrast: boolean;
+  helpStyle: React.CSSProperties;
+}
 
-export default function Help({ highContrast }: HelpProps) {
+export default function Help({ highContrast, helpStyle }: HelpProps) {
 	return (
-		<div className="Help">
+		<div className="Help" style={helpStyle}>
       <div className="Help__heading">WordleClone</div>
 
       <div className="Help__main">
