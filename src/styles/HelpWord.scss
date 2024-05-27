@@ -1,0 +1,16 @@
+.Help-Word {
+  display: flex;
+  justify-content: start;
+
+  &__letter {
+
+    &-container {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+  }
+}
