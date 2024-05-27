@@ -5,7 +5,7 @@ import Toggle from '@/components/Toggle';
 import Tooltip from '@/components/Tooltip';
 import Wordle from '@/components/Wordle';
 
-import useLocalStorage from './hooks/useLocalStorage';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 function App() {
 	const appLocalStorage = useLocalStorage({ key: 'tt-wordle-app-state' });
@@ -56,12 +56,21 @@ function App() {
 						<div className="Wordle__header-title">WordleClone</div>
 
 						<div className="Wordle__header-buttons">
+							<Tooltip direction="bottom" delay={0} content="How to play">
+								<button
+									onClick={() => setAppTriggerModal(true)}
+									className="Wordle__header-help-button"
+								>
+									<i className="fa-regular fa-circle-question"></i>
+								</button>
+							</Tooltip>
+
 							<Tooltip direction="bottom" delay={0} content="See statistics">
 								<button
 									onClick={() => setAppTriggerModal(true)}
 									className="Wordle__header-stats-button"
 								>
-									<i className="fa-solid fa-chart-column"></i>
+									<i className="fa-solid fa-square-poll-vertical"></i>
 								</button>
 							</Tooltip>
 
