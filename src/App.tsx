@@ -6,6 +6,7 @@ import Tooltip from '@/components/Tooltip';
 import Wordle from '@/components/Wordle';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
+import Modal from './components/Modal';
 
 function App() {
 	const appLocalStorage = useLocalStorage({ key: 'tt-wordle-app-state' });
@@ -13,6 +14,29 @@ function App() {
 	const [darkMode, setDarkMode] = useState(false);
 	const [highContrast, setHighContrast] = useState(false);
 	const [appTriggerModal, setAppTriggerModal] = useState(false);
+	const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+
+	const modalStyle = (
+		darkMode
+			? {
+					'--modal-overlay-bg-color': '#222222',
+					'--modal-bg-color': '#101010',
+					'--modal-ft-color': '#f7f7f7',
+				}
+			: {
+					'--modal-overlay-bg-color': '#101010',
+					'--modal-bg-color': '#f7f7f7',
+					'--modal-ft-color': '#101010',
+				}
+	) as React.CSSProperties;
+
+	const openHelpModal = () => {
+		setIsHelpModalOpen(true);
+	}
+
+	const closeHelpModal = () => {
+		setIsHelpModalOpen(false);
+	};
 
 	const toggleDarkMode = () => {
 		setDarkMode(!darkMode);
@@ -58,7 +82,7 @@ function App() {
 						<div className="Wordle__header-buttons">
 							<Tooltip direction="bottom" delay={0} content="How to play">
 								<button
-									onClick={() => setAppTriggerModal(true)}
+									onClick={openHelpModal}
 									className="Wordle__header-help-button"
 								>
 									<i className="fa-regular fa-circle-question"></i>
@@ -104,9 +128,20 @@ function App() {
 
 					<Wordle
 						darkMode={darkMode}
+						modalStyle={modalStyle}
 						appTriggerModal={appTriggerModal}
 						setAppTriggerModal={setAppTriggerModal}
 					/>
+
+					<Modal
+						isOpen={isHelpModalOpen}
+						onClose={closeHelpModal}
+						modalStyle={modalStyle}
+					>
+						<>
+							HELP ME
+						</>
+					</Modal>
 				</>
 			</ToastProvider>
 		</div>

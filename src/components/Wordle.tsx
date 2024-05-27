@@ -9,12 +9,14 @@ import useWordle from '@/hooks/useWordle';
 
 type WordleProps = {
 	darkMode: boolean;
+	modalStyle: React.CSSProperties;
 	appTriggerModal: boolean;
 	setAppTriggerModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Wordle({
 	darkMode,
+	modalStyle,
 	appTriggerModal,
 	setAppTriggerModal,
 }: WordleProps) {
@@ -52,20 +54,6 @@ export default function Wordle({
 			window.removeEventListener('keyup', handleUserInput);
 		};
 	}, [handleUserInput, gameOver]);
-
-	const modalStyle = (
-		darkMode
-			? {
-					'--modal-overlay-bg-color': '#222222',
-					'--modal-bg-color': '#101010',
-					'--modal-ft-color': '#f7f7f7',
-				}
-			: {
-					'--modal-overlay-bg-color': '#101010',
-					'--modal-bg-color': '#f7f7f7',
-					'--modal-ft-color': '#101010',
-				}
-	) as React.CSSProperties;
 
 	const statsColors = darkMode
 		? {
