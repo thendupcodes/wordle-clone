@@ -6,6 +6,12 @@
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+  max-width: 620px;
+
+  &__main {
+		color: var(--modal-ft-color);
+    margin: 32px 16px 0;
+  }
 
 	&__heading {
 		margin-top: 16px;
@@ -17,16 +23,16 @@
 	&__body {
 		display: flex;
 		width: 100%;
-		margin: 24px 0;
+		margin: 24px 0 0;
 		justify-content: center;
 		flex-direction: column;
-		align-items: center;
 		color: var(--modal-ft-color);
 
 		&-heading {
 			text-transform: uppercase;
 			font-weight: $font-weight-heavy;
 			color: var(--modal-ft-color);
+      margin: 0 16px;
 		}
 	}
 
