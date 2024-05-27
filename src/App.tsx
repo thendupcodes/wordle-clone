@@ -34,23 +34,25 @@ function App() {
 	const helpStyle = (
 		highContrast
 			? {  
-				'--cell-bd-color': '#343a40',
+				'--cell-bd-color': '#adb5bd',
 				'--correct-bg-color': '#f5783b',
 				'--correct-ft-color': '#101010',
 				'--partial-bg-color': '#85c0f8',
 				'--partial-ft-color': '#101010',
-				'--wrong-bg-color': '#343a40',
+				'--wrong-bg-color': darkMode ? '#343a40' : '#777d7e',
 				'--wrong-ft-color': '#f7f7f7',
 			}
-		: {
-			'--cell-bd-color': '#343a40',
-			'--correct-bg-color': '#548c2f',
-			'--correct-ft-color': '#f7f7f7',
-			'--partial-bg-color': '#e8b62a',
-			'--partial-ft-color': '#f7f7f7',
-			'--wrong-bg-color': '#343a40',
-			'--wrong-ft-color': '#f7f7f7',
-		}
+		: (
+			{
+				'--cell-bd-color': '#adb5bd',
+				'--correct-bg-color': '#548c2f',
+				'--correct-ft-color': '#f7f7f7',
+				'--partial-bg-color': '#e8b62a',
+				'--partial-ft-color': '#f7f7f7',
+				'--wrong-bg-color': darkMode ? '#343a40' : '#777d7e',
+				'--wrong-ft-color': '#f7f7f7',
+			}
+		)
 	) as React.CSSProperties;
 
 	const openHelpModal = () => {
