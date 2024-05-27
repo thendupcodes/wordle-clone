@@ -33,6 +33,12 @@
 			color: var(--modal-ft-color);
       margin: 0 16px;
 		}
+
+    &-content {
+      &-example {
+        margin-bottom: 8px;  
+      }
+    }
 	}
 
   &__footer {
@@ -44,7 +50,8 @@
 
 @media screen and (max-width: $min-device-width) {
 	.Help {
-		width: calc(100vw - 100px);
+		width: calc(100dvw - 100px);
+    justify-content: start;
 
 		&__heading {
 			margin-top: 0;
