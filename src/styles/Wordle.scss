@@ -27,6 +27,7 @@
 
 		&-stats-button,
 		&-help-button {
+			user-select: none;
 			font-size: $font-size-xxl;
 			margin: 0 8px;
 			background: transparent;

@@ -30,7 +30,7 @@ export default function Tooltip({
 
 	return (
 		<div
-			tabIndex={0}
+			tabIndex={-1}
 			className="Tooltip-Container"
 			onMouseEnter={() => setShow(true)}
 			onMouseLeave={() => setShow(false)}

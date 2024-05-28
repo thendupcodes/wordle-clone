@@ -107,7 +107,11 @@ function App() {
 						<div className="Wordle__header-buttons">
 							<Tooltip direction="bottom" delay={0} content="How to play">
 								<button
-									onClick={openHelpModal}
+									tabIndex={-1}
+									onClick={(e) => {
+										e.currentTarget.blur();
+										openHelpModal();
+									}}
 									className="Wordle__header-help-button"
 								>
 									<i className="fa-regular fa-circle-question"></i>
@@ -116,7 +120,11 @@ function App() {
 
 							<Tooltip direction="bottom" delay={0} content="See statistics">
 								<button
-									onClick={() => setAppTriggerModal(true)}
+									tabIndex={-1}
+									onClick={(e) => {
+										e.currentTarget.blur();
+										setAppTriggerModal(true)
+									}}
 									className="Wordle__header-stats-button"
 								>
 									<i className="fa-solid fa-square-poll-vertical"></i>
